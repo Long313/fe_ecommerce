@@ -1,7 +1,6 @@
 // File: app/[locale]/layout.tsx
 import './globals.css';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
-import type { JSX, ReactNode } from 'react';
 
 export default function LocaleLayout({
   children,
