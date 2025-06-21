@@ -1,12 +1,13 @@
 // File: app/[locale]/layout.tsx
 import './globals.css'
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import type { ReactNode } from 'react';
 
 export default async function LocaleLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   params: { locale: string }
 }) {
   return (
