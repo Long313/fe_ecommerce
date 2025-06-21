@@ -7,9 +7,9 @@ export default function LocaleLayout({
   children,
   params,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   params: { locale: string };
-}): JSX.Element {
+}) {
   return (
     <html lang={params.locale}>
       <body>
