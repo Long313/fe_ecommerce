@@ -1,14 +1,14 @@
 // File: app/[locale]/layout.tsx
 import './globals.css';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import type { ReactNode } from 'react';
 
-export default function LocaleLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+type LayoutProps = {
+  children: ReactNode;
+  params: { [key: string]: string }; 
+};
+
+export default function LocaleLayout({ children, params }: LayoutProps) {
   return (
     <html lang={params.locale}>
       <body>
