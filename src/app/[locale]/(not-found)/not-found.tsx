@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import useTranslation from '../../hooks/useTranslation'
+import useTranslation from '../../../hooks/useTranslation';
 import { useParams } from 'next/navigation'
 
 export default function NotFound() {

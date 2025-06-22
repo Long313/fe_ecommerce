@@ -1,20 +1,21 @@
+// app/[locale]/layout.tsx
 import './globals.css';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import { ReactNode } from 'react';
 
-// type Props = {
-//   children: ReactNode;
-//   params: { locale: string };
-// };
+type Props = {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+};
 
-export default function LocaleLayout({
-  children,
-  params,
-} : any) {
+export default async function LocaleLayout({ children, params }: Props) {
+  const resolvedParams = await params;
+
   return (
-    <html lang={params.locale}>
+    <html lang={resolvedParams.locale}>
       <body>
         <header className="p-4 border-b mb-6">
-          <LanguageSwitcher currentLocale={params.locale} />
+          <LanguageSwitcher currentLocale={resolvedParams.locale} />
         </header>
         <main>{children}</main>
       </body>
