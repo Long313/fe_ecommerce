@@ -9,10 +9,7 @@ import LanguageSwitcher from '../../components/LanguageSwitcher';
 export default function LocaleLayout({
   children,
   params,
-}: {
-  children: React.ReactNode;
-  params: { locale: string };
-}) {
+} : any) {
   return (
     <html lang={params.locale}>
       <body>
