@@ -3,12 +3,14 @@ import './globals.css';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import type { ReactNode } from 'react';
 
-type LocaleLayoutProps = {
+interface Props {
   children: ReactNode;
-  params: { locale: string };
-};
+  params: {
+    locale: string;
+  };
+}
 
-export default function LocaleLayout({ children, params }: LocaleLayoutProps) {
+export default function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={params.locale}>
       <body>
