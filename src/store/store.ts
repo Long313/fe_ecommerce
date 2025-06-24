@@ -2,8 +2,12 @@
 
 import { create } from 'zustand';
 
-export const useStore = create((set : any) => ({
-  // dark mode state
+interface StoreState {
+  mode: boolean;
+  setMode: (state: boolean) => void;
+}
+
+export const useStore = create<StoreState>((set) => ({
   mode: false,
-  setMode: (state: boolean) => set({ mode : state }),
+  setMode: (state) => set({ mode: state }),
 }));
