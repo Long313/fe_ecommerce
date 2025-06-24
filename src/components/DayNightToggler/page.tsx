@@ -6,13 +6,11 @@ import sun_icon from "../../image/sun_icon.png";
 import moon_icon from "../../image/moon_icon.png";
 import {useStore} from "../../store/store";
 
-const DayNightToggler: React.FC<any> = () => {
-  // State để lưu trữ trạng thái bật/tắt (ngày/đêm)
+const DayNightToggler: React.FC = () => {
   const [isNight, setIsNight] = useState(false);
   const changeNode = useStore((state) => state.setMode)
 
 
-  // Hàm để xử lý khi checkbox được thay đổi
   const handleToggle = () => {
     setIsNight(!isNight);
     changeNode(!isNight);

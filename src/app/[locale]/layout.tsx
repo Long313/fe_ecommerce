@@ -4,15 +4,15 @@ import LanguageSwitcher from '../../components/LanguageSwitcher/page';
 import { ReactNode, useEffect } from 'react';
 import { useStore } from '@/store/store';
 import DayNightToggler from '@/components/DayNightToggler/page';
-import { use } from 'react'; // import use to unwrap promises
+import { use } from 'react'; 
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ locale: string }>; // params is now a Promise
+  params: Promise<{ locale: string }>; 
 };
 
 export default function LocaleLayout({ children, params }: Props) {
-  const resolvedParams = use(params); // unwrap params using use()
+  const resolvedParams = use(params); 
   const mode = useStore((state) => state.mode);
 
   useEffect(() => {
@@ -22,7 +22,6 @@ export default function LocaleLayout({ children, params }: Props) {
   return (
     <html lang={resolvedParams.locale}>
       <body className={mode === true ? 'bg-[var(--dark)] text-[var(--light)]' : ''}>
-      {/* <body className="bg-dark"> */}
         <LanguageSwitcher currentLocale={resolvedParams.locale} />
         <DayNightToggler />
         <main>{children}</main>
