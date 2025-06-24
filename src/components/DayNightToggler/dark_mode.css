@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.title h1 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.btn {
+  position: relative;
+}
+
+.btn input[type="checkbox"] {
+  display: none;
+}
+
+.btn label {
+  display: block;
+  position: relative;
+  width: 100px;
+  height: 40px;
+  background-color: #b7b6b6;
+  border-radius: 60px;
+  transition: all 1s;
+}
+
+.btn .box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: all 1s;
+  z-index: 100;
+}
+
+.btn .scenary {
+  position: absolute;
+  top: 0;
+  left: 60px;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  transition: all 1s;
+}
+
+
+.btn input[type="checkbox"]:checked + label {
+  background-color: #333;
+}
+
+.btn input[type="checkbox"]:checked + label .box {
+  left: 60px;
+}
+
+.btn input[type="checkbox"]:checked + label .scenary {
+  left: 0;
+}
+
+/* .btn input[type="checkbox"]:checked + label .moon {
+  display: none;
+} */
+
+.btn input[type="checkbox"]:checked + label .sun {
+  display: block;
+}
+
+.content {
+  margin-top: 30px;
+  font-size: 16px;
+  color: #333;
+}
+
+.social a {
+  display: inline-block;
+  margin: 0 10px;
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s;
+}
+
+.social a:hover {
+  color: #e63946;
+}
+
+.sun, .moon {
+  width: 50px;
+  height: 50px;
+}
