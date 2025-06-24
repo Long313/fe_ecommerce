@@ -5,6 +5,7 @@
 :root {
   --light: #ffffff;
   --dark: #171717;
+  --width-screen: 1080px;
 }
 
 /* @theme inline {
