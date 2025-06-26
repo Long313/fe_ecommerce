@@ -1,3 +1,10 @@
 {
-  "homeTitle": "Home page"
+  "homeTitle": "Home page",
+  "registerTitle": "Create Account",
+  "registerText": "Please enter your details",
+  "emailPlaceHolder": "Enter your email",
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
+  "emailError": "Please enter a valid email",
+  "passwordError": "Password must be at least 6 characters, including one special character, one number and one letter"
 }

@@ -1,12 +1,8 @@
+
 export default function Login() {
   return (
-    <div className="max-w-[var(--width-screen)] w-full h-full">
-      <div className="">
-        Left
-      </div>
-      <div className="">
-        Right
-      </div>
+    <div className="h-[400px] max-w-[500px] pl-[10px] bg-red-100 border border-black">
+
     </div>
   );
 }
