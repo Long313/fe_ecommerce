@@ -4,7 +4,8 @@
   "registerText": "Nhập thông tin của bạn",
   "emailPlaceHolder": "Nhập email của bạn",
   "password": "Mật khẩu",
-  "confirmPassword": "Nhập lại mật khẩu",
+  "confirmPassword": "Nhập lai mật khẩu",
   "emailError": "Vui lòng nhập một email hợp lệ",
-  "passwordError": "Mật khẩu có ít nhất 6 ký tự, gồm có ký tự đặc biệt, số và chữ"
+  "passwordError": "Mật khẩu có ít nhất 6 ký tự, gồm có ký tự đặc biệt, số và chữ",
+  "confirmPasswordError":"Mật khẩu nhập lại không trùng khớp với mật khẩu"
 }

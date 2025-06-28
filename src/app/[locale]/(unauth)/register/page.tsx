@@ -3,8 +3,41 @@ import Image from "next/image";
 import register_background from '../../../../images/register_brackground.svg';
 import InputField from "@/components/InputFeild/page";
 import useTranslation from "@/hooks/useTranslation";
+import Button from "@/components/Button/page";
+import { useState } from "react";
 export default function Register() {
-  const { t } = useTranslation()
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [policy, setPolicy] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const { t } = useTranslation();
+
+  const handleRegister = () => {
+    console.log("email", email);
+    console.log("password", password);
+    console.log("register");
+    let checkConditionSubmit = !policy || !email || !password || !confirmPassword;
+    if (checkConditionSubmit) return;
+  };
+
+  const handleGetDataInput = (typeName: string, value: string) => {
+    console.log(typeName, value);
+    if (typeName == "email") {
+      setEmail(value);
+    }
+    if (typeName == "password") {
+      setPassword(value);
+    }
+
+    if (typeName == "confirmPassword") {
+      setConfirmPassword(value);
+      if (password !== value) {
+        setIsError(true);
+      }
+    }
+  }
+
   return (
     <div className="flex w-full h-full">
       <div className="w-1/2 flex flex-col items-center">
@@ -15,10 +48,16 @@ export default function Register() {
           <p className="font-[400] text-[14px] text-[#636364]">{t("registerText")}</p>
         </div>
         <div className="">
-          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" />
-          <InputField title={t("password")} type="password" name="password"/>
-          <InputField title={t("confirmPassword")} type="confirmPassword" name="confirmPassword"/>
+          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={isError} />
         </div>
+        <div className="max-w-[315px] flex items-start mb-[10px]">
+          <input onChange={() => setPolicy(!policy)} checked={policy}
+            type="checkbox" name="policy" className="inline-block mr-[8px] mt-[2px] w-[20px]" />
+          <span className="font-[500] text-[12px] inline-block">Agree to Terms and Conditions, Privacy Policy & License Agreement</span>
+        </div>
+        <Button title="Sign up" onSubmit={handleRegister} />
       </div>
       <div className="w-1/2">
         <div className="scale-105 relative w-full h-full">
