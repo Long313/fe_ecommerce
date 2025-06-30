@@ -1,7 +1,7 @@
 'use client'
-import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { emailRegex, passwordRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 
 type InputFeildProps = {
@@ -16,7 +16,7 @@ function InputField({ title, placeholder, type, name, onSave,getError }: InputFe
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string>("");
-    const { t } = useTranslation()
+    const { t } = useTranslation();
 
     const handleFocus = () => {
         inputRef.current?.focus();

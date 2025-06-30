@@ -17,7 +17,7 @@ export default function Register() {
     console.log("email", email);
     console.log("password", password);
     console.log("register");
-    let checkConditionSubmit = !policy || !email || !password || !confirmPassword;
+    const checkConditionSubmit = !policy || !email || !password || !confirmPassword;
     if (checkConditionSubmit) return;
   };
 

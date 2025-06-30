@@ -1,10 +1,9 @@
 'use client';
-import { useStore } from 'zustand';
 import './globals.css';
 // import LanguageSwitcher from '../../components/LanguageSwitcher/page';
-import { ReactNode, use } from 'react';
+import { ReactNode } from 'react';
 // import { useStore } from '@/store/store';
-// import DayNightToggler from '@/components/DayNightToggler/page';
+// import DayNightToggler from '@/compoOnents/DayNightToggler/page';
 // import { use } from 'react'; 
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
 export default function LocaleLayout({ children, params }: Props) { // { children, params }: Props
   // const resolvedParams = use(params); 
   // const mode = useStore((state) => state.mode);
-
+  console.log(params)
   // useEffect(() => {
   //   console.log("mode:", mode);
   // }, [mode]);
