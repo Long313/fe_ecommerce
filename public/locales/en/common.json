@@ -1,7 +1,11 @@
 {
   "homeTitle": "Home page",
   "registerTitle": "Create Account",
+  "signUp": "Sign Up",
+  "signIn": "Sign In",
   "registerText": "Please enter your details",
+  "loginTitle": "Login",
+  "loginText": "Welcome back! Please enter your details.",
   "emailPlaceHolder": "Enter your email",
   "password": "Password",
   "confirmPassword": "Confirm Password",

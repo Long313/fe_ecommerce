@@ -22,7 +22,7 @@ export default function LanguageSwitcher({ currentLocale }: { currentLocale?: st
           const newPath = pathname.replace(/^\/(vi|en)/, `/${locale}`);
           const label = locale === EN ? ENGLISH : VIETNAMESE;
           return (
-            <option key={locale} value={newPath}>
+            <option key={locale} value={newPath} className="text-center">
               {label}
             </option>
           );

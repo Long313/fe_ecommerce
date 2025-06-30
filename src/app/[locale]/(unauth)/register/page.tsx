@@ -57,7 +57,7 @@ export default function Register() {
             type="checkbox" name="policy" className="inline-block mr-[8px] mt-[2px] w-[20px]" />
           <span className="font-[500] text-[12px] inline-block">Agree to Terms and Conditions, Privacy Policy & License Agreement</span>
         </div>
-        <Button title="Sign up" onSubmit={handleRegister} />
+        <Button title={t("signUp")} onSubmit={handleRegister} />
       </div>
       <div className="w-1/2">
         <div className="scale-105 relative w-full h-full">

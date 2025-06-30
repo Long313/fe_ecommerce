@@ -1,7 +1,11 @@
 {
   "homeTitle": "Trang chủ",
   "registerTitle": "Đăng ký",
-  "registerText": "Nhập thông tin của bạn",
+  "signUp": "Đăng ký",
+  "signIn": "Đăng nhập",
+  "registerText": "Vui lòng nhập thông tin của bạn",
+  "loginTitle": "Đăng nhập",
+  "loginText": "Chào mừng bạn trở lại! Vui lòng nhập thông tin của bạn",
   "emailPlaceHolder": "Nhập email của bạn",
   "password": "Mật khẩu",
   "confirmPassword": "Nhập lai mật khẩu",

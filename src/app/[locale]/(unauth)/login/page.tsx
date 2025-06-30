@@ -1,8 +1,66 @@
-
+'use client'
+import Image from "next/image";
+import login_background from '../../../../images/login_background.svg';
+import InputField from "@/components/InputFeild/page";
+import useTranslation from "@/hooks/useTranslation";
+import Button from "@/components/Button/page";
+import { useState } from "react";
 export default function Login() {
-  return (
-    <div className="h-[400px] max-w-[500px] pl-[10px] bg-red-100 border border-black">
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [remember, setRemember] = useState<boolean>(false);
+  // const [isError, setIsError] = useState<boolean>(false);
+  const { t } = useTranslation();
 
+  const handleRegister = () => {
+    console.log("email", email);
+    console.log("password", password);
+    console.log("login");
+    const checkConditionSubmit = !email || !password;
+    if (checkConditionSubmit) return;
+  };
+
+  const handleGetDataInput = (typeName: string, value: string) => {
+    console.log(typeName, value);
+    if (typeName == "email") {
+      setEmail(value);
+    }
+    if (typeName == "password") {
+      setPassword(value);
+    }
+
+  }
+
+  return (
+    <div className="flex w-full h-full">
+      <div className="w-1/2 flex flex-col items-center">
+        <div className="text-center">
+          <h2 className="font-[500] text-[34px] uppercase">
+            {t("loginTitle")}
+          </h2>
+          <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
+        </div>
+        <div className="">
+          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+        </div>
+        <div className="w-full max-w-[315px] flex justify-between items-center mb-[10px]">
+          <div className="flex items-center">
+            <input onChange={() => setRemember(!remember)} checked={remember}
+              type="checkbox" name="remember" className="inline-block w-[20px] mr-[4px]" />
+            <span className="font-[500] text-[12px] inline-block">Remember me</span>
+          </div>
+          <p className="font-[500] text-[12px] inline-block">Forgot password</p>
+        </div>
+        <Button title={t("signIn")} onSubmit={handleRegister} />
+      </div>
+      <div className="w-1/2">
+        <div className="scale-105 relative w-full h-full">
+          <Image src={login_background} alt="background_register"
+            className="object-contain object-bottom"
+            fill />
+        </div>
+      </div>
     </div>
   );
 }
