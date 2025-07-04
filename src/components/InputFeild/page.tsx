@@ -1,21 +1,24 @@
 'use client'
+
 import { emailRegex, passwordRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react" // Hoặc dùng bất kỳ icon lib nào
 
 
 type InputFeildProps = {
     title: string,
     placeholder?: string,
     type?: string,
-    name : string,
+    name: string,
     onSave: (name: string, value: string) => void,
     getError?: boolean
 }
-function InputField({ title, placeholder, type, name, onSave,getError }: InputFeildProps) {
+function InputField({ title, placeholder, type, name, onSave, getError }: InputFeildProps) {
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string>("");
+    const [showPassword, setShowPassword] = useState<boolean>(false)
     const { t } = useTranslation();
 
     const handleFocus = () => {
@@ -31,30 +34,51 @@ function InputField({ title, placeholder, type, name, onSave,getError }: InputFe
     const handleValidate = () => {
 
         if (name === "email" && !emailRegex.test(value)) {
-            setError(t("emailError"));          
+            setError(t("emailError"));
         }
         if (name === "password" && !passwordRegex.test(value)) {
-            setError(t("passwordError")); 
+            setError(t("passwordError"));
         }
         // if (name === "confirmPassword" && !passwordRegex.test(value)) {
         //     setError(t("confirmPasswordError")); 
         // }
-        onSave(name,value);
+        onSave(name, value);
     };
 
     useEffect(() => {
-        if(getError) {
-           setError(t("confirmPasswordError")); 
+        if (getError) {
+            setError(t("confirmPasswordError"));
         }
-    },[getError])
+    }, [getError])
 
-    return (<div className="flex flex-col mt-[20px]">
+    const isPasswordField = name === "password" || name === "confirmPassword"
+    const inputType = isPasswordField && !showPassword ? "password" : "text"
+
+    return (<div className="flex flex-col">
         <label htmlFor="email_feild" className="inline-block font-[500]" onClick={handleFocus}>
             {title}
         </label>
-        <input onBlur={handleValidate} name={name}
-            onChange={(e) => handleChange(e)} type={type} ref={inputRef} placeholder={placeholder || ""} className="mt-[8px] outline-none rounded-[12px] py-[4px] px-[8px] text-[#636364] border border-[#636364] w-[315px]" />
-        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[16px] visibility-visible">
+        <div className="relative">
+            <input
+                onBlur={handleValidate}
+                name={name}
+                onChange={handleChange}
+                type={inputType}
+                ref={inputRef}
+                placeholder={placeholder || ""}
+                className="mt-[8px] outline-none rounded-[12px] py-[4px] px-[8px] text-[#636364] border border-[#636364] w-full pr-10"
+            />
+            {isPasswordField && (
+                <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute top-[calc(50%+5px)] right-[4px] transform -translate-y-1/2 text-[#636364]"
+                >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+            )}
+        </div>
+        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[36px] visibility-visible">
             {error || "\u00A0"}
         </p>
     </div>);

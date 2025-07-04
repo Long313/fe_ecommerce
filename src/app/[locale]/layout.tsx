@@ -5,10 +5,11 @@ import { ReactNode } from 'react';
 // import { useStore } from '@/store/store';
 // import DayNightToggler from '@/compoOnents/DayNightToggler/page';
 // import { use } from 'react'; 
+import { SessionProvider } from "next-auth/react"
 
 type Props = {
   children: ReactNode;
-  params: Promise<{ locale: string }>; 
+  params: Promise<{ locale: string }>;
 };
 
 export default function LocaleLayout({ children, params }: Props) { // { children, params }: Props
@@ -29,7 +30,9 @@ export default function LocaleLayout({ children, params }: Props) { // { childre
     // </html>
     <html>
       <body>
-        <main className="text-[var(--text-color-main)] w-full h-screen">{children}</main>
+        <main className="text-[var(--text-color-main)] w-full h-screen">
+          <SessionProvider>{children}</SessionProvider>
+        </main>
       </body>
     </html>
   );

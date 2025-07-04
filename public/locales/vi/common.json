@@ -3,13 +3,16 @@
   "registerTitle": "Đăng ký",
   "signUp": "Đăng ký",
   "signIn": "Đăng nhập",
+  "signInWithGoogle": "Đăng nhập bằng Gmail",
   "registerText": "Vui lòng nhập thông tin của bạn",
   "loginTitle": "Đăng nhập",
   "loginText": "Chào mừng bạn trở lại! Vui lòng nhập thông tin của bạn",
   "emailPlaceHolder": "Nhập email của bạn",
   "password": "Mật khẩu",
+  "phone": "Số điện thoại",
   "confirmPassword": "Nhập lai mật khẩu",
   "emailError": "Vui lòng nhập một email hợp lệ",
+  "phoneError": "Vui lòng nhập một số điện thoại hợp lệ",
   "passwordError": "Mật khẩu có ít nhất 6 ký tự, gồm có ký tự đặc biệt, số và chữ",
   "confirmPasswordError":"Mật khẩu nhập lại không trùng khớp với mật khẩu"
 }

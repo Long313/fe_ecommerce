@@ -5,14 +5,22 @@ import InputField from "@/components/InputFeild/page";
 import useTranslation from "@/hooks/useTranslation";
 import Button from "@/components/Button/page";
 import { useState } from "react";
+import google_logo from '../../../../images/icon_google.png'
+import Link from "next/link";
+import { signIn, signOut, useSession } from "next-auth/react"
+
 export default function Login() {
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
   // const [isError, setIsError] = useState<boolean>(false);
-  const { t } = useTranslation();
-
-  const handleRegister = () => {
+  const { t, locale } = useTranslation();
+  const { data: session } = useSession()
+  if (session) {
+    console.log("session", session);
+  }
+  const handleLogin = () => {
     console.log("email", email);
     console.log("password", password);
     console.log("login");
@@ -52,7 +60,12 @@ export default function Login() {
           </div>
           <p className="font-[500] text-[12px] inline-block">Forgot password</p>
         </div>
-        <Button title={t("signIn")} onSubmit={handleRegister} />
+        <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+        <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />
+        <div className="font-[500] text-[12px] mt-[8px]">
+          Don’t have an account?
+          <Link href={`/${locale}/register`} className="text-[#EA454C] ml-1">Sign up for free!</Link>
+        </div>
       </div>
       <div className="w-1/2">
         <div className="scale-105 relative w-full h-full">

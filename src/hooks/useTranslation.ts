@@ -22,6 +22,7 @@ export default function useTranslation() {
   }, [locale])
 
   return {
-    t: (key: string) => t[key] || key
+    t: (key: string) => t[key] || key,
+    locale,
   }
 }
