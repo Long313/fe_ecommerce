@@ -1,12 +1,12 @@
 'use client';
 import './globals.css';
 // import LanguageSwitcher from '../../components/LanguageSwitcher/page';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 // import { useStore } from '@/store/store';
 // import DayNightToggler from '@/compoOnents/DayNightToggler/page';
 // import { use } from 'react'; 
 import { SessionProvider } from "next-auth/react"
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 type Props = {
   children: ReactNode;
   params: Promise<{ locale: string }>;
@@ -19,6 +19,8 @@ export default function LocaleLayout({ children, params }: Props) { // { childre
   // useEffect(() => {
   //   console.log("mode:", mode);
   // }, [mode]);
+    const [queryClient] = useState(() => new QueryClient());
+
 
   return (
     // <html lang={resolvedParams.locale}>
@@ -31,7 +33,7 @@ export default function LocaleLayout({ children, params }: Props) { // { childre
     <html>
       <body>
         <main className="text-[var(--text-color-main)] w-full h-screen">
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider><QueryClientProvider client={queryClient}>{children}</QueryClientProvider></SessionProvider>
         </main>
       </body>
     </html>

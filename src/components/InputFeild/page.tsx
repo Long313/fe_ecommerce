@@ -1,6 +1,6 @@
 'use client'
 
-import { emailRegex, passwordRegex } from "@/constants";
+import { emailRegex, passwordRegex, phoneRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Eye, EyeOff } from "lucide-react" // Hoặc dùng bất kỳ icon lib nào
@@ -38,6 +38,9 @@ function InputField({ title, placeholder, type, name, onSave, getError }: InputF
         }
         if (name === "password" && !passwordRegex.test(value)) {
             setError(t("passwordError"));
+        }
+        if (name === "phone" && !phoneRegex.test(value)) {
+            setError(t("phoneError"));
         }
         // if (name === "confirmPassword" && !passwordRegex.test(value)) {
         //     setError(t("confirmPasswordError")); 
