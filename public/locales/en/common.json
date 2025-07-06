@@ -14,5 +14,8 @@
   "emailError": "Please enter a valid email",
   "phoneError": "Please enter a valid phone",
   "passwordError": "Password must be at least 6 characters, including one special character, one number and one letter",
-  "confirmPasswordError":"Re-entered password does not match entered password"
+  "confirmPasswordError":"Re-entered password does not match entered password",
+  "checkPolicy": "Please agree to the Terms and Conditions, Privacy Policy & License Agreement",
+  "verifyOtp": "Verify OTP",
+  "resendOtp": "Resend OTP"
 }

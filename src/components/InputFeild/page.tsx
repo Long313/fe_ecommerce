@@ -12,12 +12,12 @@ type InputFeildProps = {
     type?: string,
     name: string,
     onSave: (name: string, value: string) => void,
-    getError?: boolean
+    getError?: boolean | string
 }
 function InputField({ title, placeholder, type, name, onSave, getError }: InputFeildProps) {
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState<string | boolean>("");
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const { t } = useTranslation();
 
@@ -49,8 +49,11 @@ function InputField({ title, placeholder, type, name, onSave, getError }: InputF
     };
 
     useEffect(() => {
-        if (getError) {
+        if (getError && name == "confirmPasswordError") {
             setError(t("confirmPasswordError"));
+        } else if (getError && name == "email" ) {
+            console.log("getError", getError);
+            setError(getError);
         }
     }, [getError])
 

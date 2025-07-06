@@ -1,67 +1,107 @@
 'use client'
-import Image from "next/image";
-import register_background from '../../../../images/register_brackground.svg';
+import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
 import useTranslation from "@/hooks/useTranslation";
-import Button from "@/components/Button/page";
+import { registerUser } from "@/service/register";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
+import register_background from '../../../../images/register_brackground.svg';
+import Loader from "@/components/Loader/page";
 export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [policy, setPolicy] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean | string>(false);
   const [policyError, setPolicyError] = useState<string>("");
-  const { t } = useTranslation();
+  const [formErrors, setFormErrors] = useState<string>("");
+  const { t, locale } = useTranslation();
+  const router = useRouter();
 
   const handleRegister = () => {
-    console.log("email", email);
-    console.log("password", password);
-    console.log("phone", phone);
-    console.log("register");
-    if (!policy) setPolicyError("Please check policy");
+    if (!policy) setPolicyError(t("checkPolicy"));
     const checkConditionSubmit = !policy || !email || !password || !confirmPassword;
     if (checkConditionSubmit) return;
+    mutate({ email, password, phone_number: phone });
+
   };
+
+  // const { data, isLoading, isError } = useQuery({
+  //   queryKey: ['register'],       // key để cache
+  //   queryFn: registerUser        // hàm fetch
+  // });
+  // if (isLoading) return <p>Đang tải...</p>;
+  // if (isError) return <p>Có lỗi xảy ra!</p>;
+  // useEffect(() => {
+  //   if(data.status == 200) router.push("/");
+  // },[data])
+  const {
+    mutate,
+    isPending, // Thay thế cho isLoading trong react-query v5
+    isError: mutationError, // Đổi tên biến
+    isSuccess,
+    error,
+  } = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      if (data.status === 200) {
+        router.push(`/${locale}/otp`);
+      } else {
+        console.log(data);
+      }
+    },
+    onError: (error: any) => {
+      if (error) {
+        console.log("register error", error);
+        setFormErrors(error);
+      }
+    }
+  });
+
 
   useEffect(() => {
     setPolicyError("");
   }, [policy])
 
   const handleGetDataInput = (typeName: string, value: string) => {
-    console.log(typeName, value);
     if (typeName == "email") {
       setEmail(value);
     }
     if (typeName == "phone") {
       setPhone(value);
     }
-    if (typeName == "password") {
-      setPassword(value);
+    if (typeName === "confirmPassword") {
+      setConfirmPassword(value);
+      setIsError(password !== value);
     }
 
-    if (typeName == "confirmPassword") {
-      setConfirmPassword(value);
-      if (password !== value) {
-        setIsError(true);
+    if (typeName === "password") {
+      setPassword(value);
+      if (confirmPassword) {
+        setIsError(value !== confirmPassword);
       }
     }
   }
 
   return (
     <div className="flex w-full h-full">
+      {isPending && (
+        <Loader />
+      )}
       <div className="w-1/2 flex flex-col items-center">
         <div className="text-center">
-          <h2 className="font-[500] text-[34px] uppercase">
+          <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
             {t("registerTitle")}
           </h2>
           <p className="font-[400] text-[14px] text-[#636364]">{t("registerText")}</p>
         </div>
         <div className="">
-          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
-          <InputField title={t("phone")} type="phone" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
-          <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
+          <InputField title={t("phone")} type="phone" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
+          <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
           <InputField title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={isError} />
         </div>
         <div className="max-w-[315px] flex items-start mb-[10px]">

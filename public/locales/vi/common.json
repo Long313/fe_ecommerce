@@ -10,9 +10,12 @@
   "emailPlaceHolder": "Nhập email của bạn",
   "password": "Mật khẩu",
   "phone": "Số điện thoại",
-  "confirmPassword": "Nhập lai mật khẩu",
+  "confirmPassword": "Nhập lại mật khẩu",
   "emailError": "Vui lòng nhập một email hợp lệ",
   "phoneError": "Vui lòng nhập một số điện thoại hợp lệ",
   "passwordError": "Mật khẩu có ít nhất 6 ký tự, gồm có ký tự đặc biệt, số và chữ",
-  "confirmPasswordError":"Mật khẩu nhập lại không trùng khớp với mật khẩu"
+  "confirmPasswordError":"Mật khẩu nhập lại không trùng khớp với mật khẩu",
+  "checkPolicy": "Vui lòng đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép",
+  "verifyOtp": "Xác thực OTP",
+  "resendOtp": "Gửi lại OTP"
 }

@@ -1,13 +1,13 @@
 'use client'
-import Image from "next/image";
-import login_background from '../../../../images/login_background.svg';
+import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
 import useTranslation from "@/hooks/useTranslation";
-import Button from "@/components/Button/page";
-import { useState } from "react";
-import google_logo from '../../../../images/icon_google.png'
+import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react"
+import { useState } from "react";
+import google_logo from '../../../../images/icon_google.png';
+import login_background from '../../../../images/login_background.svg';
 
 export default function Login() {
 
@@ -43,7 +43,7 @@ export default function Login() {
     <div className="flex w-full h-full">
       <div className="w-1/2 flex flex-col items-center">
         <div className="text-center">
-          <h2 className="font-[500] text-[34px] uppercase">
+          <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
             {t("loginTitle")}
           </h2>
           <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
@@ -58,13 +58,13 @@ export default function Login() {
               type="checkbox" name="remember" className="inline-block w-[20px] mr-[4px]" />
             <span className="font-[500] text-[12px] inline-block">Remember me</span>
           </div>
-          <p className="font-[500] text-[12px] inline-block">Forgot password</p>
+          <p className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">Forgot password</p>
         </div>
-        <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
-        <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />
+        <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"/>
+        <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />
         <div className="font-[500] text-[12px] mt-[8px]">
           Don’t have an account?
-          <Link href={`/${locale}/register`} className="text-[#EA454C] ml-1">Sign up for free!</Link>
+          <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1">Sign up for free!</Link>
         </div>
       </div>
       <div className="w-1/2">

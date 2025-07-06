@@ -11,4 +11,6 @@ export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
 export const phoneRegex = /^\+?[1-9]\d{1,14}$/;
 
+export const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
