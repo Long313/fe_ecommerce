@@ -17,5 +17,6 @@
   "confirmPasswordError":"Mật khẩu nhập lại không trùng khớp với mật khẩu",
   "checkPolicy": "Vui lòng đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép",
   "verifyOtp": "Xác thực OTP",
-  "resendOtp": "Gửi lại OTP"
+  "resendOtp": "Gửi lại OTP",
+  "policyTitle": "Đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép"
 }

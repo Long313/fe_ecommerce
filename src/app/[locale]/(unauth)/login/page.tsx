@@ -42,7 +42,7 @@ export default function Login() {
   return (
     <div className="flex w-full h-full">
       <div className="w-1/2 flex flex-col items-center">
-        <div className="text-center">
+        <div className="text-center mb-[20px]">
           <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
             {t("loginTitle")}
           </h2>

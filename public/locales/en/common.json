@@ -17,5 +17,6 @@
   "confirmPasswordError":"Re-entered password does not match entered password",
   "checkPolicy": "Please agree to the Terms and Conditions, Privacy Policy & License Agreement",
   "verifyOtp": "Verify OTP",
-  "resendOtp": "Resend OTP"
+  "resendOtp": "Resend OTP",
+  "policyTitle": "Agree to Terms and Conditions, Privacy Policy & License Agreement"
 }

@@ -15,17 +15,18 @@ export default function Register() {
   const [phone, setPhone] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [policy, setPolicy] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean | string>(false);
+  // const [isError, setIsError] = useState<boolean | string>("");
   const [policyError, setPolicyError] = useState<string>("");
-  const [formErrors, setFormErrors] = useState<string>("");
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { t, locale } = useTranslation();
   const router = useRouter();
 
   const handleRegister = () => {
+    setFormErrors({})
     if (!policy) setPolicyError(t("checkPolicy"));
     const checkConditionSubmit = !policy || !email || !password || !confirmPassword;
     if (checkConditionSubmit) return;
-    mutate({ email, password, phone_number: phone });
+    mutate({ email, password, phoneNumber: phone });
 
   };
 
@@ -46,19 +47,27 @@ export default function Register() {
     error,
   } = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
-      if (data.status === 200) {
+    onSuccess: (res) => {
+      if (res.status === 200) {
         router.push(`/${locale}/otp`);
-      } else {
-        console.log(data);
       }
     },
     onError: (error: any) => {
-      if (error) {
-        console.log("register error", error);
-        setFormErrors(error);
+      console.log("❌ register error", error); // { status: 400, message: "..."}
+      if (error.status === 400) {
+        if (error.message.includes("Email")) {
+          setFormErrors((prev) => ({ ...prev, email: error.message }));
+        } else if (error.message.includes("Phone")) {
+          setFormErrors((prev) => ({ ...prev, phone: error.message }));
+        } else {
+          setFormErrors((prev) => ({ ...prev, general: error.message }));
+        }
+      } else {
+        // fallback
+        alert(error.message || "Có lỗi xảy ra");
       }
     }
+
   });
 
 
@@ -75,13 +84,13 @@ export default function Register() {
     }
     if (typeName === "confirmPassword") {
       setConfirmPassword(value);
-      setIsError(password !== value);
+      if (password !== value) setFormErrors({ ...formErrors, confirmPassword: "confirm error" });
     }
 
     if (typeName === "password") {
       setPassword(value);
       if (confirmPassword) {
-        setIsError(value !== confirmPassword);
+        setFormErrors({ ...formErrors, confirmPassword: "confirm error" })
       }
     }
   }
@@ -102,7 +111,7 @@ export default function Register() {
           <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
           <InputField title={t("phone")} type="phone" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
           <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
-          <InputField title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={isError} />
+          <InputField title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
         </div>
         <div className="max-w-[315px] flex items-start mb-[10px]">
           <input onChange={() => setPolicy(!policy)} checked={policy}

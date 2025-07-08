@@ -12,7 +12,7 @@ type InputFeildProps = {
     type?: string,
     name: string,
     onSave: (name: string, value: string) => void,
-    getError?: boolean | string
+    getError?: Record<string, string>
 }
 function InputField({ title, placeholder, type, name, onSave, getError }: InputFeildProps) {
     const [value, setValue] = useState<string>("");
@@ -49,13 +49,14 @@ function InputField({ title, placeholder, type, name, onSave, getError }: InputF
     };
 
     useEffect(() => {
-        if (getError && name == "confirmPasswordError") {
+        console.log("getError", getError);
+        if (getError?.confirmPassword === "confirm error" && name === "confirmPassword") {
             setError(t("confirmPasswordError"));
-        } else if (getError && name == "email" ) {
-            console.log("getError", getError);
-            setError(getError);
+        } else if (getError && getError[name]) {
+            setError(getError[name]);
         }
-    }, [getError])
+    }, [getError]);
+
 
     const isPasswordField = name === "password" || name === "confirmPassword"
     const inputType = isPasswordField && !showPassword ? "password" : "text"
