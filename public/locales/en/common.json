@@ -18,5 +18,11 @@
   "checkPolicy": "Please agree to the Terms and Conditions, Privacy Policy & License Agreement",
   "verifyOtp": "Verify OTP",
   "resendOtp": "Resend OTP",
-  "policyTitle": "Agree to Terms and Conditions, Privacy Policy & License Agreement"
+  "policyTitle": "Agree to Terms and Conditions, Privacy Policy & License Agreement",
+  "sendOtpTitle": "We have sent an OTP to your mail.",
+  "enterOtp" : "Please enter OTP",
+  "rememberMeTitle" : "Lưu mật khẩu",
+  "forgotPasswordTitle" : "Forgot password",
+  "dontHaveAccountTitle" : "Don’t have an account?",
+  "signUpFreeTitle" : "Sign up for free!"
 }

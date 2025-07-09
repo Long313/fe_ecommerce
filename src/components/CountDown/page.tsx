@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 
-function CountdownTimer() {
+function CountdownTimer({callBack} : {callBack : boolean}) {
   const [secondsLeft, setSecondsLeft] = useState(300); // 5 phút
 
   useEffect(() => {
@@ -19,6 +19,12 @@ function CountdownTimer() {
     const seconds = totalSeconds % 60;
     return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   };
+
+  useEffect(() => {
+      if(callBack) {
+        setSecondsLeft(300);
+      }
+  }, [callBack])
 
   return (
     <div className="text-center text-[24px] text-[#000000]">

@@ -11,16 +11,19 @@ type InputFeildProps = {
     placeholder?: string,
     type?: string,
     name: string,
+    valueDefault?: string,
     onSave: (name: string, value: string) => void,
     getError?: Record<string, string>
 }
-function InputField({ title, placeholder, type, name, onSave, getError }: InputFeildProps) {
+function InputField({ title, placeholder, type, name, onSave, getError, valueDefault }: InputFeildProps) {
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");
     const [showPassword, setShowPassword] = useState<boolean>(false)
     const { t } = useTranslation();
-
+    useEffect(() => {
+        setValue(valueDefault ?? "");
+    }, [valueDefault]);
     const handleFocus = () => {
         inputRef.current?.focus();
     };
@@ -67,6 +70,7 @@ function InputField({ title, placeholder, type, name, onSave, getError }: InputF
         </label>
         <div className="relative">
             <input
+                value={value}
                 onBlur={handleValidate}
                 name={name}
                 onChange={handleChange}

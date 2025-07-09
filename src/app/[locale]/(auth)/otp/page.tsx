@@ -11,7 +11,7 @@ function SendOtp() {
       className="bg-center bg-cover w-full h-screen"
       style={{ backgroundImage: `url(${otp_background.src})` }}
     >
-      <Modal/>
+     {otp_background.src && <Modal/>}
     </div >
   );
 }

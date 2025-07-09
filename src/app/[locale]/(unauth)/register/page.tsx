@@ -1,14 +1,15 @@
 'use client'
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
+import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { registerUser } from "@/service/register";
+import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import register_background from '../../../../images/register_brackground.svg';
-import Loader from "@/components/Loader/page";
 export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -20,14 +21,18 @@ export default function Register() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { t, locale } = useTranslation();
   const router = useRouter();
+  const { setEmailAuthen, setPasswordAuthen,setTypeOtpAuthen } = useStore();
 
   const handleRegister = () => {
     setFormErrors({})
     if (!policy) setPolicyError(t("checkPolicy"));
-    const checkConditionSubmit = !policy || !email || !password || !confirmPassword;
+    const checkConditionSubmit = !policy || !email || !password || !confirmPassword || Object.keys(formErrors).length > 0;
     if (checkConditionSubmit) return;
     mutate({ email, password, phoneNumber: phone });
-
+    console.log("email authen---", email);
+    setEmailAuthen(email);
+    setPasswordAuthen(password);
+    setTypeOtpAuthen("register");
   };
 
   // const { data, isLoading, isError } = useQuery({
@@ -41,8 +46,8 @@ export default function Register() {
   // },[data])
   const {
     mutate,
-    isPending, // Thay thế cho isLoading trong react-query v5
-    isError: mutationError, // Đổi tên biến
+    isPending, // làm loading
+    isError: mutationError, 
     isSuccess,
     error,
   } = useMutation({
@@ -53,7 +58,6 @@ export default function Register() {
       }
     },
     onError: (error: any) => {
-      console.log("❌ register error", error); // { status: 400, message: "..."}
       if (error.status === 400) {
         if (error.message.includes("Email")) {
           setFormErrors((prev) => ({ ...prev, email: error.message }));
@@ -63,8 +67,7 @@ export default function Register() {
           setFormErrors((prev) => ({ ...prev, general: error.message }));
         }
       } else {
-        // fallback
-        alert(error.message || "Có lỗi xảy ra");
+        console.log(error.message || "Có lỗi xảy ra");
       }
     }
 

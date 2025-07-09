@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useState } from "react";
 import google_logo from '../../../../images/icon_google.png';
 import login_background from '../../../../images/login_background.svg';
+import { useStore } from "@/store/store";
 
 export default function Login() {
 
@@ -16,7 +17,10 @@ export default function Login() {
   const [remember, setRemember] = useState<boolean>(false);
   // const [isError, setIsError] = useState<boolean>(false);
   const { t, locale } = useTranslation();
-  const { data: session } = useSession()
+  const { data: session } = useSession();
+  const emailAuthen = useStore((state) => state.emailAuthen);
+  const passwordAuthen = useStore((state) => state.passwordAuthen);
+
   if (session) {
     console.log("session", session);
   }
@@ -49,22 +53,22 @@ export default function Login() {
           <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
         </div>
         <div className="">
-          <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
-          <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField valueDefault={emailAuthen} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField valueDefault={passwordAuthen} title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
         </div>
         <div className="w-full max-w-[315px] flex justify-between items-center mb-[10px]">
           <div className="flex items-center">
             <input onChange={() => setRemember(!remember)} checked={remember}
               type="checkbox" name="remember" className="inline-block w-[20px] mr-[4px]" />
-            <span className="font-[500] text-[12px] inline-block">Remember me</span>
+            <span className="font-[500] text-[12px] inline-block">{t("Remember me")}</span>
           </div>
-          <p className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">Forgot password</p>
+          <p className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">{t("forgotPasswordTitle")}</p>
         </div>
-        <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"/>
+        <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
         <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />
         <div className="font-[500] text-[12px] mt-[8px]">
-          Don’t have an account?
-          <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1">Sign up for free!</Link>
+          {t("dontHaveAccountTitle")}
+          <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1">{t("signUpFreeTitle")}</Link>
         </div>
       </div>
       <div className="w-1/2">

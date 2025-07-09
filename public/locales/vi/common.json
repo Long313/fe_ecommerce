@@ -18,5 +18,11 @@
   "checkPolicy": "Vui lòng đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép",
   "verifyOtp": "Xác thực OTP",
   "resendOtp": "Gửi lại OTP",
-  "policyTitle": "Đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép"
+  "policyTitle": "Đồng ý với Điều khoản và Điều kiện, Chính sách Bảo mật & Thỏa thuận Cấp phép",
+  "sendOtpTitle": "Chúng tôi đã gửi mã OTP tới email của bạn.",
+  "enterOtp" : "Vui lòng nhập OTP",
+  "rememberMeTitle" : "Remember me",
+  "forgotPasswordTitle" : "Quên mật khẩu",
+  "dontHaveAccountTitle" : "Bạn chưa có tài khoản?",
+  "signUpFreeTitle" : "Đăng ký miễn phí!"
 }
