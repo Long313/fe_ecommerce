@@ -9,6 +9,9 @@ import { useState } from "react";
 import google_logo from '../../../../images/icon_google.png';
 import login_background from '../../../../images/login_background.svg';
 import { useStore } from "@/store/store";
+import { useRouter } from "next/navigation";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/service/login";
 
 export default function Login() {
 
@@ -20,7 +23,7 @@ export default function Login() {
   const { data: session } = useSession();
   const emailAuthen = useStore((state) => state.emailAuthen);
   const passwordAuthen = useStore((state) => state.passwordAuthen);
-
+  const router = useRouter();
   if (session) {
     console.log("session", session);
   }
@@ -30,7 +33,31 @@ export default function Login() {
     console.log("login");
     const checkConditionSubmit = !email || !password;
     if (checkConditionSubmit) return;
+    mutate({email,password});
   };
+
+  const {
+    mutate,
+    isPending, // làm loading
+    isError: mutationError, 
+    isSuccess,
+    error,
+  } = useMutation({
+    mutationFn: login,
+    onSuccess: (res) => {
+      if (res.status === 200) {
+        router.push(`/${locale}/`);
+      }
+    },
+    onError: (error: any) => {
+      if (error.status === 400) {
+        
+      } else {
+        console.log(error.message || "Có lỗi xảy ra");
+      }
+    }
+
+  });
 
   const handleGetDataInput = (typeName: string, value: string) => {
     console.log(typeName, value);

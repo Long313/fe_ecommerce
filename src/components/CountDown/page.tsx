@@ -27,7 +27,7 @@ function CountdownTimer({callBack} : {callBack : boolean}) {
   }, [callBack])
 
   return (
-    <div className="text-center text-[24px] text-[#000000]">
+    <div className="text-center text-[16px] text-[#FF35C4]">
       {formatTime(secondsLeft)}
     </div>
   );

@@ -1,24 +1,9 @@
-import { baseURL } from '@/constants';
-import axios from 'axios';
+import { baseURL } from "@/constants";
+import axios from "axios";
 
-
-/*
-export const postUser = async ({ name, email, role }) => {
-  const response = await axios.post(
-    '/users',
-    { name, email }, // body
-    {
-      params: { role }, // param nằm trên URL
-    }
-  );
-  return response.data;
-};
-*/
-
-
-export const registerUser = async (body: any) => {
+export const login = async (body: any) => {
   try {
-    const response = await axios.post(`${baseURL}/user/customer`, body);
+    const response = await axios.post(`${baseURL}/auth/login`, body);
     return response.data;
   } catch (error: any) {
     if (error.response) {
@@ -37,13 +22,3 @@ export const registerUser = async (body: any) => {
     }
   }
 };
-
-export const verifyOtpRegister = async (body: any) => {
-  try {
-    const response = await axios.post(`${baseURL}/user/verify-otp-register`, body);
-    return response.data;
-  } catch (error: any) {
-    console.error(error)
-  }
-};
-
