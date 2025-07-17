@@ -1,17 +1,20 @@
+'use client'
+
 import useTranslation from "@/hooks/useTranslation";
 import { verifyOtpRegister } from "@/service/register";
 import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { X } from "lucide-react";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import CountdownTimer from "@/components/CountDown/page";
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
 import { resendOtp } from "@/service/otp";
-import { forgotPassword } from "@/service/forgot-password";
+import { forgotPassword, resetPassword } from "@/service/forgot-password";
 
 function ModalResetPassword() {
+
     const otpLength = 4;
     // const [otp, setOtp] = useState<string[]>(Array(otpLength).fill(""));
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
@@ -23,7 +26,6 @@ function ModalResetPassword() {
     const emailAuthen = useStore((state) => state.emailAuthen);
     const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-
     // const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     //     const value = e.target.value;
 
@@ -76,24 +78,7 @@ function ModalResetPassword() {
     //     setTypeOtpAuthen("reset")
     // }
 
-    // const {
-    //     mutate: mutateResetPassword,
-    //     isPending: isPendingResetPassword, // làm loading
-    //     isError: mutationErrorResetPassword,
-    //     isSuccess: isSuccessResetPassword,
-    //     error: errorResetPassword,
-    // } = useMutation({
-    //     mutationFn: forgotPassword,
-    //     onSuccess: (res) => {
-    //         if (res.status === 200) {
-    //             router.push(`/${locale}/otp`);
-    //         }
-    //     },
-    //     onError: (error: any) => {
-    //         console.log(error.message || "Có lỗi xảy ra");
-    //     }
 
-    // });
 
     const handleGetDataInput = (typeName: string, value: string) => {
         if (typeName === "confirmPassword") {
@@ -109,8 +94,27 @@ function ModalResetPassword() {
         }
     }
 
-    const handleUpdatePassword = () => {
+    const {
+        mutate: mutateResetPassword,
+        isPending: isPendingResetPassword, // làm loading
+        isError: mutationErrorResetPassword,
+        isSuccess: isSuccessResetPassword,
+        error: errorResetPassword,
+    } = useMutation({
+        mutationFn: resetPassword,
+        onSuccess: (res) => {
+            if (res.status === 200) {
+                router.push(`/${locale}/login`);
+            }
+        },
+        onError: (error: any) => {
+            console.log(error.message || "Có lỗi xảy ra");
+        }
 
+    });
+
+    const handleUpdatePassword = () => {
+        mutateResetPassword({ email: emailAuthen, newPassword: password })
     }
 
     return (<div className="p-[8px] rounded-[16px] fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30%] max-w-[896px] max-h-[606px] bg-white">

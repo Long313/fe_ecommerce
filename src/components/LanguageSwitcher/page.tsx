@@ -1,28 +1,38 @@
-'use client'
+'use client';
 
 import { EN, ENGLISH, locales, VIETNAMESE } from '@/constants';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import globe_icon from '../../images/globe_icon.svg';
+import { CiGlobe } from "react-icons/ci";
+import { useEffect, useState } from 'react';
 
-export default function LanguageSwitcher({ currentLocale }: { currentLocale?: string }) {
+export default function LanguageSwitcher({ currentLocale, color }: { currentLocale?: string, color?: string }) {
   const router = useRouter();
   const pathname = usePathname();
-  console.log(currentLocale);
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true); // Đảm bảo render chỉ sau khi component mount (client-side)
+  }, []);
+
+  if (!mounted || !pathname) return null; // ⚠️ Không render gì trong lần render đầu SSR
+
+  const currentPathLocale = pathname.split('/')[1]; // "vi" | "en"
+  const pathWithoutLocale = pathname.replace(/^\/(vi|en)/, '');
+
   const handleRouter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedPath = event.target.value;
-    router.push(selectedPath);
+    const selectedLocale = event.target.value;
+    const newPath = `/${selectedLocale}${pathWithoutLocale}`;
+    router.push(newPath);
   };
 
   return (
     <div className='flex items-center text-[14px]'>
-      <Image src={globe_icon} alt="globe_icon" width={16} height={16} />
-      <select onChange={handleRouter} value={pathname}>
+      {color ? <CiGlobe size={16} color="#fff" /> : <CiGlobe size={16} />}
+      <select onChange={handleRouter} value={currentPathLocale} className={``}>
         {locales.map((locale) => {
-          const newPath = pathname.replace(/^\/(vi|en)/, `/${locale}`);
           const label = locale === EN ? ENGLISH : VIETNAMESE;
           return (
-            <option key={locale} value={newPath} className="text-center">
+            <option key={locale} value={locale} className={`text-center ${color ? "text-[#373737]" : ""}`}>
               {label}
             </option>
           );

@@ -20,9 +20,12 @@ function InputField({ title, placeholder, type, name, onSave, getError, valueDef
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");
     const [showPassword, setShowPassword] = useState<boolean>(false)
+    const [mounted, setMounted] = useState(false); // 👈 kiểm soát render
     const { t } = useTranslation();
+
     useEffect(() => {
-        setValue(valueDefault ?? "");
+        setValue(valueDefault || "");
+        setMounted(true); // chỉ cho render sau khi mounted
     }, [valueDefault]);
     const handleFocus = () => {
         inputRef.current?.focus();
@@ -63,6 +66,7 @@ function InputField({ title, placeholder, type, name, onSave, getError, valueDef
 
     const isPasswordField = name === "password" || name === "confirmPassword"
     const inputType = isPasswordField && !showPassword ? "password" : "text"
+    if (!mounted) return null; // tránh hydration mismatch
 
     return (<div className="flex flex-col">
         <label htmlFor="email_feild" className="inline-block font-[500]" onClick={handleFocus}>

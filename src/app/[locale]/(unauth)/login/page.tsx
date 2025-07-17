@@ -5,7 +5,7 @@ import useTranslation from "@/hooks/useTranslation";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import google_logo from '../../../../images/icon_google.png';
 import login_background from '../../../../images/login_background.svg';
 import { useStore } from "@/store/store";
@@ -24,6 +24,15 @@ export default function Login() {
   const emailAuthen = useStore((state) => state.emailAuthen);
   const passwordAuthen = useStore((state) => state.passwordAuthen);
   const router = useRouter();
+  useEffect(() => {
+    const savedEmail = localStorage.getItem('rememberEmail');
+    const savedPassword = localStorage.getItem('rememberPassword');
+    if (savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRemember(true);
+    }
+  }, []);
   if (session) {
     console.log("session", session);
   }
@@ -33,25 +42,31 @@ export default function Login() {
     console.log("login");
     const checkConditionSubmit = !email || !password;
     if (checkConditionSubmit) return;
-    mutate({email,password});
+    mutate({ email, password });
   };
 
   const {
     mutate,
     isPending, // làm loading
-    isError: mutationError, 
+    isError: mutationError,
     isSuccess,
     error,
   } = useMutation({
     mutationFn: login,
     onSuccess: (res) => {
       if (res.status === 200) {
+        if (remember) {
+          localStorage.setItem('rememberEmail', email);
+          localStorage.setItem('rememberPassword', password);
+        } else {
+          localStorage.removeItem('rememberEmail');
+        }
         router.push(`/${locale}/`);
       }
     },
     onError: (error: any) => {
       if (error.status === 400) {
-        
+
       } else {
         console.log(error.message || "Có lỗi xảy ra");
       }
@@ -80,8 +95,8 @@ export default function Login() {
           <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
         </div>
         <div className="">
-          <InputField valueDefault={emailAuthen} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
-          <InputField valueDefault={passwordAuthen} title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField valueDefault={email ? email : emailAuthen} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <InputField valueDefault={password ? password : passwordAuthen} title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
         </div>
         <div className="w-full max-w-[315px] flex justify-between items-center mb-[10px]">
           <div className="flex items-center">
@@ -89,7 +104,7 @@ export default function Login() {
               type="checkbox" name="remember" className="inline-block w-[20px] mr-[4px]" />
             <span className="font-[500] text-[12px] inline-block">{t("Remember me")}</span>
           </div>
-          <p className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">{t("forgotPasswordTitle")}</p>
+          <p onClick={() => router.push(`/${locale}/forgot-password`)} className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">{t("forgotPasswordTitle")}</p>
         </div>
         <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
         <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />

@@ -115,7 +115,7 @@ function Modal() {
         console.log("codeOpt", codeOtp);
         console.log("emailAuthen", emailAuthen);
         if (typeOtpAuthen === "reset") {
-            mutateVerifyOtpReset({ email: emailAuthen, otp: codeOtp});
+            mutateVerifyOtpReset({ email: emailAuthen, otp: codeOtp });
         } else {
             mutateVerifyOtp({ email: emailAuthen, otp: codeOtp });
         }
@@ -151,6 +151,7 @@ function Modal() {
         onSuccess: (res) => {
             if (res.status === 200) {
                 router.push(`/${locale}/reset-password`);
+                router.refresh();
             }
         },
         onError: (error: any) => {
