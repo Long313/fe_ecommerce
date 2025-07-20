@@ -1,11 +1,11 @@
 import { baseURL } from '@/constants';
-import axios from 'axios'
+import axios from 'axios';
 
 export const forgotPassword = async (body: any) => {
   try {
     const response = await axios.post(`${baseURL}/user/forgot-password`, body);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error(error)
   }
 };

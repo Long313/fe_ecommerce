@@ -1,43 +1,58 @@
 'use client';
 
 import { EN, ENGLISH, locales, VIETNAMESE } from '@/constants';
+import { Select } from 'antd';
 import { usePathname, useRouter } from 'next/navigation';
-import { CiGlobe } from "react-icons/ci";
 import { useEffect, useState } from 'react';
+import { CiGlobe } from 'react-icons/ci';
 
-export default function LanguageSwitcher({ currentLocale, color }: { currentLocale?: string, color?: string }) {
+const { Option } = Select;
+
+interface Props {
+  currentLocale?: string;
+  color?: string;
+}
+
+export default function LanguageSwitcher({ currentLocale, color }: Props) {
   const router = useRouter();
   const pathname = usePathname();
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    setMounted(true); // Đảm bảo render chỉ sau khi component mount (client-side)
+    setMounted(true);
   }, []);
 
-  if (!mounted || !pathname) return null; // ⚠️ Không render gì trong lần render đầu SSR
+  if (!mounted || !pathname) return null;
 
-  const currentPathLocale = pathname.split('/')[1]; // "vi" | "en"
+  const currentPathLocale = pathname.split('/')[1];
   const pathWithoutLocale = pathname.replace(/^\/(vi|en)/, '');
 
-  const handleRouter = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedLocale = event.target.value;
-    const newPath = `/${selectedLocale}${pathWithoutLocale}`;
+  const handleChange = (value: string) => {
+    const newPath = `/${value}${pathWithoutLocale}`;
     router.push(newPath);
   };
 
   return (
-    <div className='flex items-center text-[14px]'>
-      {color ? <CiGlobe size={16} color="#fff" /> : <CiGlobe size={16} />}
-      <select onChange={handleRouter} value={currentPathLocale} className={``}>
-        {locales.map((locale) => {
-          const label = locale === EN ? ENGLISH : VIETNAMESE;
-          return (
-            <option key={locale} value={locale} className={`text-center ${color ? "text-[#373737]" : ""}`}>
-              {label}
-            </option>
-          );
-        })}
-      </select>
+    <div className="p-[4px] pl-[8px] bg-[#fff] border border-[#C4C4C4] flex items-center text-[14px] relative z-10 rounded-[4px]">
+      <CiGlobe size={16} color={color ? '#fff' : '#000'} />
+      <div className="min-w-[120px]">
+        <Select
+          value={currentPathLocale}
+          onChange={handleChange}
+          size="small"
+          className="w-full h-[36px] text-center"
+          variant="borderless"
+        >
+          {locales.map((locale) => {
+            const label = locale === EN ? ENGLISH : VIETNAMESE;
+            return (
+              <Option key={locale} value={locale} className="w-full">
+                {label}
+              </Option>
+            );
+          })}
+        </Select>
+      </div>
     </div>
   );
 }

@@ -1,15 +1,15 @@
 'use client'
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
+import LanguageSwitcher from "@/components/LanguageSwitcher/page";
 import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { registerUser } from "@/service/register";
 import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
-import register_background from '../../../../images/register_brackground.svg';
+import register_background from '../../../../images/register_background.svg';
 export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -21,7 +21,7 @@ export default function Register() {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { t, locale } = useTranslation();
   const router = useRouter();
-  const { setEmailAuthen, setPasswordAuthen,setTypeOtpAuthen } = useStore();
+  const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
 
   const handleRegister = () => {
     setFormErrors({})
@@ -47,7 +47,7 @@ export default function Register() {
   const {
     mutate,
     isPending, // làm loading
-    isError: mutationError, 
+    isError: mutationError,
     isSuccess,
     error,
   } = useMutation({
@@ -100,6 +100,9 @@ export default function Register() {
 
   return (
     <div className="flex w-full h-full">
+      <div className="z-20 fixed top-[10px] right-[20px] flex justify-center items-center text-left rounded-[12px] w-[120px] h-[34px] p-[2px]">
+        <LanguageSwitcher />
+      </div>
       {isPending && (
         <Loader />
       )}
@@ -126,13 +129,10 @@ export default function Register() {
         </p>
         <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} onSubmit={handleRegister} />
       </div>
-      <div className="w-1/2">
-        <div className="scale-105 relative w-full h-full">
-          <Image src={register_background} alt="background_register"
-            className="object-contain object-bottom"
-            fill />
-        </div>
-      </div>
+      <div
+        className="w-1/2 h-screen bg-cover bg-center"
+        style={{ backgroundImage: `url(${register_background.src})` }}
+      ></div>
     </div>
   );
 }

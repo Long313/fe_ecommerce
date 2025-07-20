@@ -2,16 +2,15 @@
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
 import useTranslation from "@/hooks/useTranslation";
+import { login } from "@/service/login";
+import { useStore } from "@/store/store";
+import { useMutation } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import google_logo from '../../../../images/icon_google.png';
 import login_background from '../../../../images/login_background.svg';
-import { useStore } from "@/store/store";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { login } from "@/service/login";
 
 export default function Login() {
 
@@ -87,7 +86,7 @@ export default function Login() {
 
   return (
     <div className="flex w-full h-full">
-      <div className="w-1/2 flex flex-col items-center">
+      <div className="w-1/2 flex flex-col items-center justify-center">
         <div className="text-center mb-[20px]">
           <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
             {t("loginTitle")}
@@ -113,13 +112,10 @@ export default function Login() {
           <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1">{t("signUpFreeTitle")}</Link>
         </div>
       </div>
-      <div className="w-1/2">
-        <div className="scale-105 relative w-full h-full">
-          <Image src={login_background} alt="background_register"
-            className="object-contain object-bottom"
-            fill />
-        </div>
-      </div>
+      <div
+        className="w-1/2 h-screen bg-cover bg-center"
+        style={{ backgroundImage: `url(${login_background.src})` }}
+      ></div>
     </div>
   );
 }

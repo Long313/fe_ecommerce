@@ -2,8 +2,8 @@ import LanguageSwitcher from "@/components/LanguageSwitcher/page";
 import { ReactNode } from "react";
 function LayoutAuthen({ children }: { children: ReactNode }) {
     return (
-        <div className="mt-[10px] mx-[20px] w-full h-full">
-            <div className="ml-auto mr-[30px] flex justify-center items-center text-left border border-[#C4C4C4] rounded-[12px] w-[120px] h-[34px] p-[2px]">
+        <div className="h-screen w-full overflow-hidden">
+            <div className="z-20 fixed top-[10px] right-[20px] flex justify-center items-center text-left rounded-[12px] w-[120px] h-[34px] p-[2px]">
                 <LanguageSwitcher />
             </div>
             {children}

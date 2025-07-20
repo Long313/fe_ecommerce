@@ -1,26 +1,24 @@
-import useTranslation from "@/hooks/useTranslation";
-import { verifyOtpRegister } from "@/service/register";
-import { useStore } from "@/store/store";
-import { useMutation } from "@tanstack/react-query";
-import { X } from "lucide-react";
-import { useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
-import CountdownTimer from "@/components/CountDown/page";
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
-import { resendOtp } from "@/service/otp";
+import Loader from "@/components/Loader/page";
+import useTranslation from "@/hooks/useTranslation";
 import { forgotPassword } from "@/service/forgot-password";
+import { useStore } from "@/store/store";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from 'react';
 
 function ModalForgotPassWord() {
     const otpLength = 4;
     // const [otp, setOtp] = useState<string[]>(Array(otpLength).fill(""));
     const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
     const [resetTime, setResetTime] = useState<boolean>(false)
+    const [error, setError] = useState<string>("")
     const { t, locale } = useTranslation();
     const router = useRouter();
     const [email, setMail] = useState<string>("");
     const emailAuthen = useStore((state) => state.emailAuthen);
-    const { setEmailAuthen, setPasswordAuthen,setTypeOtpAuthen } = useStore();
+    const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
 
     // const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     //     const value = e.target.value;
@@ -69,7 +67,7 @@ function ModalForgotPassWord() {
         // const codeOtp = otp.join("");
         // console.log("codeOpt", codeOtp);
         // console.log("emailAuthen", emailAuthen);
-        mutateResetPassword({ email});
+        mutateResetPassword({ email });
         setEmailAuthen(email);
         setTypeOtpAuthen("reset")
     }
@@ -85,30 +83,36 @@ function ModalForgotPassWord() {
         onSuccess: (res) => {
             if (res.status === 200) {
                 router.push(`/${locale}/otp`);
+            } else {
+                setError("User not exist")
             }
         },
-        onError: (error: any) => {
-            console.log(error.message || "Có lỗi xảy ra");
+        onError: (error) => {
+            setError("User not exist")
         }
 
     });
 
     const handleGetDataInput = (typeName: string, value: string) => {
+        setError("")
         setMail(value);
     }
 
-    return (<div className="p-[8px] rounded-[16px] fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[30%] max-w-[896px] max-h-[606px] bg-white">
+    return (<div className="max-w-[700px]">
+        {isPendingResetPassword && (
+            <Loader />
+        )}
         {/* <div className="flex justify-between"><p className="text-[#751872]">{t("registerTitle")}</p><X color="#9135FA" className="cursor-pointer" onClick={handleCloseModal} /></div> */}
-        <div className="mt-[20px] text-center text-[#030303] text-[20px] font-[500]">{t("forgotPassword")}</div>
+        <div className="mt-[20px] text-center bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[46px] font-[700]">{t("forgotPassword")}</div>
         <div className="flex flex-col items-center mt-[10px]">
             <p className="text-[16px] text-[#636364] text-center">{t("enterMail")}</p>
         </div>
-        <div className="w-[80%] mx-auto mt-[20px]">
-            <InputField placeholder="Enter your email" title="Email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+        <div className="w-[70%] mx-auto mt-[20px]">
+            <InputField getError={{ email: error }} placeholder="Enter your email" title="" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
         </div>
 
         <div className="flex-col mb-[30px] mx-auto flex justify-center items-center">
-            <Button title={t("confirm")} width="w-[80%]" height="h-[34px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+            <Button title={t("confirm")} width="w-[70%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             {/* <p className="text-[14px] mt-[10px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p> */}
         </div>
     </div>);

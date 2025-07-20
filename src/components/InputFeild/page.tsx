@@ -2,8 +2,8 @@
 
 import { emailRegex, passwordRegex, phoneRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
+import { Eye, EyeOff } from "lucide-react"; // Hoặc dùng bất kỳ icon lib nào
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { Eye, EyeOff } from "lucide-react" // Hoặc dùng bất kỳ icon lib nào
 
 
 type InputFeildProps = {
@@ -38,7 +38,6 @@ function InputField({ title, placeholder, type, name, onSave, getError, valueDef
     }
 
     const handleValidate = () => {
-
         if (name === "email" && !emailRegex.test(value)) {
             setError(t("emailError"));
         }

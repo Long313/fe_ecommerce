@@ -6,9 +6,9 @@
   --dark: #171717;
   --width-screen: 1920px;
   --height-screen: 1080px;
-  --text-color-main: #181818;
   --size-text: 14px;
   --padding-screen: 10%;
+  --text-color: #373737;
 }
 
 /* Reset CSS */
@@ -16,11 +16,17 @@
   box-sizing: border-box;
 }
 
-div {
-}
+div {}
 
 select {
   border: none;
   outline: none;
   /* appearance: none;  */
+}
+
+select option:checked,
+select option:hover {
+  background-color: #FF35C4;
+  /* màu tím hồng */
+  color: white;
 }

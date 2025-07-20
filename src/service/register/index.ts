@@ -42,7 +42,7 @@ export const verifyOtpRegister = async (body: any) => {
   try {
     const response = await axios.post(`${baseURL}/user/verify-otp-register`, body);
     return response.data;
-  } catch (error: any) {
+  } catch (error) {
     console.error(error)
   }
 };
