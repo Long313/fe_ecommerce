@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const searchProductByName = async (params: ParamsSearchType) => {
     try {
-        const response = await axios.get(`${baseURL}/user/product`, {
+        const response = await axios.get(`${baseURL}/product`, {
             params,
         });
         return response.data;

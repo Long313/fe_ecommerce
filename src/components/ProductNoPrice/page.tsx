@@ -9,8 +9,7 @@ interface ProductNoPriceProps {
 }
 
 function ProductNoPrice(props: ProductNoPriceProps) {
-    const { image, width, height, name, description } = props;
-    console.log(width, height);
+    const { image, name, description } = props;
     return (
         <div className={`hover:scale-101 transition-transform duration-300 cursor-pointer w-full`}>
             <div className="bg-[#F8F8F8] rounded-[4px] w-full overflow-hidden aspect-[477/628]">

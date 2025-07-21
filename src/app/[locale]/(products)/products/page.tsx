@@ -19,7 +19,7 @@ export default function Products() {
                     value !== undefined
             )
         );
-        const data = mutate(filteredParams);
+        const data = mutate(searchParams);
         console.log("data", data);
     }, [searchParams]);
     const {
