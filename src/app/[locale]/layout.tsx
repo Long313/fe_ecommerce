@@ -1,30 +1,16 @@
-'use client';
-import './globals.css';
-import LanguageSwitcher from '../../components/LanguageSwitcher/page';
-import { ReactNode, useEffect } from 'react';
-import { useStore } from '@/store/store';
-import DayNightToggler from '@/components/DayNightToggler/page';
-import { use } from 'react'; 
-
-type Props = {
-  children: ReactNode;
-  params: Promise<{ locale: string }>; 
-};
-
-export default function LocaleLayout({ children, params }: Props) {
-  const resolvedParams = use(params); 
-  const mode = useStore((state) => state.mode);
-
-  useEffect(() => {
-    console.log("mode:", mode);
-  }, [mode]);
-
+// app/[locale]/layout.tsx
+import LayoutWrapper from '@/components/LayoutWrapper/page';
+import { ReactNode } from 'react';
+import './globals.css'
+export default function LocaleLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang={resolvedParams.locale}>
-      <body className={mode === true ? 'bg-[var(--dark)] text-[var(--light)]' : ''}>
-        <LanguageSwitcher currentLocale={resolvedParams.locale} />
-        <DayNightToggler />
-        <main>{children}</main>
+    <html>
+      <body>
+        <main className="min-h-screen flex flex-col text-[var(--text-color-main)] w-full max-w-[var(--width-screen)] h-screen mx-auto">
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
+        </main>
       </body>
     </html>
   );
