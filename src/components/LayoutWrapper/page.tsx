@@ -11,8 +11,8 @@ export default function LayoutWrapper({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const [queryClient] = useState(() => new QueryClient());
     const locale = pathname?.split('/')[1];
-    const isHome = pathname === `/${locale}`;
-
+    const isHome = pathname === `/${locale}` || pathname === `/${locale}/products`;
+    console.log("isHome", isHome);
     return (
         <SessionProvider>
             <QueryClientProvider client={queryClient}>

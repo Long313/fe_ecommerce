@@ -32,13 +32,6 @@ export default function Home() {
   }, []);
   const [activeTab, setActiveTab] = useState<string>('SALE');
 
-  // const handleCloseSearch = () => {
-  //   setSearch(false);
-  // }
-  // const handleOpenSearch = () => {
-  //   setSearch(true);
-  // }
-
   const fullText = "Step Into Your Sporty Look!";
   const [index, setIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
@@ -112,30 +105,6 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-32 w-full max-w-7xl mx-auto">
-          {/* <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div> */}
           {productData.map((data, i) => (
             <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
               <Product {...data} />

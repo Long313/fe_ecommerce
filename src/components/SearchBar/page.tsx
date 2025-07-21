@@ -2,7 +2,7 @@ import { useStore } from "@/store/store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IoSearchOutline } from "react-icons/io5";
+import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import ProposeTag from "../ProposeTag/page";
@@ -13,17 +13,31 @@ export default function SearchBar() {
     const router = useRouter();
     const { setSearch } = useStore();
     const [show, setShow] = useState(false);
-
+    const [listPropose, setListPropose] = useState<string[]>([]);
     const handleCloseSearchBar = () => {
-        setSearch(false);
+        setShow(false);
+        setTimeout(() => {
+            setSearch(false);
+        }, 500);
     }
 
-    const handleSeach = () => {
+    useEffect(() => {
+        const list = JSON.parse(localStorage.getItem("prosose") || '[]');
+        setListPropose(list);
+    }, [])
 
-    }
+    const handleSearch = () => {
+        const newList = [
+            ...listPropose.filter(item => item !== value),
+            value
+        ];
+        setListPropose(newList);
+        localStorage.setItem("prosose", JSON.stringify(newList));
 
-    const handleGetKeySearch = (key: string) => {
-        console.log("key", key);
+    };
+
+    const handleSearchByKey = (value: string) => {
+        console.log("key", value);
     }
 
 
@@ -39,16 +53,21 @@ export default function SearchBar() {
                     <Image src={logo} alt="logo" width={30} />
                     <Image src={amax} alt="amax_logo" width={90} height={30} />
                 </div>
-                <div className="flex-1 mx-[40px] border border-[#373737] rounded-[16px] py-[8px] px-[16px] flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
-                    <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleSeach} />
-                    <input value={value} onChange={e => setValue(e.target.value)} className="text-[#A3A3A3] flex-1 outline-none" />
+                <div className="relative flex-1 mx-[40px] border border-[#373737] rounded-[16px] py-[8px] px-[16px] flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
+                    <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleSearch} />
+                    <input placeholder="SEARCH" value={value} onChange={e => setValue(e.target.value)} className="text-[#A3A3A3] flex-1 outline-none pr-[40px]" />
+                    {value ? <IoCloseOutline onClick={() => setValue("")} size={20} className="cursor-pointer absolute top-1/2 -translate-y-[50%] right-[10px]" /> : <></>}
                 </div>
                 <p className="font-[600] cursor-pointer" onClick={handleCloseSearchBar}>Cancel</p>
             </div>
-            <p className="text-[#A3A3A3] my-[20px] ml-[14%]">Popular search terms</p>
-            <div className="flex ml-[14%] flex-wrap overflow-y-hidden gap-y-4">
-                <ProposeTag name="Item A" onChoose={(value) => handleGetKeySearch(value)} />
-                <ProposeTag name="Item CC" onChoose={(value) => handleGetKeySearch(value)} />
+            <p className="text-[#A3A3A3] my-[20px] ml-[15%]">Popular search terms</p>
+            <div className="flex ml-[16%] flex-wrap overflow-y-hidden gap-y-4">
+                {listPropose.length > 0 && listPropose.map((name, index) => {
+                    return (
+                        <ProposeTag key={index} name={name} onChoose={(value) => handleSearchByKey(value)} />
+                    )
+                })}
+                {/* <ProposeTag name="Item CC" onChoose={(value) => handleGetKeySearch(value)} />
                 <ProposeTag name="Item BBBBBBBBBBB" onChoose={(value) => handleGetKeySearch(value)} />
                 <ProposeTag name="Item A" onChoose={(value) => handleGetKeySearch(value)} />
                 <ProposeTag name="Item CC" onChoose={(value) => handleGetKeySearch(value)} />
@@ -58,9 +77,9 @@ export default function SearchBar() {
                 <ProposeTag name="Item BBBBBBBBBBB" onChoose={(value) => handleGetKeySearch(value)} />
                 <ProposeTag name="Item A" onChoose={(value) => handleGetKeySearch(value)} />
                 <ProposeTag name="Item CC" onChoose={(value) => handleGetKeySearch(value)} />
-                <ProposeTag name="Item BBBBBBBBBBB" onChoose={(value) => handleGetKeySearch(value)} />
+                <ProposeTag name="Item BBBBBBBBBBB" onChoose={(value) => handleGetKeySearch(value)} /> */}
             </div>
         </div>
-        <div className="flex-1 bg-[#000] opacity-20" onClick={handleCloseSearchBar}></div>
+        <div className={`flex-1 bg-[#000] transition-opacity duration-500 ease-in-out ${show ? "opacity-20" : "opacity-0"}`} onClick={handleCloseSearchBar}></div>
     </div>)
 }

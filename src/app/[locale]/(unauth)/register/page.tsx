@@ -35,6 +35,15 @@ export default function Register() {
     setTypeOtpAuthen("register");
   };
 
+  // const { data, isLoading, isError } = useQuery({
+  //   queryKey: ['register'],       // key để cache
+  //   queryFn: registerUser        // hàm fetch
+  // });
+  // if (isLoading) return <p>Đang tải...</p>;
+  // if (isError) return <p>Có lỗi xảy ra!</p>;
+  // useEffect(() => {
+  //   if(data.status == 200) router.push("/");
+  // },[data])
   const {
     mutate,
     isPending
@@ -48,7 +57,7 @@ export default function Register() {
         router.push(`/${locale}/otp`);
       }
     },
-    onError: (error: {status: number, message: string}) => {
+    onError: (error: { status: number, message: string }) => {
       if (error.status === 400) {
         if (error.message.includes("Email")) {
           setFormErrors((prev) => ({ ...prev, email: error.message }));
