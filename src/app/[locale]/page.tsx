@@ -26,7 +26,6 @@ export default function Home() {
     { label: 'ACCESSORIES' },
   ], []);
   const productData = Array(8).fill({ image: item, name: "Item A", price: 38.99, rate: 5 });
-
   const targetDate = useMemo(() => {
     return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
   }, []);

@@ -6,6 +6,7 @@ import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import ProposeTag from "../ProposeTag/page";
+import useTranslation from "@/hooks/useTranslation";
 
 
 export default function SearchBar() {
@@ -14,6 +15,8 @@ export default function SearchBar() {
     const { setSearch } = useStore();
     const [show, setShow] = useState(false);
     const [listPropose, setListPropose] = useState<string[]>([]);
+    const { locale } = useTranslation();
+
     const handleCloseSearchBar = () => {
         setShow(false);
         setTimeout(() => {
@@ -25,6 +28,7 @@ export default function SearchBar() {
         const list = JSON.parse(localStorage.getItem("prosose") || '[]');
         setListPropose(list);
     }, [])
+    const { setParamsSearch } = useStore();
 
     const handleSearch = () => {
         const newList = [
@@ -33,7 +37,8 @@ export default function SearchBar() {
         ];
         setListPropose(newList);
         localStorage.setItem("prosose", JSON.stringify(newList));
-
+        setParamsSearch({ search: value.trim() });
+        router.push(`/${locale}/products`);
     };
 
     const handleSearchByKey = (value: string) => {

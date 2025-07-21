@@ -9,14 +9,14 @@ interface StoreState {
   passwordAuthen: string;
   search: boolean;
   paramsSearch: {
-    search: string;
-    gender: string;
-    category: string;
-    startPrice: string;
-    endPrice: string;
-    pageSize: number,
-    pageIndex: number,
-    sort: string,
+    search?: string;
+    gender?: string;
+    category?: string;
+    startPrice?: string;
+    endPrice?: string;
+    pageSize?: number,
+    pageIndex?: number,
+    sort?: string,
   };
   setMode: (state: boolean) => void;
   setSearch: (state: boolean) => void;

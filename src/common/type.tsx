@@ -42,3 +42,13 @@ export type VerifyOtpType = EmailType & OtpType;
 
 export type ResendOtpType = EmailType & PurposeType;
 
+export type ParamsSearchType = {
+    search?: string;
+    gender?: string;
+    category?: string;
+    startPrice?: string;
+    endPrice?: string;
+    pageSize?: number,
+    pageIndex?: number,
+    sort?: string
+};
