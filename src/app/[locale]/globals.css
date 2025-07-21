@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+:root {
+  /* Color Variable */
+  --light: #ffffff;
+  --dark: #171717;
+  --width-screen: 1920px;
+  --height-screen: 1080px;
+  --size-text: 14px;
+  --padding-screen: 10%;
+  --text-color: #373737;
+}
+
+/* Reset CSS */
+* {
+  box-sizing: border-box;
+}
+
+div {}
+
+select {
+  border: none;
+  outline: none;
+  /* appearance: none;  */
+}
+
+select option:checked,
+select option:hover {
+  background-color: #FF35C4;
+  /* màu tím hồng */
+  color: white;
+}
