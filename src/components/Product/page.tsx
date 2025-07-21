@@ -1,4 +1,5 @@
 import Image from "next/image";
+import React from "react";
 import { IoMdStar } from "react-icons/io";
 
 interface ProductProps {
@@ -28,4 +29,4 @@ function Product(props: ProductProps) {
     </div>);
 }
 
-export default Product;
+export default React.memo(Product);

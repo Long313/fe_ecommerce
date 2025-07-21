@@ -1,42 +1,74 @@
 'use client'
 import Button from "@/components/Button/page";
-import useTranslation from "@/hooks/useTranslation";
-import Image from "next/image";
-import home_img from '../../images/home_img.svg';
 import Product from "@/components/Product/page";
-import item from "../../images/item.svg";
-import Link from "next/link";
-import discount from '../../images/discount.svg';
-import Clock from "@/components/Clock/page";
 import ProductNoPrice from "@/components/ProductNoPrice/page";
-import { useState } from "react";
-import FeedbackCard from "@/components/FeedbackCard/page";
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import home_img from '../../images/home_img.svg';
+import item from "../../images/item.svg";
+// import Clock from "@/components/Clock/page";
+// import FeedbackCard from "@/components/FeedbackCard/page";
+// import SearchBar from "@/components/SearchBar/page";
+import { useStore } from "@/store/store";
+import dynamic from "next/dynamic";
+const FeedbackCard = dynamic(() => import('@/components/FeedbackCard/page'), { ssr: false });
+const Clock = dynamic(() => import('@/components/Clock/page'), { ssr: false });
+const SearchBar = dynamic(() => import('@/components/SearchBar/page'), { ssr: false });
 export default function Home() {
-  const { t } = useTranslation()
-  const targetDate = new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
-  const tabs = [
+  // const { t } = useTranslation();
+  const isSearch = useStore((state) => state.search);
+  // const setSearch = useStore((state) => state.setSearch);
+
+  const tabs = useMemo(() => [
     { label: 'SALE' },
     { label: 'HOT' },
     { label: 'NEW ARRIVALS' },
     { label: 'ACCESSORIES' },
-  ];
+  ], []);
+  const productData = Array(8).fill({ image: item, name: "Item A", price: 38.99, rate: 5 });
+
+  const targetDate = useMemo(() => {
+    return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
+  }, []);
   const [activeTab, setActiveTab] = useState<string>('SALE');
 
+  // const handleCloseSearch = () => {
+  //   setSearch(false);
+  // }
+  // const handleOpenSearch = () => {
+  //   setSearch(true);
+  // }
 
+  const fullText = "Step Into Your Sporty Look!";
+  const [index, setIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+
+  useEffect(() => {
+    if (!isTyping) return;
+    const timeout = setTimeout(() => {
+      setIndex((prev) => {
+        if (prev < fullText.length) return prev + 1;
+        setIsTyping(false);
+        return prev;
+      });
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [index, isTyping]);
   return (
     <div className="flex-1 mt-[200px] px-[var(--padding-screen)]">
       <section className="flex justify-between">
         <div className="w-[45%] mt-[50px]">
-          <p className="font-[700] text-[46px] text-[var(--text-color)] tracking-[2px]">Step Into Your <br /> Sporty Look!</p>
+          <p className="transition-transform font-[700] text-[46px] text-[var(--text-color)] tracking-[2px]">
+            {fullText.slice(0, index)}
+            {isTyping && <span className="animate-blink">|</span>}
+          </p>
           <p className="font-[500] text-[20px] text-[var(--text-color)] mt-[60px] mb-[30px]">Elevate your game with curated athletic <br /> fashion and sleek accessories – tailored to <br /> your lifestyle.</p>
           <Button title="EXPLORE NOW" onSubmit={() => { }} width="w-[160px]" height="h-[46px]" />
         </div>
         <div className="w-[45%] ml-auto">
-          <div className="aspect-[632/795] w-3/4 ml-auto">
-            <Image src={home_img} alt="home_image" />
+          <div className="relative aspect-[632/795] w-3/4 ml-auto">
+            <Image src={home_img} alt="home_image" fill className="w-full h-full object-contain" />
           </div>
         </div>
       </section>
@@ -44,18 +76,11 @@ export default function Home() {
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Best selling</h2>
         <p className="text-[var(--text-color)] mt-[20px] mb-[100px] font-[600]">Stay on trend with our best-selling sportwear picks.</p>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-8 w-full max-w-7xl mx-auto">
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-            <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
+          {productData.slice(0, 4).map((data, i) => (
+            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+              <Product {...data} />
+            </div>
+          ))}
         </div>
         <div className="my-[60px]">
           <Button title="See all" onSubmit={() => { }} width="w-[160px]" height="h-[46px]" arrow={true} />
@@ -87,7 +112,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-32 w-full max-w-7xl mx-auto">
-          <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+          {/* <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
             <Product image={item} name="Item A" price={38.99} rate={5} />
           </div>
           <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
@@ -110,7 +135,12 @@ export default function Home() {
           </div>
           <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
             <Product image={item} name="Item A" price={38.99} rate={5} />
-          </div>
+          </div> */}
+          {productData.map((data, i) => (
+            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+              <Product {...data} />
+            </div>
+          ))}
         </div>
       </section>
       <section className="flex flex-col my-[200px] items-center">
@@ -129,45 +159,26 @@ export default function Home() {
           Own every move with high-performance sportswear built for style and power!
         </p>
         <div className="flex flex-wrap justify-between mb-[100px] w-full">
-          <div className="w-1/3">
+          <div className="w-[30%]">
             <ProductNoPrice name="Clothes" description="Finish your athletic look with essential sportswear – from sweat-wicking shirts to stretch-fit pants and training sets." image={item} />
           </div>
-          <div className="w-1/3">
+          <div className="w-[30%]">
             <ProductNoPrice name="Shoe" description="Discover sporty footwear that blends comfort, function, and style – perfect for workouts or street-ready looks." image={item} />
           </div>
-          <div className="w-1/3">
+          <div className="w-[30%]">
             <ProductNoPrice name="Accessories" description="Complete your sporty look with essential accessories like caps, gym bags, socks, and water bottles." image={item} />
           </div>
         </div>
       </section>
       <section className="flex flex-col mt-[100px] items-center">
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Feedback Corner</h2>
-        {/* <div className="flex flex-row flex-wrap justify-between w-full mt-[100px]">
-          <FeedbackCard />
-          <FeedbackCard />
-          <FeedbackCard />
-        </div> */}
-        <Swiper spaceBetween={20} slidesPerView={3} loop autoplay>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-          <SwiperSlide>
-            <FeedbackCard />
-          </SwiperSlide>
-        </Swiper>
+        <div className="flex flex-row flex-wrap justify-between w-full mt-[100px]">
+          <FeedbackCard name="Emily Wilson" description="The customer experience was exceptional from start to finish. The website is user-friendly, the checkout process was smooth, and the clothes I ordered fit perfectly. I'm beyond satisfied!" />
+          <FeedbackCard name="Sarah Thompson" description="I absolutely love the quality and style of the clothing I purchased from this website. customer service was outstanding, and I received my order quickly. Highly recommended!" />
+          <FeedbackCard name="Olivia Martinez" description="I had a great experience shopping on this website. The clothes I bought are fashionable and comfortable. Highly satisfied!" />
+        </div>
       </section>
+      {isSearch && <SearchBar />}
     </div>
   );
 }

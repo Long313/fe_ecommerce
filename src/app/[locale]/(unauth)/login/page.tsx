@@ -1,6 +1,7 @@
 'use client'
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
+import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { login } from "@/service/login";
 import { useStore } from "@/store/store";
@@ -36,9 +37,7 @@ export default function Login() {
     console.log("session", session);
   }
   const handleLogin = () => {
-    console.log("email", email);
-    console.log("password", password);
-    console.log("login");
+
     const checkConditionSubmit = !email || !password;
     if (checkConditionSubmit) return;
     mutate({ email, password });
@@ -46,10 +45,10 @@ export default function Login() {
 
   const {
     mutate,
-    isPending, // làm loading
-    isError: mutationError,
-    isSuccess,
-    error,
+    isPending
+    // isError: mutationError,
+    // isSuccess,
+    // error,
   } = useMutation({
     mutationFn: login,
     onSuccess: (res) => {
@@ -63,7 +62,7 @@ export default function Login() {
         router.push(`/${locale}/`);
       }
     },
-    onError: (error: any) => {
+    onError: (error: { status: number, message: string }) => {
       if (error.status === 400) {
 
       } else {
@@ -86,6 +85,9 @@ export default function Login() {
 
   return (
     <div className="flex w-full h-full">
+      {isPending && (
+        <Loader />
+      )}
       <div className="w-1/2 flex flex-col items-center justify-center">
         <div className="text-center mb-[20px]">
           <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">

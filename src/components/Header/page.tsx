@@ -9,15 +9,21 @@ import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import Button from "../Button/page";
 import LanguageSwitcher from "../LanguageSwitcher/page";
+import { useStore } from "@/store/store";
 
 function Header() {
+    const { setSearch } = useStore();
     const router = useRouter();
-    const { t, locale } = useTranslation();
+    const { locale } = useTranslation();
     const handleRouterLogin = () => {
         router.push(`/${locale}/login`)
     }
 
-    return (<header className="z-90 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
+    const handleOpenSearchBar = () => {
+        setSearch(true);
+    }
+
+    return (<header className="z-20 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
         <div className="h-[40px] w-full bg-[#373737] text-[#fff] flex justify-center items-center text-[14px]">
             <div className="mr-[50px]">
                 <span>Summer Sale For All Swim Sports And Free Express Delivery - OFF 50%! &nbsp;</span>
@@ -61,11 +67,10 @@ function Header() {
                             <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                         </li>
                     </ul>
-
                 </nav>
             </div>
             <div className="flex ml-auto">
-                <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" />
+                <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
                 <PiBag size={20} className="mr-[40px] cursor-pointer" />
                 <IoIosHeartEmpty size={20} className="mr-[40px] cursor-pointer" />
             </div>

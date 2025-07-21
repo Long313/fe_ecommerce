@@ -6,67 +6,16 @@ import { forgotPassword } from "@/service/forgot-password";
 import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 function ModalForgotPassWord() {
-    const otpLength = 4;
-    // const [otp, setOtp] = useState<string[]>(Array(otpLength).fill(""));
-    const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-    const [resetTime, setResetTime] = useState<boolean>(false)
     const [error, setError] = useState<string>("")
     const { t, locale } = useTranslation();
     const router = useRouter();
     const [email, setMail] = useState<string>("");
-    const emailAuthen = useStore((state) => state.emailAuthen);
-    const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
-
-    // const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const value = e.target.value;
-
-    //     if (!/^[0-9]?$/.test(value)) return;
-
-    //     const newOtp = [...otp];
-    //     newOtp[index] = value;
-    //     setOtp(newOtp);
-
-    //     if (value && index < otpLength - 1) {
-    //         inputRefs.current[index + 1]?.focus();
-    //     }
-    // };
-
-    // const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-    //         inputRefs.current[index - 1]?.focus();
-    //     }
-    // };
-
-    // const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
-    //     e.preventDefault();
-    //     const pasteData = e.clipboardData.getData("text").trim();
-    //     if (!/^\d+$/.test(pasteData)) return;
-
-    //     const pasteArray = pasteData.slice(0, otpLength).split("");
-    //     const newOtp = [...otp];
-    //     pasteArray.forEach((digit, idx) => {
-    //         newOtp[idx] = digit;
-    //         if (inputRefs.current[idx]) {
-    //             inputRefs.current[idx]!.value = digit;
-    //         }
-    //     });
-    //     setOtp(newOtp);
-
-    //     const nextIndex = pasteArray.length < otpLength ? pasteArray.length : otpLength - 1;
-    //     inputRefs.current[nextIndex]?.focus();
-    // };
-
-
-    const handleCloseModal = () => {
-    }
+    const { setEmailAuthen, setTypeOtpAuthen } = useStore();
 
     const handleVerifyOtp = () => {
-        // const codeOtp = otp.join("");
-        // console.log("codeOpt", codeOtp);
-        // console.log("emailAuthen", emailAuthen);
         mutateResetPassword({ email });
         setEmailAuthen(email);
         setTypeOtpAuthen("reset")
@@ -74,10 +23,10 @@ function ModalForgotPassWord() {
 
     const {
         mutate: mutateResetPassword,
-        isPending: isPendingResetPassword, // làm loading
-        isError: mutationErrorResetPassword,
-        isSuccess: isSuccessResetPassword,
-        error: errorResetPassword,
+        isPending: isPendingResetPassword
+        // isError: mutationErrorResetPassword,
+        // isSuccess: isSuccessResetPassword,
+        // error: errorResetPassword,
     } = useMutation({
         mutationFn: forgotPassword,
         onSuccess: (res) => {
@@ -88,6 +37,7 @@ function ModalForgotPassWord() {
             }
         },
         onError: (error) => {
+            console.log(error)
             setError("User not exist")
         }
 

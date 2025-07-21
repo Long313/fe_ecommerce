@@ -8,12 +8,14 @@ import { CiGlobe } from 'react-icons/ci';
 
 const { Option } = Select;
 
-interface Props {
+interface LanguageSwitcherProps {
   currentLocale?: string;
   color?: string;
 }
 
-export default function LanguageSwitcher({ currentLocale, color }: Props) {
+export default function LanguageSwitcher(props: LanguageSwitcherProps) {
+  const { currentLocale, color } = props;
+  console.log(currentLocale);
   const router = useRouter();
   const pathname = usePathname();
 

@@ -15,7 +15,8 @@ type InputFeildProps = {
     onSave: (name: string, value: string) => void,
     getError?: Record<string, string>
 }
-function InputField({ title, placeholder, type, name, onSave, getError, valueDefault }: InputFeildProps) {
+function InputField(props: InputFeildProps) {
+    const { title, placeholder, name, onSave, getError, valueDefault } = props;
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");

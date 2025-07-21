@@ -90,10 +90,10 @@ function Modal() {
 
     const {
         mutate,
-        isPending, // làm loading
-        isError: mutationError,
-        isSuccess,
-        error,
+        isPending
+        // isError: mutationError,
+        // isSuccess,
+        // error,
     } = useMutation({
         mutationFn: resendOtp,
         onSuccess: (res) => {
@@ -107,13 +107,8 @@ function Modal() {
 
     });
 
-    const handleCloseModal = () => {
-    }
-
     const handleVerifyOtp = () => {
         const codeOtp = otp.join("");
-        console.log("codeOpt", codeOtp);
-        console.log("emailAuthen", emailAuthen);
         if (typeOtpAuthen === "reset") {
             mutateVerifyOtpReset({ email: emailAuthen, otp: codeOtp });
         } else {
@@ -123,10 +118,10 @@ function Modal() {
 
     const {
         mutate: mutateVerifyOtp,
-        isPending: isPendingVerifyOtp, // làm loading
-        isError: mutationErrorVerifyOtp,
-        isSuccess: isSuccessVerifyOtp,
-        error: errorVerifyOtp,
+        // isPending: isPendingVerifyOtp
+        // isError: mutationErrorVerifyOtp,
+        // isSuccess: isSuccessVerifyOtp,
+        // error: errorVerifyOtp,
     } = useMutation({
         mutationFn: verifyOtpRegister,
         onSuccess: (res) => {
@@ -134,7 +129,7 @@ function Modal() {
                 router.push(`/${locale}/success`);
             }
         },
-        onError: (error: any) => {
+        onError: (error) => {
             console.log(error.message || "Có lỗi xảy ra");
         }
 
@@ -142,10 +137,10 @@ function Modal() {
 
     const {
         mutate: mutateVerifyOtpReset,
-        isPending: isPendingVerifyOtpReset, // làm loading
-        isError: mutationErrorVerifyOtpReset,
-        isSuccess: isSuccessVerifyOtpReset,
-        error: errorVerifyOtpReset,
+        // isPending: isPendingVerifyOtpReset
+        // isError: mutationErrorVerifyOtpReset,
+        // isSuccess: isSuccessVerifyOtpReset,
+        // error: errorVerifyOtpReset,
     } = useMutation({
         mutationFn: verifyOtpReset,
         onSuccess: (res) => {
@@ -164,11 +159,9 @@ function Modal() {
         {isPending && (
             <Loader />
         )}
-        {/* <div className="flex justify-between"><p className="text-[#751872]">{t("registerTitle")}</p><X color="#9135FA" className="cursor-pointer" onClick={handleCloseModal} /></div> */}
         <div className="mt-[20px] text-center bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[46px] font-[700]">{t("checkMailTitle")}</div>
         <div className="flex flex-col items-center mt-[10px]">
             <p className="text-[16px] text-[#636364] text-center">{t("sendOtpTitle")}</p>
-            {/* <p className="text-[#CE00C5] text-[24px]">{t("enterOtp")}</p> */}
             <CountdownTimer callBack={resetTime} />
         </div>
         <div className="mx-auto flex justify-between w-[70%] mt-[40px]">
@@ -185,15 +178,8 @@ function Modal() {
                     className="text-[40px] font-[700] outline-none inline-block border-b-[2px] border-[#822FFF] w-[18%] text-center"
                 />
             ))}
-
-
         </div>
         <div className="flex-col my-[30px] mx-auto flex justify-center items-center">
-            {/* <div onClick={handleResendOtp} className="cursor-pointer inline-block rounded-[4px] p-[2px] bg-gradient-to-r from-[#9930F4] to-[#FC35C5]">
-                <button className="hover:zoom transition-transform duration-300 transform hover:scale-101 cursor-pointer rounded-[4px] bg-white text-[#5B005C] font-semibold px-[12px] py-[4px] w-[120px]">
-                    {t("resendOtp")}
-                </button>
-            </div> */}
             <Button title={t("verifyOtp")} width="w-[80%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             <p className="text-[14px] mt-[10px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p>
         </div>
