@@ -16,7 +16,6 @@ export default function Register() {
   const [phone, setPhone] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [policy, setPolicy] = useState<boolean>(false);
-  // const [isError, setIsError] = useState<boolean | string>("");
   const [policyError, setPolicyError] = useState<string>("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const { t, locale } = useTranslation();
@@ -29,7 +28,6 @@ export default function Register() {
     const checkConditionSubmit = !policy || !email || !password || !confirmPassword || Object.keys(formErrors).length > 0;
     if (checkConditionSubmit) return;
     mutate({ email, password, phoneNumber: phone });
-    console.log("email authen---", email);
     setEmailAuthen(email);
     setPasswordAuthen(password);
     setTypeOtpAuthen("register");

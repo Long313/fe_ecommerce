@@ -19,6 +19,8 @@ export default function Login() {
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
   // const [isError, setIsError] = useState<boolean>(false);
+  const { setUserInfor } = useStore();
+
   const { t, locale } = useTranslation();
   const { data: session } = useSession();
   const emailAuthen = useStore((state) => state.emailAuthen);
@@ -33,9 +35,15 @@ export default function Login() {
       setRemember(true);
     }
   }, []);
-  if (session) {
-    console.log("session", session);
-  }
+
+  useEffect(() => {
+    if (session) {
+      setUserInfor({
+        email: session?.user?.email || "",
+        fullname: session?.user?.name || "",
+      });
+    }
+  }, [])
   const handleLogin = () => {
 
     const checkConditionSubmit = !email || !password;
@@ -53,6 +61,7 @@ export default function Login() {
     mutationFn: login,
     onSuccess: (res) => {
       if (res.status === 200) {
+        setUserInfor(res.data);
         if (remember) {
           localStorage.setItem('rememberEmail', email);
           localStorage.setItem('rememberPassword', password);

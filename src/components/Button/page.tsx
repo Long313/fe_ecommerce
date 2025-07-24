@@ -21,6 +21,7 @@ type ButtonProps = {
     rounded?: string;
     position?: string;
     arrow?: boolean;
+    padding?: string;
 };
 
 function Button(props: ButtonProps) {
@@ -40,6 +41,7 @@ function Button(props: ButtonProps) {
         rounded,
         position,
         arrow,
+        padding,
     } = props;
 
     const [mounted, setMounted] = useState(false);
@@ -59,6 +61,7 @@ function Button(props: ButtonProps) {
     ${margin ?? ""}
     ${rounded ?? "rounded-[12px]"}
     ${position ?? ""}
+    ${padding ?? ""}
     flex items-center justify-center font-[500] text-[14px] cursor-pointer hover:zoom transition-transform duration-300 transform hover:scale-101
   `;
 

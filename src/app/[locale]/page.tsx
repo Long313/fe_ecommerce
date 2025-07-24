@@ -13,11 +13,8 @@ import { useStore } from "@/store/store";
 import dynamic from "next/dynamic";
 const FeedbackCard = dynamic(() => import('@/components/FeedbackCard/page'), { ssr: false });
 const Clock = dynamic(() => import('@/components/Clock/page'), { ssr: false });
-const SearchBar = dynamic(() => import('@/components/SearchBar/page'), { ssr: false });
 export default function Home() {
   // const { t } = useTranslation();
-  const isSearch = useStore((state) => state.search);
-  // const setSearch = useStore((state) => state.setSearch);
 
   const tabs = useMemo(() => [
     { label: 'SALE' },
@@ -25,7 +22,7 @@ export default function Home() {
     { label: 'NEW ARRIVALS' },
     { label: 'ACCESSORIES' },
   ], []);
-  const productData = Array(8).fill({ image: item, name: "Item A", price: 38.99, rate: 5 });
+  const productData = Array(8).fill({ image_url: item, name: "Item A", price: 38.99, rate: 5 });
   const targetDate = useMemo(() => {
     return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
   }, []);
@@ -146,7 +143,6 @@ export default function Home() {
           <FeedbackCard name="Olivia Martinez" description="I had a great experience shopping on this website. The clothes I bought are fashionable and comfortable. Highly satisfied!" />
         </div>
       </section>
-      {isSearch && <SearchBar />}
     </div>
   );
 }

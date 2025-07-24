@@ -39,10 +39,14 @@ export default function SearchBar() {
         localStorage.setItem("prosose", JSON.stringify(newList));
         setParamsSearch({ search: value.trim() });
         router.push(`/${locale}/products`);
+        setSearch(false);
     };
 
     const handleSearchByKey = (value: string) => {
         console.log("key", value);
+        setParamsSearch({ search: value.trim() });
+        router.push(`/${locale}/products`);
+        setSearch(false);
     }
 
 

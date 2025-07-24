@@ -27,9 +27,20 @@ export type OtpType = {
     otp: string;
 }
 
+export enum GENDER {
+    MALE = "male",
+    FEMALE = "female",
+    UNISEX = "unisex",
+}
+
 export enum ROLE {
-  ADMIN = "admin",
-  USER = "user",
+    ADMIN = "admin",
+    CUSTOMER = "customer",
+}
+
+export enum ISACTIVE {
+    ACTIVE = "active",
+    INACTIVE = "inactive",
 }
 
 export type LoginType = EmailType & PasswordType;
@@ -52,3 +63,30 @@ export type ParamsSearchType = {
     pageIndex?: number,
     sort?: string
 };
+
+export interface ProductProps {
+    id?: string | number,
+    image_url: string,
+    width?: number,
+    height?: number,
+    name?: string,
+    price?: number | string,
+    rate?: number | string;
+}
+
+export interface UserInfor {
+    id?: string;
+    fullname: string | null;
+    email: string | null;
+    phone_number?: string;
+    gender?: GENDER;
+    role?: ROLE
+    status?: ISACTIVE
+    refresh_token?: string;
+    created_at?: string;
+    created_by?: string | null;
+    updated_at?: string;
+    updated_by?: string | null;
+    deleted_at?: string | null;
+    deleted_by?: string | null;
+}

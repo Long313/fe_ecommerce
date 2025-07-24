@@ -1,27 +1,35 @@
 import useTranslation from "@/hooks/useTranslation";
+import { useStore } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { PiBag } from "react-icons/pi";
+import { SlUser } from "react-icons/sl";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import Button from "../Button/page";
 import LanguageSwitcher from "../LanguageSwitcher/page";
-import { useStore } from "@/store/store";
 
 function Header() {
     const { setSearch } = useStore();
+    const emailUser = useStore(state => state.userInfor.email);
+
     const router = useRouter();
-    const { locale } = useTranslation();
+    const { t, locale } = useTranslation();
     const handleRouterLogin = () => {
+        router.push(`/${locale}/login`)
+    }
+
+    const handleRouterLogout = () => {
         router.push(`/${locale}/login`)
     }
 
     const handleOpenSearchBar = () => {
         setSearch(true);
     }
+
 
     return (<header className="z-20 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
         <div className="h-[40px] w-full bg-[#373737] text-[#fff] flex justify-center items-center text-[14px]">
@@ -73,9 +81,12 @@ function Header() {
                 <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
                 <PiBag size={20} className="mr-[40px] cursor-pointer" />
                 <IoIosHeartEmpty size={20} className="mr-[40px] cursor-pointer" />
+                {emailUser && <SlUser size={18} className="mr-[40px] cursor-pointer" />}
             </div>
             <div>
-                <Button backgroundColor="#fff" onSubmit={handleRouterLogin} title="LOGIN" border="border border-[#AEAEAE]" width="w-[67px]" height="h-[33px]" color="#373737" />
+                {emailUser ?
+                    <Button backgroundColor="#fff" onSubmit={handleRouterLogout} title={t("logOut")} border="border border-[#AEAEAE]" width="min-w-[86px] w-fit" height="h-[33px]" color="#373737" padding="px-[8x] py-[4px]" />
+                    : <Button backgroundColor="#fff" onSubmit={handleRouterLogin} title={t("signIn")} border="border border-[#AEAEAE]" width="min-w-[86px] w-fit" height="h-[33px]" color="#373737" />}
             </div>
         </div>
     </header>);
