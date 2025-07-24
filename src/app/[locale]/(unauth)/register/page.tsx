@@ -10,6 +10,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import register_background from '../../../../images/register_background.svg';
+import dynamic from "next/dynamic";
+import Link from "next/link";
+const PhoneInput = dynamic(() => import('@/components/PhoneWrapper/page'), {
+  ssr: false,
+});
 export default function Register() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -23,10 +28,14 @@ export default function Register() {
   const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
 
   const handleRegister = () => {
-    setFormErrors({})
+    setFormErrors({});
     if (!policy) setPolicyError(t("checkPolicy"));
-    const checkConditionSubmit = !policy || !email || !password || !confirmPassword || Object.keys(formErrors).length > 0;
-    if (checkConditionSubmit) return;
+    const checkConditionSubmit = !policy || !phone || !email || !password || !confirmPassword || Object.keys(formErrors).length > 0;
+    if (checkConditionSubmit) {
+      // if (!email) setFormErrors({ ...formErrors, email: "emailError" })
+      // if (!phone) setFormErrors({ ...formErrors, phone: "phoneError" })
+      return;
+    }
     mutate({ email, password, phoneNumber: phone });
     setEmailAuthen(email);
     setPasswordAuthen(password);
@@ -79,28 +88,32 @@ export default function Register() {
   const handleGetDataInput = (typeName: string, value: string) => {
     if (typeName == "email") {
       setEmail(value);
+      // setFormErrors({ ...formErrors, email: "" })
     }
     if (typeName == "phone") {
       setPhone(value);
+      // setFormErrors({ ...formErrors, phone: "" })
     }
     if (typeName === "confirmPassword") {
+      // setFormErrors({ ...formErrors, confirmPassword: "" })
       setConfirmPassword(value);
       if (password !== value) setFormErrors({ ...formErrors, confirmPassword: "confirm error" });
     }
 
     if (typeName === "password") {
+      // setFormErrors({ ...formErrors, password: "" })
       setPassword(value);
-      if (confirmPassword) {
+      if (confirmPassword && confirmPassword != value) {
         setFormErrors({ ...formErrors, confirmPassword: "confirm error" })
       }
     }
   }
 
   return (
-    <div className="flex w-full h-full">
-      <div className="z-20 fixed top-[10px] right-[20px] flex justify-center items-center text-left rounded-[12px] w-[120px] h-[34px] p-[2px]">
+    <div className="flex w-full h-screen overflow-y-scroll">
+      {/* <div className="z-20 fixed top-[10px] right-[20px] flex justify-center items-center text-left rounded-[12px] w-[120px] h-[34px] p-[2px]">
         <LanguageSwitcher />
-      </div>
+      </div> */}
       {isPending && (
         <Loader />
       )}
@@ -113,22 +126,27 @@ export default function Register() {
         </div>
         <div className="">
           <InputField title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
-          <InputField title={t("phone")} type="phone" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
+          {/* <InputField title={t("phone")} type="phone" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} /> */}
+          <PhoneInput onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
           <InputField title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
           <InputField title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} getError={formErrors} />
         </div>
         <div className="max-w-[315px] flex items-start mb-[10px]">
           <input onChange={() => setPolicy(!policy)} checked={policy}
             type="checkbox" name="policy" className="inline-block mr-[8px] mt-[2px] w-[20px]" />
-          <span className="font-[500] text-[12px] inline-block">Agree to Terms and Conditions, Privacy Policy & License Agreement</span>
+          <span className="font-[500] text-[12px] inline-block">{t("checkPolicy")}</span>
         </div>
         <p className="w-[315px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
           {policyError ? policyError : "\u00A0"}
         </p>
         <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} onSubmit={handleRegister} />
+        <div className="font-[500] text-[12px] mt-[8px]">
+          {t("doHaveAccountTitle")}
+          <Link href={`/${locale}/login`} className="text-[#822FFF] ml-1">{t("signInNowTitle")}</Link>
+        </div>
       </div>
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
+        className="w-1/2 bg-cover bg-center sticky top-0 right-0 bottom-0"
         style={{ backgroundImage: `url(${register_background.src})` }}
       ></div>
     </div>

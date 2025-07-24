@@ -14,7 +14,8 @@ import LanguageSwitcher from "../LanguageSwitcher/page";
 
 function Header() {
     const { setSearch } = useStore();
-    const emailUser = useStore(state => state.userInfor.email);
+    const accessToken = useStore(state => state.accessToken);
+    const { setAccessToken } = useStore();
 
     const router = useRouter();
     const { t, locale } = useTranslation();
@@ -23,7 +24,7 @@ function Header() {
     }
 
     const handleRouterLogout = () => {
-        router.push(`/${locale}/login`)
+        setAccessToken("");
     }
 
     const handleOpenSearchBar = () => {
@@ -81,10 +82,10 @@ function Header() {
                 <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
                 <PiBag size={20} className="mr-[40px] cursor-pointer" />
                 <IoIosHeartEmpty size={20} className="mr-[40px] cursor-pointer" />
-                {emailUser && <SlUser size={18} className="mr-[40px] cursor-pointer" />}
+                {accessToken && <SlUser size={18} className="mr-[40px] cursor-pointer" />}
             </div>
             <div>
-                {emailUser ?
+                {accessToken ?
                     <Button backgroundColor="#fff" onSubmit={handleRouterLogout} title={t("logOut")} border="border border-[#AEAEAE]" width="min-w-[86px] w-fit" height="h-[33px]" color="#373737" padding="px-[8x] py-[4px]" />
                     : <Button backgroundColor="#fff" onSubmit={handleRouterLogin} title={t("signIn")} border="border border-[#AEAEAE]" width="min-w-[86px] w-fit" height="h-[33px]" color="#373737" />}
             </div>

@@ -9,6 +9,7 @@ interface StoreState {
   typeOtpAuthen: string;
   passwordAuthen: string;
   search: boolean;
+  accessToken: string;
   paramsSearch: {
     search?: string;
     gender?: string;
@@ -22,6 +23,7 @@ interface StoreState {
   userInfor: UserInfor,
   setUserInfor: (state: UserInfor) => void;
   setMode: (state: boolean) => void;
+  setAccessToken: (state: string) => void;
   setSearch: (state: boolean) => void;
   setEmailAuthen: (state: string) => void;
   setTypeOtpAuthen: (state: string) => void;
@@ -35,6 +37,7 @@ export const useStore = create<StoreState>((set) => ({
   emailAuthen: "",
   typeOtpAuthen: "",
   passwordAuthen: "",
+  accessToken: "",
   paramsSearch: {
     search: '',
     gender: '',
@@ -68,6 +71,7 @@ export const useStore = create<StoreState>((set) => ({
     },
   })),
   setMode: (state) => set({ mode: state }),
+  setAccessToken: (state) => set({ accessToken: state }),
   setSearch: (state) => set({ search: state }),
   setEmailAuthen: (state) => set({ emailAuthen: state }),
   setTypeOtpAuthen: (state) => set({ typeOtpAuthen: state }),

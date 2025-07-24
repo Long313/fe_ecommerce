@@ -9,7 +9,8 @@ const defaultLocale = 'vi'
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-
+  const cookies = req.cookies;
+  console.log("cookies", cookies);
   // Ignore files (e.g. /favicon.ico) and API routes
   if (
     pathname.startsWith('/_next') ||

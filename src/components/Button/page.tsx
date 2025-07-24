@@ -62,7 +62,7 @@ function Button(props: ButtonProps) {
     ${rounded ?? "rounded-[12px]"}
     ${position ?? ""}
     ${padding ?? ""}
-    flex items-center justify-center font-[500] text-[14px] cursor-pointer hover:zoom transition-transform duration-300 transform hover:scale-101
+    flex items-center justify-center font-[500] text-[14px] cursor-pointer hover:zoom transition-transform duration-300 transform hover:scale-101 min-h-[40px]
   `;
 
     return (

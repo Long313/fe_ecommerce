@@ -15,7 +15,7 @@ const FeedbackCard = dynamic(() => import('@/components/FeedbackCard/page'), { s
 const Clock = dynamic(() => import('@/components/Clock/page'), { ssr: false });
 export default function Home() {
   // const { t } = useTranslation();
-
+  
   const tabs = useMemo(() => [
     { label: 'SALE' },
     { label: 'HOT' },

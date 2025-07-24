@@ -48,7 +48,8 @@ export default function Products() {
             {isPending && <Loader />}
             <div>
                 <div className="w-[30%]">
-                    <p>{searchParams?.search ? searchParams?.search : "Product"}&nbsp;<span>{`(${data.length})`}</span></p>
+                    <p>{searchParams?.search ? searchParams?.search : "Product"}&nbsp;<span>{` ( ${data.length > 1 ? `${data.length} results` : `${data.length} result`} )`}</span>
+                    </p>
                 </div>
                 <div className="w-[70%] flex flex-wrap justify-center gap-x-6 gap-y-8 max-w-7xl mx-auto">{data.length > 0 && data.map(item =>
                     <div key={item.id} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">

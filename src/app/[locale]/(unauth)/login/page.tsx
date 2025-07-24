@@ -51,6 +51,7 @@ export default function Login() {
     mutate({ email, password });
   };
 
+  const { setAccessToken } = useStore();
   const {
     mutate,
     isPending
@@ -62,13 +63,31 @@ export default function Login() {
     onSuccess: (res) => {
       if (res.status === 200) {
         setUserInfor(res.data);
+        const getCookie = (name: string): string | null => {
+          if (typeof document === 'undefined') return null;
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) {
+            const tokenPart = parts.pop();
+            if (tokenPart) {
+              return tokenPart.split(';').shift() ?? null;
+            }
+          }
+          return null;
+        };
+
+        const accessToken = getCookie('access_token');
+        if (accessToken) {
+          console.log('AccessToken', accessToken);
+          setAccessToken(accessToken);
+        }
+        router.push(`/${locale}/`);
         if (remember) {
           localStorage.setItem('rememberEmail', email);
           localStorage.setItem('rememberPassword', password);
         } else {
           localStorage.removeItem('rememberEmail');
         }
-        router.push(`/${locale}/`);
       }
     },
     onError: (error: { status: number, message: string }) => {
