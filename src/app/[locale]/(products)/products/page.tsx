@@ -150,9 +150,9 @@ export default function Products() {
                         <Option value="asc" className="w-full">Low to High</Option>
                     </Select>
                 </div>
-                <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-8 max-w-7xl mx-auto">{data.length > 0 && data.map(item =>
+                <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-8 max-w-7xl mx-auto mt-[60px]">{data.length > 0 && data.map(item =>
                     <div key={item.id} className="w-full sm:w-[48%] lg:w-[22%] xl:w-[22%] max-w-[250px]">
-                        <Product image_url={item.image_url} name={item.name} price={item.price} />
+                        <Product id={item.id} image_url={item.image_url} name={item.name} price={item.price} />
                     </div>
                 )}</div>
             </div>
