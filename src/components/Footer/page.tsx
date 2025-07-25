@@ -48,7 +48,7 @@ export default function Footer() {
                             onChange={(e) => setEmail(e.target.value)}
                             type="text"
                             placeholder="Enter your email"
-                            className="w-full bg-white text-black px-[8px] py-[4px] outline-none"
+                            className="w-full bg-white text-black px-[8px] py-[4px] outline-none h-[39px] inline-block"
                         />
                     </div>
                     <Button title="SUBMIT" onSubmit={() => { }} height="h-[33px]" width="w-[100px]" rounded='rounded-none' position="absolute top-[1px] right-[1px] bottom-0" />

@@ -41,7 +41,7 @@ function Header() {
             <LanguageSwitcher />
         </div>
         <div className="h-[60px] border-b border-[#AEAEAE] px-[var(--padding-screen)] flex items-center bg-[#fff]">
-            <div className="flex items-center cursor-pointer" onClick={() => router.push(`/`)}>
+            <div className="flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
                 <Image src={logo} alt="logo" width={30} />
                 <Image src={amax} alt="amax_logo" width={90} height={30} />
             </div>

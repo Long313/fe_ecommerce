@@ -9,9 +9,6 @@ const defaultLocale = 'vi'
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-  const cookies = req.cookies;
-  console.log("cookies", cookies);
-  // Ignore files (e.g. /favicon.ico) and API routes
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -20,7 +17,6 @@ export function middleware(req: NextRequest) {
     return NextResponse.next()
   }
 
-  // Check if pathname already has a locale prefix
   const pathnameIsMissingLocale = locales.every(
     (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   )

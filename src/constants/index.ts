@@ -1,4 +1,5 @@
-export const locales = ['vi', 'en']
+export const locales = ['vi', 'en'];
+export const GENDER = ['male', 'female', 'unisex'];
 
 
 export const VI = "vi";

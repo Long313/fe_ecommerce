@@ -78,7 +78,6 @@ export default function Login() {
 
         const accessToken = getCookie('access_token');
         if (accessToken) {
-          console.log('AccessToken', accessToken);
           setAccessToken(accessToken);
         }
         router.push(`/${locale}/`);
@@ -101,7 +100,6 @@ export default function Login() {
   });
 
   const handleGetDataInput = (typeName: string, value: string) => {
-    console.log(typeName, value);
     if (typeName == "email") {
       setEmail(value);
     }

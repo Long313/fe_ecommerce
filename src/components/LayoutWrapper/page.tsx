@@ -15,27 +15,6 @@ export default function LayoutWrapper({ children }: { children: ReactNode }) {
     const locale = pathname?.split('/')[1];
     const isHome = pathname === `/${locale}` || pathname === `/${locale}/products`;
     const isSearch = useStore((state) => state.search);
-    // const { setAccessToken } = useStore();
-    // useEffect(() => {
-    //     const getCookie = (name: string): string | null => {
-    //         if (typeof document === 'undefined') return null;
-    //         const value = `; ${document.cookie}`;
-    //         const parts = value.split(`; ${name}=`);
-    //         if (parts.length === 2) {
-    //             const tokenPart = parts.pop();
-    //             if (tokenPart) {
-    //                 return tokenPart.split(';').shift() ?? null;
-    //             }
-    //         }
-    //         return null;
-    //     };
-
-    //     const accessToken = getCookie('access_token');
-    //     if (accessToken) {
-    //         console.log('AccessToken', accessToken);
-    //         setAccessToken(accessToken);
-    //     }
-    // }, [setAccessToken]);
     return (
         <SessionProvider>
             <QueryClientProvider client={queryClient}>
