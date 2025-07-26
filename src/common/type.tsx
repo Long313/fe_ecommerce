@@ -74,6 +74,16 @@ export interface ProductProps {
     rate?: number | string;
 }
 
+export interface ProductDetailProps {
+    id: string | number,
+    name: string,
+    category: string,
+    description: string,
+    price: number | string,
+    image_url: string,
+    gender: string;
+}
+
 export interface UserInfor {
     id?: string;
     fullname: string | null;

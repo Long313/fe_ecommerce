@@ -13,7 +13,7 @@ export default function LayoutWrapper({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const [queryClient] = useState(() => new QueryClient());
     const locale = pathname?.split('/')[1];
-    const isHome = pathname === `/${locale}` || pathname.startsWith(`/${locale}/products/`);
+    const isHome = pathname === `/${locale}` || pathname.startsWith(`/${locale}/products`);
     const isSearch = useStore((state) => state.search);
     return (
         <SessionProvider>

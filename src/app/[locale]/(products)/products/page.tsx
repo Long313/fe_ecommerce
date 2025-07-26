@@ -4,7 +4,7 @@ import { ProductProps, ServerError } from "@/common/type";
 import Loader from "@/components/Loader/page";
 import Product from "@/components/Product/page";
 import { GENDER } from "@/constants";
-import { searchProductByName } from "@/service/products";
+import { searchProductByName } from "@/service/product";
 import { useStore } from "@/store/store"
 import { useMutation } from "@tanstack/react-query";
 import { Select } from "antd";

@@ -12,3 +12,12 @@ export const searchProductByName = async (params: ParamsSearchType) => {
         console.error(error);
     }
 };
+
+export const getDetailProduct = async (id: string) => {
+    try {
+        const response = await axios.get(`${baseURL}/product/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+};

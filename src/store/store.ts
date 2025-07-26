@@ -2,6 +2,25 @@
 
 import { GENDER, ISACTIVE, ROLE, UserInfor } from '@/common/type';
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
+
+interface TokenSlice {
+  accessToken: string;
+  setAccessToken: (token: string) => void;
+}
+
+export const useAccessToken = create<TokenSlice>()(
+  persist(
+    (set) => ({
+      accessToken: '',
+      setAccessToken: (token) => set({ accessToken: token }),
+    }),
+    {
+      name: 'access-token-storage',
+      storage: createJSONStorage(() => localStorage),
+    }
+  )
+);
 
 interface StoreState {
   mode: boolean;
@@ -9,7 +28,7 @@ interface StoreState {
   typeOtpAuthen: string;
   passwordAuthen: string;
   search: boolean;
-  accessToken: string;
+  // accessToken: string;
   paramsSearch: {
     search?: string;
     gender?: string;
@@ -23,7 +42,7 @@ interface StoreState {
   userInfor: UserInfor,
   setUserInfor: (state: UserInfor) => void;
   setMode: (state: boolean) => void;
-  setAccessToken: (state: string) => void;
+  // setAccessToken: (state: string) => void;
   setSearch: (state: boolean) => void;
   setEmailAuthen: (state: string) => void;
   setTypeOtpAuthen: (state: string) => void;
@@ -37,7 +56,7 @@ export const useStore = create<StoreState>((set) => ({
   emailAuthen: "",
   typeOtpAuthen: "",
   passwordAuthen: "",
-  accessToken: "",
+  // accessToken: "",
   paramsSearch: {
     search: '',
     gender: '',
@@ -71,7 +90,7 @@ export const useStore = create<StoreState>((set) => ({
     },
   })),
   setMode: (state) => set({ mode: state }),
-  setAccessToken: (state) => set({ accessToken: state }),
+  // setAccessToken: (state) => set({ accessToken: state }),
   setSearch: (state) => set({ search: state }),
   setEmailAuthen: (state) => set({ emailAuthen: state }),
   setTypeOtpAuthen: (state) => set({ typeOtpAuthen: state }),

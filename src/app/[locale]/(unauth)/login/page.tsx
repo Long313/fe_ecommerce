@@ -4,7 +4,7 @@ import InputField from "@/components/InputFeild/page";
 import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { login } from "@/service/login";
-import { useStore } from "@/store/store";
+import { useAccessToken, useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -51,7 +51,7 @@ export default function Login() {
     mutate({ email, password });
   };
 
-  const { setAccessToken } = useStore();
+  const { setAccessToken } = useAccessToken();
   const {
     mutate,
     isPending

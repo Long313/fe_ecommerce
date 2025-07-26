@@ -1,5 +1,5 @@
 import useTranslation from "@/hooks/useTranslation";
-import { useStore } from "@/store/store";
+import { useAccessToken, useStore } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -14,9 +14,9 @@ import LanguageSwitcher from "../LanguageSwitcher/page";
 
 function Header() {
     const { setSearch } = useStore();
-    const accessToken = useStore(state => state.accessToken);
-    const { setAccessToken } = useStore();
-
+    const accessToken = useAccessToken(state => state.accessToken);
+    const { setAccessToken } = useAccessToken();
+    
     const router = useRouter();
     const { t, locale } = useTranslation();
     const handleRouterLogin = () => {
@@ -30,6 +30,26 @@ function Header() {
     const handleOpenSearchBar = () => {
         setSearch(true);
     }
+
+    // const getCookie = (name: string): string | null => {
+    //     if (typeof document === 'undefined') return null;
+    //     const value = `; ${document.cookie}`;
+    //     const parts = value.split(`; ${name}=`);
+    //     if (parts.length === 2) {
+    //         const tokenPart = parts.pop();
+    //         if (tokenPart) {
+    //             return tokenPart.split(';').shift() ?? null;
+    //         }
+    //     }
+    //     return null;
+    // };
+
+    // useEffect(() => {
+    //     const accessToken = getCookie('access_token');
+    //     if (accessToken) {
+    //         setAccessToken(accessToken);
+    //     }
+    // }, []);
 
 
     return (<header className="z-20 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
@@ -79,10 +99,10 @@ function Header() {
                 </nav>
             </div>
             <div className="flex ml-auto">
-                <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
-                <PiBag size={20} className="mr-[40px] cursor-pointer" />
-                <IoIosHeartEmpty size={20} className="mr-[40px] cursor-pointer" />
-                {accessToken && <SlUser size={18} className="mr-[40px] cursor-pointer" />}
+                <IoSearchOutline size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
+                <PiBag size={20} className="hover:scale-105 mr-[40px] cursor-pointer" />
+                <IoIosHeartEmpty size={20} className="hover:scale-105 mr-[40px] cursor-pointer" />
+                {accessToken && <SlUser size={18} className="hover:scale-105 mr-[40px] cursor-pointer" />}
             </div>
             <div>
                 {accessToken ?
