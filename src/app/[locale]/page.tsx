@@ -11,26 +11,39 @@ import item from "../../images/item.svg";
 // import SearchBar from "@/components/SearchBar/page";
 import { useStore } from "@/store/store";
 import dynamic from "next/dynamic";
+import { useProductSearch } from "@/hooks/useProductSearch";
+import useTranslation from "@/hooks/useTranslation";
+import { useRouter } from "next/navigation";
 const FeedbackCard = dynamic(() => import('@/components/FeedbackCard/page'), { ssr: false });
 const Clock = dynamic(() => import('@/components/Clock/page'), { ssr: false });
+const tabs = [
+  { label: 'SALE' },
+  { label: 'HOT' },
+  { label: 'NEW ARRIVALS' },
+  { label: 'ACCESSORIES' },
+]
 export default function Home() {
   // const { t } = useTranslation();
-  
-  const tabs = useMemo(() => [
-    { label: 'SALE' },
-    { label: 'HOT' },
-    { label: 'NEW ARRIVALS' },
-    { label: 'ACCESSORIES' },
-  ], []);
-  const productData = Array(8).fill({ image_url: item, name: "Item A", price: 38.99, rate: 5 });
-  const targetDate = useMemo(() => {
-    return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
-  }, []);
   const [activeTab, setActiveTab] = useState<string>('SALE');
-
   const fullText = "Step Into Your Sporty Look!";
   const [index, setIndex] = useState(0);
   const [isTyping, setIsTyping] = useState(true);
+  const router = useRouter();
+  const { locale } = useTranslation();
+  const params = useMemo(() => {
+    const base: Record<string, any> = {};
+
+    if (activeTab === 'SALE') base.sale = "sale";
+    else if (activeTab === 'HOT') base.hot = "hot";
+    else if (activeTab === 'NEW ARRIVALS') base.new = "new arrivals";
+    else if (activeTab === 'ACCESSORIES') base.category = 'accessories';
+
+    return base;
+  }, [activeTab]);
+  const { data: productData, isPending } = useProductSearch(params);
+  const targetDate = useMemo(() => {
+    return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
+  }, []);
 
   useEffect(() => {
     if (!isTyping) return;
@@ -44,6 +57,17 @@ export default function Home() {
 
     return () => clearTimeout(timeout);
   }, [index, isTyping]);
+  const { resetParamsSearch } = useStore();
+
+  const handleExplore = () => {
+    resetParamsSearch();
+    router.push(`/${locale}/products`);
+  }
+
+  const handeRouter = (value: string) => {
+    router.push(`/${locale}/products?category=${value}`);
+  }
+
   return (
     <div className="flex-1 mt-[200px] px-[var(--padding-screen)]">
       <section className="flex justify-between">
@@ -53,7 +77,7 @@ export default function Home() {
             {isTyping && <span className="animate-blink">|</span>}
           </p>
           <p className="font-[500] text-[20px] text-[var(--text-color)] mt-[60px] mb-[30px]">Elevate your game with curated athletic <br /> fashion and sleek accessories – tailored to <br /> your lifestyle.</p>
-          <Button title="EXPLORE NOW" onSubmit={() => { }} width="w-[160px]" height="h-[46px]" />
+          <Button title="EXPLORE NOW" onSubmit={handleExplore} width="w-[160px]" height="h-[46px]" />
         </div>
         <div className="w-[45%] ml-auto">
           <div className="relative aspect-[632/795] w-3/4 ml-auto">
@@ -65,7 +89,12 @@ export default function Home() {
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Best selling</h2>
         <p className="text-[var(--text-color)] mt-[20px] mb-[100px] font-[600]">Stay on trend with our best-selling sportwear picks.</p>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-8 w-full max-w-7xl mx-auto">
-          {productData.slice(0, 4).map((data, i) => (
+          {/* {productData.slice(0, 4).map((data, i) => (
+            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+              <Product {...data} />
+            </div>
+          ))} */}
+          {productData?.data?.slice(0, 4).map((data, i) => (
             <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
               <Product {...data} />
             </div>
@@ -101,7 +130,7 @@ export default function Home() {
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-32 w-full max-w-7xl mx-auto">
-          {productData.map((data, i) => (
+          {productData?.data?.map((data, i) => (
             <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
               <Product {...data} />
             </div>
@@ -124,13 +153,13 @@ export default function Home() {
           Own every move with high-performance sportswear built for style and power!
         </p>
         <div className="flex flex-wrap justify-between mb-[100px] w-full">
-          <div className="w-[30%]">
+          <div className="w-[30%]" onClick={() => handeRouter("shirts")}>
             <ProductNoPrice name="Clothes" description="Finish your athletic look with essential sportswear – from sweat-wicking shirts to stretch-fit pants and training sets." image={item} />
           </div>
-          <div className="w-[30%]">
-            <ProductNoPrice name="Shoe" description="Discover sporty footwear that blends comfort, function, and style – perfect for workouts or street-ready looks." image={item} />
+          <div className="w-[30%]" onClick={() => handeRouter("shoes")}>
+            <ProductNoPrice name="Shoes" description="Discover sporty footwear that blends comfort, function, and style – perfect for workouts or street-ready looks." image={item} />
           </div>
-          <div className="w-[30%]">
+          <div className="w-[30%]" onClick={() => handeRouter("accessories")}>
             <ProductNoPrice name="Accessories" description="Complete your sporty look with essential accessories like caps, gym bags, socks, and water bottles." image={item} />
           </div>
         </div>

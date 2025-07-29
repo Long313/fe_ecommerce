@@ -2,8 +2,9 @@
 
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { IoCartOutline } from "react-icons/io5";
 
 type ButtonProps = {
     title: string;
@@ -22,6 +23,7 @@ type ButtonProps = {
     position?: string;
     arrow?: boolean;
     padding?: string;
+    type?: string;
 };
 
 function Button(props: ButtonProps) {
@@ -42,6 +44,7 @@ function Button(props: ButtonProps) {
         position,
         arrow,
         padding,
+        type
     } = props;
 
     const [mounted, setMounted] = useState(false);
@@ -76,6 +79,11 @@ function Button(props: ButtonProps) {
                     className="inline-block mr-[8px]"
                 />
             )}
+            {
+                type && (
+                    <IoCartOutline size={20} className="hover:scale-105 mr-[20px] cursor-pointer" />
+                )
+            }
             <span className="inline-block">{title}</span>
             {arrow && <FaArrowRightLong className="ml-[10px]" />}
         </button>

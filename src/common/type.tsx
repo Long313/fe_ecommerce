@@ -28,8 +28,8 @@ export type OtpType = {
 }
 
 export enum GENDER {
-    MALE = "male",
-    FEMALE = "female",
+    MEN = "men",
+    WOMEN = "women",
     UNISEX = "unisex",
 }
 
@@ -61,7 +61,7 @@ export type ParamsSearchType = {
     endPrice?: string;
     pageSize?: number,
     pageIndex?: number,
-    sort?: string
+    sort?: string,
 };
 
 export interface ProductProps {
@@ -71,7 +71,13 @@ export interface ProductProps {
     height?: number,
     name?: string,
     price?: number | string,
-    rate?: number | string;
+    rate?: number | string,
+    quantity?: number,
+    color?: string,
+}
+
+export interface ProductBtnProps extends ProductProps {
+    onRemove?: () => void;
 }
 
 export interface ProductDetailProps {
@@ -82,6 +88,10 @@ export interface ProductDetailProps {
     price: number | string,
     image_url: string,
     gender: string;
+    size: string;
+    quantity?: number,
+    rate?: number | string,
+    color?: string,
 }
 
 export interface UserInfor {

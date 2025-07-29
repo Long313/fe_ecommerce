@@ -4,19 +4,43 @@ import { ProductProps, ServerError } from "@/common/type";
 import Loader from "@/components/Loader/page";
 import Product from "@/components/Product/page";
 import { GENDER } from "@/constants";
+import { useProductSearch } from "@/hooks/useProductSearch";
 import { searchProductByName } from "@/service/product";
 import { useStore } from "@/store/store"
 import { useMutation } from "@tanstack/react-query";
 import { Select } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 const { Option } = Select;
+import { useSearchParams } from "next/navigation";
 
 export default function Products() {
-    const [data, setData] = useState<ProductProps[]>([]);
     const searchParams = useStore(state => state.paramsSearch);
+    const { setParamsSearch } = useStore();
+    const searchParamsRouter = useSearchParams();
+    const genderQuery = searchParamsRouter.get("gender");
+    const categoryQuery = searchParamsRouter.get("category");
+    const searchQuery = searchParamsRouter.get("search");
+    const [sort, setSort] = useState('');
+    const [startPrice, setStartPrice] = useState('');
+    const [endPrice, setEndPrice] = useState('');
+    const [gender, setGender] = useState<string>("");
+    const [search, setSearch] = useState<string>("");
+    const [category, setCategory] = useState<string>("");
     useEffect(() => {
-        const filteredParams = Object.fromEntries(
-            Object.entries(searchParams).filter(
+        if (genderQuery) setGender(genderQuery);
+        if (categoryQuery) setCategory(categoryQuery);
+        if (searchQuery) setSearch(searchQuery);
+    }, [genderQuery, categoryQuery]);
+    const filteredParams = useMemo(() => {
+        return Object.fromEntries(
+            Object.entries({
+                ...searchParams,
+                sort,
+                startPrice,
+                endPrice,
+                gender: gender,
+                category: category,
+            }).filter(
                 ([, value]) =>
                     value !== '' &&
                     value !== 0 &&
@@ -24,73 +48,30 @@ export default function Products() {
                     value !== undefined
             )
         );
-        mutate(filteredParams);
-    }, [searchParams]);
-    const {
-        mutate,
-        isPending
-        // isError: mutationError,
-        // isSuccess,
-        // error,
-    } = useMutation({
-        mutationFn: searchProductByName,
-        onSuccess: (res) => {
-            if (res.status === 200) {
-                console.log("Res.data", res.data);
-                setData(res.data);
-            }
-        },
-        onError: (error: ServerError) => {
-            console.log(error)
-        }
+    }, [searchParams, search, sort, startPrice, endPrice, gender, category]);
 
-    });
-    const [sort, setSort] = useState<string>("");
-    const [startPrice, setStartPrice] = useState<string>("");
-    const [endPrice, setEndPrice] = useState<string>("");
-    const [gender, setGender] = useState<string[]>([""]);
-    const [category, setCategory] = useState<string[]>([""]);
+    console.log('filteredParams', filteredParams);
+    const { data, isPending } = useProductSearch(filteredParams);
 
     const handleGenderChange = (value: string) => {
-        setGender((prev) =>
-            prev.includes(value)
-                ? prev.filter((item) => item !== value) // Bỏ chọn
-                : [...prev, value] // Thêm chọn
-        );
+        setGender(value);
     };
 
     const handleCategoryChange = (value: string) => {
-        setCategory((prev) =>
-            prev.includes(value)
-                ? prev.filter((item) => item !== value) // Bỏ chọn
-                : [...prev, value] // Thêm chọn
-        );
+        setCategory(value);
     };
-    const { setParamsSearch } = useStore();
 
     const handleSort = (value: string) => {
         setSort(value);
-        const updatedParams = {
-            ...searchParams,
-            sort: value,
-        };
-        const filtered = Object.fromEntries(
-            Object.entries(updatedParams).filter(
-                ([, value]) =>
-                    value !== '' &&
-                    value !== 0 &&
-                    value !== null &&
-                    value !== undefined
-            )
-        );
-        setParamsSearch(filtered);
-        mutate(filtered);
+        setParamsSearch({ ...searchParams, sort: value });
     };
     return (
         <div className="w-full h-full my-[200px] px-[var(--padding-screen)] flex">
             {isPending && <Loader />}
             <aside className="w-[20%] h-full mr-[10px]">
-                <p className="text-[20px] font-[600] bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">{searchParams?.search ? searchParams?.search : "Product"}&nbsp;<span className="text-[#FF35C4]">{` ( ${data.length > 1 ? `${data.length} results` : `${data.length} result`} )`}</span>
+                <p className="text-[20px] font-[600] bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">{searchParams?.search ? searchParams?.search : "Product"}&nbsp;<span className="text-[#FF35C4]">
+                    ({data?.data?.length || 0} result{data?.data?.length !== 1 ? 's' : ''})
+                </span>
                 </p>
                 <div className="my-[10px] border-b border-[#AEAEAE] px-[10px] pb-[10px]">
                     <p className="font-[600] mb-[10px]">Gender</p>
@@ -150,11 +131,16 @@ export default function Products() {
                         <Option value="asc" className="w-full">Low to High</Option>
                     </Select>
                 </div>
-                <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-8 max-w-7xl mx-auto mt-[60px]">{data.length > 0 && data.map(item =>
-                    <div key={item.id} className="w-full sm:w-[48%] lg:w-[22%] xl:w-[22%] max-w-[250px]">
-                        <Product id={item.id} image_url={item.image_url} name={item.name} price={item.price} />
-                    </div>
-                )}</div>
+                <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-8 max-w-7xl mx-auto mt-[60px]">
+                    {data?.data?.map(item => (
+                        <div
+                            key={item.id}
+                            className="w-full sm:w-[48%] lg:w-[22%] xl:w-[22%] max-w-[250px]"
+                        >
+                            <Product id={item.id} image_url={item.image_url} name={item.name} price={item.price} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

@@ -13,10 +13,10 @@ import Button from "../Button/page";
 import LanguageSwitcher from "../LanguageSwitcher/page";
 
 function Header() {
-    const { setSearch } = useStore();
+    const { setSearch, setParamsSearch } = useStore();
     const accessToken = useAccessToken(state => state.accessToken);
     const { setAccessToken } = useAccessToken();
-    
+
     const router = useRouter();
     const { t, locale } = useTranslation();
     const handleRouterLogin = () => {
@@ -51,8 +51,30 @@ function Header() {
     //     }
     // }, []);
 
+    const handleRouterLink = (value: string) => {
+        let query = '';
+        switch (value) {
+            case 'men':
+                query = 'gender=men';
+                break;
+            case 'women':
+                query = 'gender=women';
+                break;
+            case 'kids':
+                query = 'category=kids';
+                break;
+            case 'accessories':
+                query = 'category=accessories';
+                break;
+            default:
+                return;
+        }
 
-    return (<header className="z-20 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
+        router.push(`/${locale}/products?${query}`);
+    };
+
+
+    return (<header className="z-90 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
         <div className="h-[40px] w-full bg-[#373737] text-[#fff] flex justify-center items-center text-[14px]">
             <div className="mr-[50px]">
                 <span>Summer Sale For All Swim Sports And Free Express Delivery - OFF 50%! &nbsp;</span>
@@ -68,28 +90,28 @@ function Header() {
             <div className="ml-[10%] w-4/10">
                 <nav className="w-full">
                     <ul className="flex w-full justify-between">
-                        <li className="relative group cursor-pointer">
+                        <li className="relative group cursor-pointer" onClick={() => handleRouterLink("men")}>
                             <Link href="/men" className="relative z-10">
                                 MEN
                             </Link>
                             <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                         </li>
 
-                        <li className="relative group cursor-pointer">
+                        <li className="relative group cursor-pointer" onClick={() => handleRouterLink("women")}>
                             <Link href="/women" className="relative z-10">
                                 WOMEN
                             </Link>
                             <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                         </li>
 
-                        <li className="relative group cursor-pointer">
+                        <li className="relative group cursor-pointer" onClick={() => handleRouterLink("kids")}>
                             <Link href="/kids" className="relative z-10">
                                 KIDS
                             </Link>
                             <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                         </li>
 
-                        <li className="relative group cursor-pointer">
+                        <li className="relative group cursor-pointer" onClick={() => handleRouterLink("accessories")}>
                             <Link href="/accessories" className="relative z-10">
                                 ACCESSORIES
                             </Link>
@@ -100,9 +122,9 @@ function Header() {
             </div>
             <div className="flex ml-auto">
                 <IoSearchOutline size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
-                <PiBag size={20} className="hover:scale-105 mr-[40px] cursor-pointer" />
-                <IoIosHeartEmpty size={20} className="hover:scale-105 mr-[40px] cursor-pointer" />
-                {accessToken && <SlUser size={18} className="hover:scale-105 mr-[40px] cursor-pointer" />}
+                <PiBag size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/bag`)} />
+                <IoIosHeartEmpty size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/favorite`)} />
+                {accessToken && <SlUser size={18} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/user`)} />}
             </div>
             <div>
                 {accessToken ?

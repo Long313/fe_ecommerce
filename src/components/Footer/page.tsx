@@ -7,10 +7,11 @@ import { FaInstagram } from "react-icons/fa";
 import { SlSocialTwitter } from "react-icons/sl";
 import white_amax_logo from '../../images/white_amax.svg';
 import Button from '../Button/page';
+import useTranslation from '@/hooks/useTranslation';
 
 export default function Footer() {
     const [email, setEmail] = useState<string>("");
-    console.log(email);
+    const { locale } = useTranslation();
     return (<footer className="mt-[200px] p-[var(--padding-screen)] py-[50px] bg-[#373737] text-[#fff] w-full">
         <div className='flex justify-between'>
             <div className="flex flex-col">
@@ -34,8 +35,8 @@ export default function Footer() {
             <div className='flex flex-col text-[#fff]'>
                 <p className='font-[500] my-[10px]'>COMPANY</p>
                 <ul>
-                    <li><Link href="/">About us</Link></li>
-                    <li><Link href="/">Contact</Link></li>
+                    <li><Link href={`/${locale}/about-us`}>About us</Link></li>
+                    <li><Link href={`/${locale}/contact`}>Contact</Link></li>
                     <li><Link href="/">News</Link></li>
                     <li><Link href="/">Support</Link></li>
                 </ul>

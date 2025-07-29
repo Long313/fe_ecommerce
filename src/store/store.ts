@@ -40,6 +40,7 @@ interface StoreState {
     sort?: string,
   };
   userInfor: UserInfor,
+  resetParamsSearch: () => void;
   setUserInfor: (state: UserInfor) => void;
   setMode: (state: boolean) => void;
   // setAccessToken: (state: string) => void;
@@ -83,6 +84,7 @@ export const useStore = create<StoreState>((set) => ({
     deleted_at: null,
     deleted_by: null
   },
+  resetParamsSearch: () => set(() => ({ paramsSearch: {} })),
   setUserInfor: (state: UserInfor) => set((prev) => ({
     userInfor: {
       ...prev.userInfor,
