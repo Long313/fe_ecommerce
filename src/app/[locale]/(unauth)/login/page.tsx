@@ -4,7 +4,7 @@ import InputField from "@/components/InputFeild/page";
 import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { login } from "@/service/login";
-import { useStore } from "@/store/store";
+import { useAccessToken, useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -19,6 +19,8 @@ export default function Login() {
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
   // const [isError, setIsError] = useState<boolean>(false);
+  const { setUserInfor } = useStore();
+
   const { t, locale } = useTranslation();
   const { data: session } = useSession();
   const emailAuthen = useStore((state) => state.emailAuthen);
@@ -33,9 +35,15 @@ export default function Login() {
       setRemember(true);
     }
   }, []);
-  if (session) {
-    console.log("session", session);
-  }
+
+  useEffect(() => {
+    if (session) {
+      setUserInfor({
+        email: session?.user?.email || "",
+        fullname: session?.user?.name || "",
+      });
+    }
+  }, [])
   const handleLogin = () => {
 
     const checkConditionSubmit = !email || !password;
@@ -43,6 +51,7 @@ export default function Login() {
     mutate({ email, password });
   };
 
+  const { setAccessToken } = useAccessToken();
   const {
     mutate,
     isPending
@@ -53,13 +62,31 @@ export default function Login() {
     mutationFn: login,
     onSuccess: (res) => {
       if (res.status === 200) {
+        setUserInfor(res.data);
+        const getCookie = (name: string): string | null => {
+          if (typeof document === 'undefined') return null;
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) {
+            const tokenPart = parts.pop();
+            if (tokenPart) {
+              return tokenPart.split(';').shift() ?? null;
+            }
+          }
+          return null;
+        };
+
+        const accessToken = getCookie('access_token');
+        if (accessToken) {
+          setAccessToken(accessToken);
+        }
+        router.push(`/${locale}/`);
         if (remember) {
           localStorage.setItem('rememberEmail', email);
           localStorage.setItem('rememberPassword', password);
         } else {
           localStorage.removeItem('rememberEmail');
         }
-        router.push(`/${locale}/`);
       }
     },
     onError: (error: { status: number, message: string }) => {
@@ -73,7 +100,6 @@ export default function Login() {
   });
 
   const handleGetDataInput = (typeName: string, value: string) => {
-    console.log(typeName, value);
     if (typeName == "email") {
       setEmail(value);
     }

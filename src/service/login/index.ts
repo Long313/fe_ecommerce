@@ -4,7 +4,9 @@ import axios, { AxiosError } from "axios";
 
 export const login = async (body: LoginType) => {
   try {
-    const response = await axios.post(`${baseURL}/auth/login`, body);
+    const response = await axios.post(`${baseURL}/auth/login`, body, {
+      withCredentials: true, // 🔥 Cho phép nhận và gửi cookie
+    });
     return response.data;
   } catch (error) {
     const axiosError = error as AxiosError<ServerError>;

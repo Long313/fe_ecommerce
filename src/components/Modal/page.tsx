@@ -19,7 +19,7 @@ function Modal() {
     const router = useRouter();
     const emailAuthen = useStore((state) => state.emailAuthen);
     const typeOtpAuthen = useStore((state) => state.typeOtpAuthen);
-
+    const [error, setError] = useState<string>("");
     const handleChange = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
 
@@ -90,7 +90,7 @@ function Modal() {
 
     const {
         mutate,
-        isPending
+        // isPending
         // isError: mutationError,
         // isSuccess,
         // error,
@@ -118,7 +118,7 @@ function Modal() {
 
     const {
         mutate: mutateVerifyOtp,
-        // isPending: isPendingVerifyOtp
+        isPending
         // isError: mutationErrorVerifyOtp,
         // isSuccess: isSuccessVerifyOtp,
         // error: errorVerifyOtp,
@@ -127,10 +127,13 @@ function Modal() {
         onSuccess: (res) => {
             if (res.status === 200) {
                 router.push(`/${locale}/success`);
+            } else {
+                setError("OTP code not valid")
             }
         },
         onError: (error) => {
             console.log(error.message || "Có lỗi xảy ra");
+            setError("OTP code not valid")
         }
 
     });
@@ -155,16 +158,16 @@ function Modal() {
 
     });
 
-    return (<div className="max-w-[500px]">
+    return (<div className="max-w-[520px]">
         {isPending && (
             <Loader />
         )}
-        <div className="mt-[20px] text-center bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[46px] font-[700]">{t("checkMailTitle")}</div>
+        <div className="mt-[20px] text-center bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[40px] font-[700]">{t("checkMailTitle")}</div>
         <div className="flex flex-col items-center mt-[10px]">
             <p className="text-[16px] text-[#636364] text-center">{t("sendOtpTitle")}</p>
             <CountdownTimer callBack={resetTime} />
         </div>
-        <div className="mx-auto flex justify-between w-[70%] mt-[40px]">
+        <div className="mx-auto flex justify-between w-[68%] mt-[40px]">
             {otp.map((digit, index) => (
                 <input
                     key={index}
@@ -175,13 +178,14 @@ function Modal() {
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
                     ref={(el) => { inputRefs.current[index] = el; }}
-                    className="text-[40px] font-[700] outline-none inline-block border-b-[2px] border-[#822FFF] w-[18%] text-center"
+                    className="text-[36px] font-[600] outline-none inline-block border-b-[2px] border-[#822FFF] w-[18%] text-center"
                 />
             ))}
         </div>
+        <p className="mt-[20px] w-[68%] mx-auto text-center text-[14px] text-[red] font-[600]">{error ? error : "\u00A0"}</p>
         <div className="flex-col my-[30px] mx-auto flex justify-center items-center">
-            <Button title={t("verifyOtp")} width="w-[80%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
-            <p className="text-[14px] mt-[10px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p>
+            <Button title={t("verifyOtp")} width="w-[70%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+            <p className="text-[14px] mt-[20px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p>
         </div>
     </div>);
 }
