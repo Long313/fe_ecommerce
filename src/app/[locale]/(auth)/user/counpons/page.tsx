@@ -1,9 +1,9 @@
 'use client'
 
-export default function UserInfor() {
+export default function Counpons() {
     return (
         <div>
-            user infor
+            Counpons
         </div>
     )
 }

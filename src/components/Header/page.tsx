@@ -13,7 +13,7 @@ import Button from "../Button/page";
 import LanguageSwitcher from "../LanguageSwitcher/page";
 
 function Header() {
-    const { setSearch, setParamsSearch } = useStore();
+    const { setSearch } = useStore();
     const accessToken = useAccessToken(state => state.accessToken);
     const { setAccessToken } = useAccessToken();
 
@@ -30,26 +30,6 @@ function Header() {
     const handleOpenSearchBar = () => {
         setSearch(true);
     }
-
-    // const getCookie = (name: string): string | null => {
-    //     if (typeof document === 'undefined') return null;
-    //     const value = `; ${document.cookie}`;
-    //     const parts = value.split(`; ${name}=`);
-    //     if (parts.length === 2) {
-    //         const tokenPart = parts.pop();
-    //         if (tokenPart) {
-    //             return tokenPart.split(';').shift() ?? null;
-    //         }
-    //     }
-    //     return null;
-    // };
-
-    // useEffect(() => {
-    //     const accessToken = getCookie('access_token');
-    //     if (accessToken) {
-    //         setAccessToken(accessToken);
-    //     }
-    // }, []);
 
     const handleRouterLink = (value: string) => {
         let query = '';
