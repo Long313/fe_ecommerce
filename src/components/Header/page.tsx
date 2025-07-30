@@ -54,7 +54,7 @@ function Header() {
     };
 
 
-    return (<header className="z-90 fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
+    return (<header className="z-[30] fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
         <div className="h-[40px] w-full bg-[#373737] text-[#fff] flex justify-center items-center text-[14px]">
             <div className="mr-[50px]">
                 <span>Summer Sale For All Swim Sports And Free Express Delivery - OFF 50%! &nbsp;</span>
