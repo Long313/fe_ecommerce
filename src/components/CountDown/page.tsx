@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 
-const COUNTDOWN_DURATION = 300; // 5 phút
+const COUNTDOWN_DURATION = 300; 
 const STORAGE_KEY = "otp_expiry_time";
 
 function CountdownTimer({ callBack }: { callBack: boolean }) {
   const [secondsLeft, setSecondsLeft] = useState<number>(COUNTDOWN_DURATION);
 
-  // Đọc từ localStorage khi component mount
   useEffect(() => {
     const expiryString = localStorage.getItem(STORAGE_KEY);
     const now = Date.now();
@@ -22,13 +21,11 @@ function CountdownTimer({ callBack }: { callBack: boolean }) {
       }
     }
 
-    // Nếu không có hoặc đã hết hạn
     const newExpiry = now + COUNTDOWN_DURATION * 1000;
     localStorage.setItem(STORAGE_KEY, newExpiry.toString());
     setSecondsLeft(COUNTDOWN_DURATION);
   }, []);
 
-  // Reset thời gian khi callBack thay đổi (ví dụ khi bấm "Resend OTP")
   useEffect(() => {
     if (callBack) {
       const newExpiry = Date.now() + COUNTDOWN_DURATION * 1000;

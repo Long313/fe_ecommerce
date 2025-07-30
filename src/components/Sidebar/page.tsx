@@ -36,7 +36,7 @@ export default function Sidebar() {
                 <Link href={`/${locale}/user/address-book`} className={`my-[10px] ml-[20px] hover:bg-gradient-to-r hover:from-[#822FFF] hover:to-[#FF35C4] hover:bg-clip-text hover:text-transparent ${isActive(`/${locale}/user/address-book`)}`}>Address book</Link>
                 <Link href={`/${locale}/user/change-password`} className={`ml-[20px] hover:bg-gradient-to-r hover:from-[#822FFF] hover:to-[#FF35C4] hover:bg-clip-text hover:text-transparent ${isActive(`/${locale}/user/change-password`)}`}>Change my password</Link>
             </div>
-            <p className="font-[600] mt-[20px] cursor-pointer" onClick={handleRouterLogout}>Sign out</p>
+            <p className="font-[600] mt-[20px] cursor-pointer hover:bg-gradient-to-r hover:from-[#822FFF] hover:to-[#FF35C4] hover:bg-clip-text hover:text-transparent" onClick={handleRouterLogout}>Sign out</p>
         </div>
     );
 }

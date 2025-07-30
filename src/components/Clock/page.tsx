@@ -35,7 +35,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate }) => {
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
-    }, 1000); // cập nhật mỗi giây
+    }, 1000); 
 
     return () => clearInterval(timer);
   }, [targetDate]);
