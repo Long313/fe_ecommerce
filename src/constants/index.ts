@@ -1,5 +1,7 @@
-export const locales = ['vi', 'en']
-
+export const locales = ['vi', 'en'];
+export const GENDER = ['male', 'female', 'unisex'];
+export const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
+export const COLORS = ["white", "gray", "black", "pink", "blue", "purple"]
 
 export const VI = "vi";
 export const EN = "en";

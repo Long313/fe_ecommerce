@@ -16,7 +16,6 @@
   box-sizing: border-box;
 }
 
-div {}
 
 select {
   border: none;
@@ -29,4 +28,21 @@ select option:hover {
   background-color: #FF35C4;
   /* màu tím hồng */
   color: white;
+}
+
+.flag-dropdown,
+.selected-flag,
+.selected-flag:hover {
+  background: #f1f1f1 !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+  border: none !important;
+}
+
+.flag-dropdown {
+  border: 1px solid #636364 !important;
+}
+
+.react-tel-input .form-control {
+  border: 1px solid #636364 !important;
 }

@@ -26,7 +26,7 @@ function InputField(props: InputFeildProps) {
 
     useEffect(() => {
         setValue(valueDefault || "");
-        setMounted(true); // chỉ cho render sau khi mounted
+        setMounted(true);
     }, [valueDefault]);
     const handleFocus = () => {
         inputRef.current?.focus();
@@ -34,7 +34,6 @@ function InputField(props: InputFeildProps) {
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setError("")
-        console.log("e", e.target.value);
         setValue(e.target.value);
     }
 
@@ -55,11 +54,10 @@ function InputField(props: InputFeildProps) {
     };
 
     useEffect(() => {
-        console.log("getError", getError);
         if (getError?.confirmPassword === "confirm error" && name === "confirmPassword") {
             setError(t("confirmPasswordError"));
         } else if (getError && getError[name]) {
-            setError(getError[name]);
+            setError(t(`${getError[name]}`));
         }
     }, [getError]);
 
@@ -69,8 +67,8 @@ function InputField(props: InputFeildProps) {
     if (!mounted) return null; // tránh hydration mismatch
 
     return (<div className="flex flex-col">
-        <label htmlFor="email_feild" className="inline-block font-[500]" onClick={handleFocus}>
-            {title}
+        <label className="inline-block font-[500]" onClick={handleFocus}>
+            {title}<span className="text-[red]">*</span>
         </label>
         <div className="relative">
             <input
@@ -81,7 +79,7 @@ function InputField(props: InputFeildProps) {
                 type={inputType}
                 ref={inputRef}
                 placeholder={placeholder || ""}
-                className="mt-[8px] outline-none rounded-[12px] py-[4px] px-[8px] text-[#636364] border border-[#636364] w-full pr-10"
+                className="mt-[8px] outline-none rounded-[8px] py-[4px] px-[8px] text-[#636364] border border-[#636364] w-full pr-10 text-[16px]"
             />
             {isPasswordField && (
                 <button
@@ -93,7 +91,7 @@ function InputField(props: InputFeildProps) {
                 </button>
             )}
         </div>
-        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[36px] visibility-visible">
+        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[24px] visibility-visible">
             {error || "\u00A0"}
         </p>
     </div>);

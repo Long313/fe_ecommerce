@@ -14,8 +14,7 @@ interface LanguageSwitcherProps {
 }
 
 export default function LanguageSwitcher(props: LanguageSwitcherProps) {
-  const { currentLocale, color } = props;
-  console.log(currentLocale);
+  const { color } = props;
   const router = useRouter();
   const pathname = usePathname();
 

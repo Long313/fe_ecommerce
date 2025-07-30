@@ -2,8 +2,9 @@
 
 import { StaticImport } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
-import { FaArrowRightLong } from "react-icons/fa6";
 import { useEffect, useState } from "react";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { IoCartOutline } from "react-icons/io5";
 
 type ButtonProps = {
     title: string;
@@ -21,6 +22,8 @@ type ButtonProps = {
     rounded?: string;
     position?: string;
     arrow?: boolean;
+    padding?: string;
+    type?: string;
 };
 
 function Button(props: ButtonProps) {
@@ -40,6 +43,8 @@ function Button(props: ButtonProps) {
         rounded,
         position,
         arrow,
+        padding,
+        type
     } = props;
 
     const [mounted, setMounted] = useState(false);
@@ -59,7 +64,8 @@ function Button(props: ButtonProps) {
     ${margin ?? ""}
     ${rounded ?? "rounded-[12px]"}
     ${position ?? ""}
-    flex items-center justify-center font-[500] text-[14px] cursor-pointer hover:zoom transition-transform duration-300 transform hover:scale-101
+    ${padding ?? ""}
+    flex items-center justify-center font-[500] text-[14px] cursor-pointer hover:zoom transition-transform duration-300 transform hover:scale-101 min-h-[40px]
   `;
 
     return (
@@ -73,6 +79,11 @@ function Button(props: ButtonProps) {
                     className="inline-block mr-[8px]"
                 />
             )}
+            {
+                type && (
+                    <IoCartOutline size={20} className="hover:scale-105 mr-[20px] cursor-pointer" />
+                )
+            }
             <span className="inline-block">{title}</span>
             {arrow && <FaArrowRightLong className="ml-[10px]" />}
         </button>
