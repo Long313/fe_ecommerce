@@ -11,6 +11,7 @@ import useTranslation from '@/hooks/useTranslation';
 
 export default function Footer() {
     const [email, setEmail] = useState<string>("");
+    console.log(email);
     const { locale } = useTranslation();
     return (<footer className="mt-[200px] p-[var(--padding-screen)] py-[50px] bg-[#373737] text-[#fff] w-full">
         <div className='flex justify-between'>

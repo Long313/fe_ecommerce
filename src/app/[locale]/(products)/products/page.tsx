@@ -1,17 +1,14 @@
 'use client'
 
-import { ProductProps, ServerError } from "@/common/type";
 import Loader from "@/components/Loader/page";
 import Product from "@/components/Product/page";
 import { GENDER } from "@/constants";
 import { useProductSearch } from "@/hooks/useProductSearch";
-import { searchProductByName } from "@/service/product";
-import { useStore } from "@/store/store"
-import { useMutation } from "@tanstack/react-query";
+import { useStore } from "@/store/store";
 import { Select } from "antd";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 const { Option } = Select;
-import { useSearchParams } from "next/navigation";
 
 export default function Products() {
     const searchParams = useStore(state => state.paramsSearch);
@@ -50,7 +47,6 @@ export default function Products() {
         );
     }, [searchParams, search, sort, startPrice, endPrice, gender, category]);
 
-    console.log('filteredParams', filteredParams);
     const { data, isPending } = useProductSearch(filteredParams);
 
     const handleGenderChange = (value: string) => {

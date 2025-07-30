@@ -7,7 +7,7 @@ type ProductSearchResponse = {
   data: ProductProps[];
 };
 
-export const useProductSearch = (params: Record<string, any>) => {
+export const useProductSearch = (params: Record<string, string | number>) => {
   const queryClient = useQueryClient();
 
   return useQuery<ProductSearchResponse>({

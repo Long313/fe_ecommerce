@@ -1,11 +1,11 @@
 'use client';
-import { ReactNode, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { SessionProvider } from "next-auth/react";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Header from '../Header/page';
-import dynamic from 'next/dynamic';
 import { useStore } from '@/store/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SessionProvider } from "next-auth/react";
+import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
+import { ReactNode, useState } from 'react';
+import Header from '../Header/page';
 import SearchBar from '../SearchBar/page';
 const Footer = dynamic(() => import('@/components/Footer/page'), { ssr: false });
 

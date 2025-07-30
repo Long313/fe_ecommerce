@@ -1,17 +1,16 @@
 'use client'
 import Button from "@/components/Button/page";
 import InputField from "@/components/InputFeild/page";
-import LanguageSwitcher from "@/components/LanguageSwitcher/page";
 import Loader from "@/components/Loader/page";
 import useTranslation from "@/hooks/useTranslation";
 import { registerUser } from "@/service/register";
 import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import register_background from '../../../../images/register_background.svg';
-import dynamic from "next/dynamic";
-import Link from "next/link";
 const PhoneInput = dynamic(() => import('@/components/PhoneWrapper/page'), {
   ssr: false,
 });

@@ -31,7 +31,7 @@ export default function Home() {
   const router = useRouter();
   const { locale } = useTranslation();
   const params = useMemo(() => {
-    const base: Record<string, any> = {};
+    const base: Record<string, string | number> = {};
 
     if (activeTab === 'SALE') base.sale = "sale";
     else if (activeTab === 'HOT') base.hot = "hot";
@@ -40,7 +40,7 @@ export default function Home() {
 
     return base;
   }, [activeTab]);
-  const { data: productData, isPending } = useProductSearch(params);
+  const { data: productData } = useProductSearch(params);
   const targetDate = useMemo(() => {
     return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
   }, []);

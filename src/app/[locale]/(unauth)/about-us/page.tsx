@@ -1,25 +1,24 @@
-import line_top from '@/images/line_top.svg';
-import line_bot from '@/images/line_bot.svg';
-import logo from '@/images/logo.svg';
-import about_us from '@/images/about_us.svg';
 import about_1 from '@/images/about_1.svg';
 import about_2 from '@/images/about_2.svg';
 import about_3 from '@/images/about_3.svg';
 import about_4 from '@/images/about_4.svg';
 import about_5 from '@/images/about_5.svg';
+import about_us from '@/images/about_us.svg';
+import line_bot from '@/images/line_bot.svg';
+import line_top from '@/images/line_top.svg';
+import logo from '@/images/logo.svg';
+import Image from 'next/image';
 import about_6 from '../../../../images/about_6.svg';
+import bar_1 from '../../../../images/bar_1.svg';
+import bar_2 from '../../../../images/bar_2.svg';
+import bar_3 from '../../../../images/bar_3.svg';
 import line_1 from '../../../../images/line_1.svg';
 import line_2 from '../../../../images/line_2.svg';
 import line_3 from '../../../../images/line_3.svg';
 import line_4 from '../../../../images/line_4.svg';
 import line_5 from '../../../../images/line_5.svg';
 import line_6 from '../../../../images/line_6.svg';
-import bar_1 from '../../../../images/bar_1.svg';
-import bar_2 from '../../../../images/bar_2.svg';
-import bar_3 from '../../../../images/bar_3.svg';
-import Image from 'next/image';
 function AboutUs() {
-    const text = `ABOUT US`
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
             <div className="w-full mt-[60px]">
