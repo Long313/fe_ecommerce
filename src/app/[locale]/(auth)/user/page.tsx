@@ -10,7 +10,7 @@ export default function UserInfor() {
     const userInfor = useStore(state => state.userInfor);
     const { avatar, fullname, phone_number, gender, email, birthday, address } = userInfor;
 
-    const qrRef = useRef<SVGSVGElement | null>(null);
+    // const qrRef = useRef<SVGSVGElement | null>(null);
 
     function getInitials(name: string): string {
         const words = name.trim().split(" ");

@@ -121,5 +121,6 @@ export type InputProps = {
     width?: string,
     height?: string,
     placeholder?: string,
-    onGetData: (name: string, value: string | number) => void;
+    defaultValue?: string,
+    onGetData: (name: string, value: string) => void;
 }
