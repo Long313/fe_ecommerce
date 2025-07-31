@@ -1,6 +1,6 @@
 'use client'
-import LanguageSwitcher from "@/components/LanguageSwitcher/page";
-import ModalForgotPassWord from "@/components/Modal/ModalForgotPassWord/page";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ModalForgotPassWord from "@/components/Modal/ModalForgotPassWord";
 import register_background from '../../../../images/register_background.svg';
 
 function ForgotPassWord() {

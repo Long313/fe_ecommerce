@@ -1,5 +1,5 @@
 // app/[locale]/layout.tsx
-import LayoutWrapper from '@/components/LayoutWrapper/page';
+import LayoutWrapper from '@/components/LayoutWrapper';
 import { ReactNode } from 'react';
 import './globals.css'
 export default function LocaleLayout({ children }: { children: ReactNode }) {

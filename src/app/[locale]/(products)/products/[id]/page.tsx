@@ -1,7 +1,7 @@
 'use client'
 import { ProductDetailProps } from '@/common/type';
-import Button from '@/components/Button/page';
-import Loader from '@/components/Loader/page';
+import Button from '@/components/Button';
+import Loader from '@/components/Loader';
 import { COLORS, SIZES } from '@/constants';
 import useTranslation from '@/hooks/useTranslation';
 import { getDetailProduct } from '@/service/product';

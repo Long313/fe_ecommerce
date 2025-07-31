@@ -1,7 +1,7 @@
 'use client'
 
-import Loader from "@/components/Loader/page";
-import Product from "@/components/Product/page";
+import Loader from "@/components/Loader";
+import Product from "@/components/Product";
 import { GENDER } from "@/constants";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import { useStore } from "@/store/store";

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import item from "../../images/item.svg";
 import Link from "next/link";
-import Button from "../Button/page";
+import Button from "../Button";
 import { CiTrash } from "react-icons/ci";
 import useTranslation from "@/hooks/useTranslation";
 import { ProductBtnProps } from "@/common/type";

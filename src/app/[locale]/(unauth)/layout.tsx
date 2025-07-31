@@ -1,4 +1,4 @@
-import LanguageSwitcher from "@/components/LanguageSwitcher/page";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ReactNode } from "react";
 function LayoutAuthen({ children }: { children: ReactNode }) {
     return (

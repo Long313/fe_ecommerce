@@ -5,9 +5,9 @@ import { SessionProvider } from "next-auth/react";
 import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { ReactNode, useState } from 'react';
-import Header from '../Header/page';
-import SearchBar from '../SearchBar/page';
-const Footer = dynamic(() => import('@/components/Footer/page'), { ssr: false });
+import Header from '../Header';
+import SearchBar from '../SearchBar';
+const Footer = dynamic(() => import('@/components/Footer'), { ssr: false });
 
 export default function LayoutWrapper({ children }: { children: ReactNode }) {
     const pathname = usePathname();

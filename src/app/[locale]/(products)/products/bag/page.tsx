@@ -1,6 +1,6 @@
 'use client'
 import { ProductDetailProps, ProductProps } from "@/common/type"
-import Button from "@/components/Button/page";
+import Button from "@/components/Button";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import shop_cart from '../../../../../images/shop_cart.svg'

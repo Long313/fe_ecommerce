@@ -1,7 +1,7 @@
 'use client'
-import Button from "@/components/Button/page";
-import InputField from "@/components/InputFeild/page";
-import Loader from "@/components/Loader/page";
+import Button from "@/components/Button";
+import InputField from "@/components/InputFeild";
+import Loader from "@/components/Loader";
 import useTranslation from "@/hooks/useTranslation";
 import { registerUser } from "@/service/register";
 import { useStore } from "@/store/store";
@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import register_background from '../../../../images/register_background.svg';
-const PhoneInput = dynamic(() => import('@/components/PhoneWrapper/page'), {
+const PhoneInput = dynamic(() => import('@/components/PhoneWrapper'), {
   ssr: false,
 });
 export default function Register() {

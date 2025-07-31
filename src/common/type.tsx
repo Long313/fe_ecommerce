@@ -100,8 +100,11 @@ export interface UserInfor {
     email: string | null;
     phone_number?: string;
     gender?: GENDER;
-    role?: ROLE
-    status?: ISACTIVE
+    avatar?: string;
+    address?: string;
+    birthday?: string;
+    role?: ROLE;
+    status?: ISACTIVE;
     refresh_token?: string;
     created_at?: string;
     created_by?: string | null;
@@ -109,4 +112,14 @@ export interface UserInfor {
     updated_by?: string | null;
     deleted_at?: string | null;
     deleted_by?: string | null;
+}
+
+export type InputProps = {
+    title: string,
+    name: string,
+    type: string,
+    width?: string,
+    height?: string,
+    placeholder?: string,
+    onGetData: (name: string, value: string | number) => void;
 }

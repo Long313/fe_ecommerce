@@ -1,6 +1,6 @@
 'use client';
-import LanguageSwitcher from '@/components/LanguageSwitcher/page';
-import ModalResetPassword from '@/components/Modal/ModalResetPassword/page';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import ModalResetPassword from '@/components/Modal/ModalResetPassword';
 import register_background from '../../../../images/register_background.svg';
 
 export default function ResetPassWord() {

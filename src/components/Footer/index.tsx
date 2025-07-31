@@ -6,7 +6,7 @@ import { AiOutlineFacebook } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { SlSocialTwitter } from "react-icons/sl";
 import white_amax_logo from '../../images/white_amax.svg';
-import Button from '../Button/page';
+import Button from '../Button';
 import useTranslation from '@/hooks/useTranslation';
 
 export default function Footer() {

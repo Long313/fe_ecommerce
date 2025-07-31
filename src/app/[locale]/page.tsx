@@ -1,7 +1,7 @@
 'use client'
-import Button from "@/components/Button/page";
-import Product from "@/components/Product/page";
-import ProductNoPrice from "@/components/ProductNoPrice/page";
+import Button from "@/components/Button";
+import Product from "@/components/Product";
+import ProductNoPrice from "@/components/ProductNoPrice";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import home_img from '../../images/home_img.svg';
@@ -14,8 +14,8 @@ import dynamic from "next/dynamic";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import useTranslation from "@/hooks/useTranslation";
 import { useRouter } from "next/navigation";
-const FeedbackCard = dynamic(() => import('@/components/FeedbackCard/page'), { ssr: false });
-const Clock = dynamic(() => import('@/components/Clock/page'), { ssr: false });
+const FeedbackCard = dynamic(() => import('@/components/FeedbackCard'), { ssr: false });
+const Clock = dynamic(() => import('@/components/Clock'), { ssr: false });
 const tabs = [
   { label: 'SALE' },
   { label: 'HOT' },

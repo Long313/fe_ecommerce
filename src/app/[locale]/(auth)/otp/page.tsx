@@ -1,6 +1,6 @@
 'use client'
-import LanguageSwitcher from "@/components/LanguageSwitcher/page";
-import Modal from "@/components/Modal/page";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Modal from "@/components/Modal";
 import register_background from '../../../../images/register_background.svg';
 
 function SendOtp() {
