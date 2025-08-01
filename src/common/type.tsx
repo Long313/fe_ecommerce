@@ -64,6 +64,20 @@ export type ParamsSearchType = {
     sort?: string,
 };
 
+export type ParamsSearchProvincesType = {
+    page: number,
+    size: number,
+    query?: string,
+};
+
+export interface ProvincesProps {
+    id: string,
+    name: string,
+    type: number,
+    typeText: string,
+    slug: string
+}
+
 export interface ProductProps {
     id?: string | number,
     image_url: string,
@@ -122,5 +136,8 @@ export type InputProps = {
     height?: string,
     placeholder?: string,
     defaultValue?: string,
-    onGetData: (name: string, value: string) => void;
+    dataSelect?: {
+        id?: string; label: string; value: string
+    }[],
+    onGetData: (name: string, value: string, id?: string) => void;
 }

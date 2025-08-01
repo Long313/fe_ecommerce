@@ -91,7 +91,7 @@ function InputField(props: InputFeildProps) {
                 </button>
             )}
         </div>
-        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[24px] visibility-visible">
+        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
             {error || "\u00A0"}
         </p>
     </div>);

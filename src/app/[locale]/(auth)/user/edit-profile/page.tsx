@@ -134,7 +134,11 @@ export default function EditProfile() {
                         <Input defaultValue={email} title="Email" name="email" type="string" onGetData={handleGetData} />
                         <Input defaultValue={address} title="Address" name="address" type="string" onGetData={handleGetData} />
                         <Input defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
-                        <Input defaultValue={gender} title="Gender" name="gender" type="string" onGetData={handleGetData} />
+                        <Input defaultValue={gender} dataSelect={[
+                            { label: "Male", value: "men" },
+                            { label: "Female", value: "women" },
+                            { label: "Unisex", value: "unisex" },
+                        ]} title="Gender" name="gender" type="string" onGetData={handleGetData} />
                     </div>
 
                     <div className="flex justify-end w-[80%] mx-auto my-[40px]">
