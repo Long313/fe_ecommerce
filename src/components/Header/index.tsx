@@ -41,7 +41,7 @@ function Header() {
                 query = 'gender=women';
                 break;
             case 'kids':
-                query = 'category=kids';
+                query = 'type=kid';
                 break;
             case 'accessories':
                 query = 'category=accessories';

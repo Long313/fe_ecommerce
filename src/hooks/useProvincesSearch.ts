@@ -23,12 +23,12 @@ export const useCitySearch = (params: ParamsSearchProvincesType) => {
     });
 };
 
-export const useDistrictSearch = (id: string,params: ParamsSearchProvincesType) => {
+export const useDistrictSearch = (id: string, params: ParamsSearchProvincesType) => {
     const queryClient = useQueryClient();
 
     return useQuery<ProvincesSearchResponse>({
-        queryKey: ['district-search', params],
-        queryFn: () => searchDistrict(id,params),
+        queryKey: ['district-search', id, params],
+        queryFn: () => searchDistrict(id, params),
         staleTime: 1000 * 60 * 3,
         refetchOnWindowFocus: false,
         placeholderData: () => {
@@ -38,12 +38,12 @@ export const useDistrictSearch = (id: string,params: ParamsSearchProvincesType) 
     });
 };
 
-export const useWardSearch = (id: string,params: ParamsSearchProvincesType) => {
+export const useWardSearch = (id: string, params: ParamsSearchProvincesType) => {
     const queryClient = useQueryClient();
 
     return useQuery<ProvincesSearchResponse>({
-        queryKey: ['ward-search', params],
-        queryFn: () => searchWard(id,params),
+        queryKey: ['ward-search', id, params],
+        queryFn: () => searchWard(id, params),
         staleTime: 1000 * 60 * 3,
         refetchOnWindowFocus: false,
         placeholderData: () => {

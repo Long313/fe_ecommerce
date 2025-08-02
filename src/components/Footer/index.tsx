@@ -53,7 +53,7 @@ export default function Footer() {
                             className="w-full bg-white text-black px-[8px] py-[4px] outline-none h-[36px] inline-block"
                         />
                     </div>
-                    <Button title="SUBMIT" onSubmit={() => { }} height="h-[39px]" width="w-[100px]" rounded='rounded-none' position="absolute top-[1px] right-[1px] bottom-0" />
+                    <Button title="SUBMIT" onSubmit={() => { }} height="h-[37px]" width="w-[100px]" rounded='rounded-none' position="absolute top-[1px] right-[1px] bottom-0" />
                 </div>
 
             </div>

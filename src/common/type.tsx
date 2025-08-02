@@ -55,8 +55,9 @@ export type ResendOtpType = EmailType & PurposeType;
 
 export type ParamsSearchType = {
     search?: string;
-    gender?: string;
-    category?: string;
+    gender?: string[];
+    category?: string[];
+    type?: string;
     startPrice?: string;
     endPrice?: string;
     pageSize?: number,
@@ -85,7 +86,7 @@ export interface ProductProps {
     height?: number,
     name?: string,
     price?: number | string,
-    rate?: number | string,
+    star?: number | string,
     quantity?: number,
     color?: string,
 }
@@ -133,6 +134,7 @@ export type InputProps = {
     name: string,
     type: string,
     width?: string,
+    minWidth?: string,
     height?: string,
     placeholder?: string,
     defaultValue?: string,

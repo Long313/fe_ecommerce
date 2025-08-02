@@ -65,7 +65,7 @@ export const useStore = create<StoreState>()(
         category: '',
         startPrice: '',
         endPrice: '',
-        pageSize: 5,
+        pageSize: 10,
         pageIndex: 1,
         sort: 'desc',
       },

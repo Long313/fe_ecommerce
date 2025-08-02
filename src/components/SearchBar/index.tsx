@@ -44,7 +44,7 @@ export default function SearchBar() {
 
     const handleSearchByKey = (value: string) => {
         setParamsSearch({ search: value.trim() });
-        router.push(`/${locale}/products?name=${value}`);
+        router.push(`/${locale}/products?search=${value}`);
         setSearch(false);
     }
 

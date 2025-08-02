@@ -11,7 +11,7 @@ export default function EditProfile() {
     const userInfor = useStore(state => state.userInfor);
     const [name, setName] = useState<string>("");
     const [birthday, setBirthday] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
+    // const [email, setEmail] = useState<string>("");
     const [address, setAddress] = useState<string>("");
     const [phone, setPhone] = useState<string>("");
     const [gender, setGender] = useState<string>("");
@@ -19,7 +19,7 @@ export default function EditProfile() {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { avatar, fullname, phone_number, gender: genderUser, email: emailUser, birthday: birthdayUser, address: addressUser } = userInfor;
+    const { avatar, fullname, phone_number, gender: genderUser, birthday: birthdayUser, address: addressUser } = userInfor;
 
     function getInitials(name: string): string {
         const words = name.trim().split(" ");
@@ -33,7 +33,7 @@ export default function EditProfile() {
     useEffect(() => {
         if (fullname) setName(fullname);
         if (birthdayUser) setBirthday(birthdayUser);
-        if (emailUser) setEmail(emailUser);
+        // if (emailUser) setEmail(emailUser);
         if (addressUser) setAddress(addressUser);
         if (phone_number) setPhone(phone_number);
         if (genderUser) setGender(genderUser);
@@ -47,9 +47,9 @@ export default function EditProfile() {
             case "birthday":
                 setBirthday(value);
                 break;
-            case "email":
-                setEmail(value);
-                break;
+            // case "email":
+            //     setEmail(value);
+            //     break;
             case "address":
                 setAddress(value);
                 break;
@@ -65,7 +65,7 @@ export default function EditProfile() {
     }
 
     const handleSave = () => {
-        console.log(name, birthday, email, address, phone, gender);
+        console.log(name, birthday, address, phone, gender);
         // TODO: Submit data (including previewAvatar) to backend if needed
     }
 
@@ -96,7 +96,6 @@ export default function EditProfile() {
                     <h1 className="text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
                         Profile
                     </h1>
-
                     <div className="flex flex-row justify-start mt-[40px]">
                         <div className="p-[2px] rounded-full bg-gradient-to-b from-[#822FFF] to-[#FF35C4] w-[100px] h-[100px] relative">
                             {previewAvatar || avatar ? (
@@ -131,7 +130,7 @@ export default function EditProfile() {
                     <div className="mt-[20px] w-[80%] mx-auto">
                         <Input defaultValue={name} title="Name" name="name" type="string" onGetData={handleGetData} />
                         <Input defaultValue={birthday} title="Birthday" name="birthday" type="date" onGetData={handleGetData} />
-                        <Input defaultValue={email} title="Email" name="email" type="string" onGetData={handleGetData} />
+                        {/* <Input defaultValue={email} title="Email" name="email" type="string" onGetData={handleGetData} /> */}
                         <Input defaultValue={address} title="Address" name="address" type="string" onGetData={handleGetData} />
                         <Input defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
                         <Input defaultValue={gender} dataSelect={[

@@ -8,6 +8,7 @@ export default function Input(props: InputProps) {
         name,
         type,
         width,
+        minWidth,
         height,
         placeholder,
         defaultValue,
@@ -24,10 +25,10 @@ export default function Input(props: InputProps) {
         if (defaultValue) setValue(defaultValue);
     }, [defaultValue]);
     const check = name === "city" || name === "district" || name === "ward";
-    
+
     return (
         <div className="flex w-full h-full mt-[30px]">
-            <p className="text-black font-[600] min-w-[100px]">
+            <p className={`text-black font-[600] min-w-[100px] ${minWidth ? minWidth : "min-w-[100px]"}`}>
                 {title}:<span className="text-[red]">&nbsp;*</span>
             </p>
 

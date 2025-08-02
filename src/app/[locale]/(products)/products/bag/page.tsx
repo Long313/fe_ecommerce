@@ -9,12 +9,15 @@ import { IoAdd } from "react-icons/io5";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 import { RiSubtractFill } from "react-icons/ri";
 import item_img from "../../../../../images/item.svg";
+import useTranslation from "@/hooks/useTranslation";
+import { useRouter } from "next/navigation";
 
 export default function Bag() {
     const [listItem, setListItem] = useState<ProductDetailProps[]>([]);
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [like, setLike] = useState<(string | number)[]>([]);
-
+    const { locale } = useTranslation();
+    const router = useRouter();
     useEffect(() => {
         const listOrder = JSON.parse(localStorage.getItem("bag") || "[]");
         setListItem(listOrder);
@@ -41,7 +44,7 @@ export default function Bag() {
     }, [quantities]);
 
     const handleCheckout = () => {
-        // TODO: Xử lý checkout
+        router.push(`/${locale}/products/checkout`)
     }
 
     const handleClear = (id: string | number | undefined) => {
