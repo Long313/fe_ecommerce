@@ -1,20 +1,23 @@
+'use client';
+
 import { ProductProps } from "@/common/type";
 import Image from "next/image";
 import React, { useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import item from "../../images/item.svg";
 import Link from "next/link";
+import useTranslation from "@/hooks/useTranslation";
 
 function Product(props: ProductProps) {
     const { id, image_url, width, height, name, price, star } = props;
-
+    const { locale } = useTranslation();
     const [imgSrc, setImgSrc] = useState(image_url);
 
     const handleError = () => {
         setImgSrc(item);
     };
-    return (<div className={`hover:scale-101 transition-transform duration-300 cursor-pointer flex justify-center items-center flex-col ${width ? width : "max-w-[240px]"} ${height ? height : "max-h-[calc(240px+100px)]"}`}>
-        <Link href={`products/${id}`}>
+    return (<div className={`hover:scale-101 transition-transform duration-300 cursor-pointer flex justify-center items-center flex-col ${width ? width : "max-w-[160px]"} ${height ? height : "max-h-[180px]"}`}>
+        <Link href={`/${locale}/products/${id}`}>
             <div className="bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1">
                 {imgSrc ? (
                     <Image
@@ -32,7 +35,7 @@ function Product(props: ProductProps) {
                     height={height ?? 628}
                 />}
             </div>
-            <div className="h-[200px] flex-col justify-center">
+            <div className="h-[60px] flex-col justify-center">
                 <p className="font-[500] text-center mt-[20px] m-b-[10px]">{name}</p>
                 <div className="flex items-center justify-center">
                     <p><span className="font-[600]">$</span><span>{price}</span></p>

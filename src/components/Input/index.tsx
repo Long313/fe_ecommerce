@@ -6,6 +6,7 @@ export default function Input(props: InputProps) {
         onGetData,
         title,
         name,
+        star = true,
         type,
         width,
         minWidth,
@@ -24,12 +25,12 @@ export default function Input(props: InputProps) {
     useEffect(() => {
         if (defaultValue) setValue(defaultValue);
     }, [defaultValue]);
-    const check = name === "city" || name === "district" || name === "ward";
+    const check = name === "city" || name === "district" || name === "ward" || name === "gender";
 
     return (
-        <div className="flex w-full h-full mt-[30px]">
-            <p className={`text-black font-[600] min-w-[100px] ${minWidth ? minWidth : "min-w-[100px]"}`}>
-                {title}:<span className="text-[red]">&nbsp;*</span>
+        <div className={`flex ${width ? width : "w-full"} h-full mt-[30px]`}>
+            <p className={`text-black font-[600] ${minWidth ? minWidth : "min-w-[100px]"}`}>
+                {title}: <span className={`text-[red] ${star ? 'block' : 'hidden'}`}>&nbsp;*</span>
             </p>
 
             {!check ? (

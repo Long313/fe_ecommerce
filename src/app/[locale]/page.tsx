@@ -69,7 +69,11 @@ export default function Home() {
   }
 
   const handeRouter = (value: string) => {
-    router.push(`/${locale}/products?category=${value}`);
+    if (value === "clothes") {
+      router.push(`/${locale}/products?category=shirts&category=trousers&category=shorts&category=skirts`);
+    } else {
+      router.push(`/${locale}/products?category=${value}`);
+    }
   }
 
   const handleRouterSale = () => {
@@ -77,7 +81,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex-1 mt-[120px] px-[var(--padding-screen)]">
+    <div className="flex-1 mt-[110px] px-[var(--padding-screen)]">
       <section className="flex justify-between">
         <div className="w-[45%] mt-[50px]">
           <p className="min-h-[140px] transition-transform font-[700] text-[46px] text-[var(--text-color)] tracking-[2px]">
@@ -108,7 +112,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="mb-[60px]">
+        <div className="mt-[80px] mb-[60px]">
           <Button title="See all" onSubmit={handleRouterSale} width="w-[160px]" height="h-[46px]" arrow={true} />
         </div>
       </section>
@@ -161,7 +165,7 @@ export default function Home() {
           Own every move with high-performance sportswear built for style and power!
         </p>
         <div className="flex flex-wrap justify-between mb-[100px] w-full">
-          <div className="w-[30%]" onClick={() => handeRouter("shirts")}>
+          <div className="w-[30%]" onClick={() => handeRouter("clothes")}>
             <ProductNoPrice name="Clothes" description="Finish your athletic look with essential sportswear – from sweat-wicking shirts to stretch-fit pants and training sets." image={item} />
           </div>
           <div className="w-[30%]" onClick={() => handeRouter("shoes")}>

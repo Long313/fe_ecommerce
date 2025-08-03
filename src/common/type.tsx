@@ -132,6 +132,7 @@ export interface UserInfor {
 export type InputProps = {
     title: string,
     name: string,
+    star: boolean,
     type: string,
     width?: string,
     minWidth?: string,

@@ -19,7 +19,7 @@ export default function Favorite() {
     };
 
     return (
-        <div className="w-full h-full my-[240px] px-[var(--padding-screen)] flex flex-col">
+        <div className="w-full h-full mt-[240px] px-[var(--padding-screen)] flex flex-col">
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-32 w-full max-w-7xl mx-auto">
                 {list.length > 0 && list.map(item => (
                     <div className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]" key={item.id}>
