@@ -62,8 +62,8 @@ function ProductBtn(props: ProductBtnProps) {
     return (<div className={`hover:scale-101 transition-transform duration-300 cursor-pointer flex justify-center items-center flex-col ${width ? width : "max-w-[240px]"} ${height ? height : "max-h-[calc(240px+100px)]"}`}>
         <Link href={`/${locale}/products/${id}`}>
             <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1">
-                <Image onError={handleError}
-                    src={imgSrc} alt="product" width={width ?? 477} height={height ?? 628} />
+                {imgSrc ? <Image onError={handleError}
+                    src={imgSrc} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
                 <CiTrash
                     size={26}
                     onClick={(e: React.MouseEvent<SVGElement>) => handleClear(e, id)}

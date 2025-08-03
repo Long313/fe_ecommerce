@@ -144,4 +144,17 @@ export type InputProps = {
     onGetData: (name: string, value: string, id?: string) => void;
 }
 
-export type addressListProps = { name: string, phone: string, address: string, default: boolean }
+export type addressListProps =
+    {
+        name: string,
+        phone: string,
+        address: string,
+        default: boolean
+    }
+
+export type PriceInputProps = {
+    name: string,
+    title: string,
+    value: string,
+    onGetValue: (name: string, value: string) => void
+}

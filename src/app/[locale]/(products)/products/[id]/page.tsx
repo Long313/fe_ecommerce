@@ -115,7 +115,7 @@ export default function ProductDetail() {
             {isPending && <Loader />}
             {data.image_url && <div className="w-full h-full my-[200px] px-[var(--padding-screen)] flex justify-around">
                 <div className="relative w-[30%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] h-[400px rounded-[4px]">
-                    <Image onError={handleError} src={data.image_url} alt="product" fill className='object-contain' />
+                    {data.image_url ? <Image onError={handleError} src={data.image_url} alt="product" fill className='object-contain' /> : null}
                 </div>
                 <div className="relative w-[40%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] p-[20px] flex flex-col items-center rounded-[4px]">
                     <h2 className="text-black text-[30px] font-[600]">{data.name}</h2>
