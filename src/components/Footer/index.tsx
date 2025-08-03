@@ -6,7 +6,7 @@ import { AiOutlineFacebook } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { SlSocialTwitter } from "react-icons/sl";
 import white_amax_logo from '../../images/white_amax.svg';
-import Button from '../Button/page';
+import Button from '../Button';
 import useTranslation from '@/hooks/useTranslation';
 
 export default function Footer() {
@@ -50,10 +50,10 @@ export default function Footer() {
                             onChange={(e) => setEmail(e.target.value)}
                             type="text"
                             placeholder="Enter your email"
-                            className="w-full bg-white text-black px-[8px] py-[4px] outline-none h-[39px] inline-block"
+                            className="w-full bg-white text-black px-[8px] py-[4px] outline-none h-[36px] inline-block"
                         />
                     </div>
-                    <Button title="SUBMIT" onSubmit={() => { }} height="h-[33px]" width="w-[100px]" rounded='rounded-none' position="absolute top-[1px] right-[1px] bottom-0" />
+                    <Button title="SUBMIT" onSubmit={() => { }} height="h-[37px]" width="w-[100px]" rounded='rounded-none' position="absolute top-[1px] right-[1px] bottom-0" />
                 </div>
 
             </div>

@@ -9,8 +9,8 @@ import { PiBag } from "react-icons/pi";
 import { SlUser } from "react-icons/sl";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
-import Button from "../Button/page";
-import LanguageSwitcher from "../LanguageSwitcher/page";
+import Button from "../Button";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 function Header() {
     const { setSearch } = useStore();
@@ -41,7 +41,7 @@ function Header() {
                 query = 'gender=women';
                 break;
             case 'kids':
-                query = 'category=kids';
+                query = 'type=kid';
                 break;
             case 'accessories':
                 query = 'category=accessories';

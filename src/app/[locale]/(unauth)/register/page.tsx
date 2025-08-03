@@ -1,7 +1,7 @@
 'use client'
-import Button from "@/components/Button/page";
-import InputField from "@/components/InputFeild/page";
-import Loader from "@/components/Loader/page";
+import Button from "@/components/Button";
+import InputField from "@/components/InputFeild";
+import Loader from "@/components/Loader";
 import useTranslation from "@/hooks/useTranslation";
 import { registerUser } from "@/service/register";
 import { useStore } from "@/store/store";
@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import register_background from '../../../../images/register_background.svg';
-const PhoneInput = dynamic(() => import('@/components/PhoneWrapper/page'), {
+const PhoneInput = dynamic(() => import('@/components/PhoneWrapper'), {
   ssr: false,
 });
 export default function Register() {
@@ -109,7 +109,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex w-full h-screen overflow-y-scroll">
+    <div className="flex w-full min-h-screen">
       {/* <div className="z-20 fixed top-[10px] right-[20px] flex justify-center items-center text-left rounded-[12px] w-[120px] h-[34px] p-[2px]">
         <LanguageSwitcher />
       </div> */}
@@ -138,7 +138,7 @@ export default function Register() {
         <p className="w-[315px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
           {policyError ? policyError : "\u00A0"}
         </p>
-        <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} onSubmit={handleRegister} />
+        <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} height="h-[36px]" onSubmit={handleRegister} />
         <div className="font-[500] text-[12px] mt-[8px]">
           {t("doHaveAccountTitle")}
           <Link href={`/${locale}/login`} className="text-[#822FFF] ml-1">{t("signInNowTitle")}</Link>

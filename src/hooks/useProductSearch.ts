@@ -1,13 +1,16 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { searchProductByName } from '@/service/product';
-import { ProductProps } from '@/common/type';
+import { ParamsSearchType, ProductProps } from '@/common/type';
 
 type ProductSearchResponse = {
   status: number;
   data: ProductProps[];
+  pagination: {
+    total: number
+  }
 };
 
-export const useProductSearch = (params: Record<string, string | number>) => {
+export const useProductSearch = (params: ParamsSearchType) => {
   const queryClient = useQueryClient();
 
   return useQuery<ProductSearchResponse>({

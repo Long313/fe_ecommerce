@@ -6,7 +6,7 @@ import item from "../../images/item.svg";
 import Link from "next/link";
 
 function Product(props: ProductProps) {
-    const { id,image_url, width, height, name, price, rate } = props;
+    const { id, image_url, width, height, name, price, star } = props;
 
     const [imgSrc, setImgSrc] = useState(image_url);
 
@@ -24,7 +24,7 @@ function Product(props: ProductProps) {
                 <div className="flex items-center justify-center">
                     <span>${price}</span>
                     <span className="inline-block bg-[#454545] w-[2px] h-[16px] mx-[20px]"></span>
-                    <span>{rate}</span>
+                    <span>{star}</span>
                     <IoMdStar color="yellow" />
                 </div>
             </div>

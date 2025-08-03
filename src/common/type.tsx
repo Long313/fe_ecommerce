@@ -55,14 +55,29 @@ export type ResendOtpType = EmailType & PurposeType;
 
 export type ParamsSearchType = {
     search?: string;
-    gender?: string;
-    category?: string;
+    gender?: string[];
+    category?: string[];
+    type?: string;
     startPrice?: string;
     endPrice?: string;
     pageSize?: number,
     pageIndex?: number,
     sort?: string,
 };
+
+export type ParamsSearchProvincesType = {
+    page: number,
+    size: number,
+    query?: string,
+};
+
+export interface ProvincesProps {
+    id: string,
+    name: string,
+    type: number,
+    typeText: string,
+    slug: string
+}
 
 export interface ProductProps {
     id?: string | number,
@@ -71,7 +86,7 @@ export interface ProductProps {
     height?: number,
     name?: string,
     price?: number | string,
-    rate?: number | string,
+    star?: number | string,
     quantity?: number,
     color?: string,
 }
@@ -100,8 +115,11 @@ export interface UserInfor {
     email: string | null;
     phone_number?: string;
     gender?: GENDER;
-    role?: ROLE
-    status?: ISACTIVE
+    avatar?: string;
+    address?: string;
+    birthday?: string;
+    role?: ROLE;
+    status?: ISACTIVE;
     refresh_token?: string;
     created_at?: string;
     created_by?: string | null;
@@ -110,3 +128,20 @@ export interface UserInfor {
     deleted_at?: string | null;
     deleted_by?: string | null;
 }
+
+export type InputProps = {
+    title: string,
+    name: string,
+    type: string,
+    width?: string,
+    minWidth?: string,
+    height?: string,
+    placeholder?: string,
+    defaultValue?: string,
+    dataSelect?: {
+        id?: string; label: string; value: string
+    }[],
+    onGetData: (name: string, value: string, id?: string) => void;
+}
+
+export type addressListProps = { name: string, phone: string, address: string, default: boolean }
