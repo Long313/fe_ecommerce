@@ -1,6 +1,6 @@
-import Button from "@/components/Button/page";
-import InputField from "@/components/InputFeild/page";
-import Loader from "@/components/Loader/page";
+import Button from "@/components/Button";
+import InputField from "@/components/InputFeild";
+import Loader from "@/components/Loader";
 import useTranslation from "@/hooks/useTranslation";
 import { forgotPassword } from "@/service/forgot-password";
 import { useStore } from "@/store/store";

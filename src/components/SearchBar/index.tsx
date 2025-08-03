@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
-import ProposeTag from "../ProposeTag/page";
+import ProposeTag from "../ProposeTag";
 import useTranslation from "@/hooks/useTranslation";
 
 
@@ -44,7 +44,7 @@ export default function SearchBar() {
 
     const handleSearchByKey = (value: string) => {
         setParamsSearch({ search: value.trim() });
-        router.push(`/${locale}/products?name=${value}`);
+        router.push(`/${locale}/products?search=${value}`);
         setSearch(false);
     }
 

@@ -6,9 +6,9 @@ import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from 'react';
-import Button from "../Button/page";
-import CountdownTimer from "../CountDown/page";
-import Loader from "../Loader/page";
+import Button from "../Button";
+import CountdownTimer from "../CountDown";
+import Loader from "../Loader";
 
 function Modal() {
     const otpLength = 4;

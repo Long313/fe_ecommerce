@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import item from "../../images/item.svg";
 import Link from "next/link";
-import Button from "../Button/page";
+import Button from "../Button";
 import { CiTrash } from "react-icons/ci";
 import useTranslation from "@/hooks/useTranslation";
 import { ProductBtnProps } from "@/common/type";
 
 function ProductBtn(props: ProductBtnProps) {
-    const { id, image_url, width, height, name, price, rate, onRemove } = props;
+    const { id, image_url, width, height, name, price, star, onRemove } = props;
     const { locale } = useTranslation();
     const [imgSrc, setImgSrc] = useState(image_url);
 
@@ -76,7 +76,7 @@ function ProductBtn(props: ProductBtnProps) {
                 <div className="flex items-center justify-center">
                     <span>${price}</span>
                     <span className="inline-block bg-[#454545] w-[2px] h-[16px] mx-[20px]"></span>
-                    <span>{rate}</span>
+                    <span>{star}</span>
                     <IoMdStar color="yellow" />
                 </div>
             </div>

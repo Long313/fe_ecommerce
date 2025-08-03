@@ -1,6 +1,6 @@
 'use client'
 import { ProductDetailProps } from "@/common/type";
-import ProductBtn from "@/components/ProductBtn/page";
+import ProductBtn from "@/components/ProductBtn";
 import { useEffect, useState } from "react";
 export default function Favorite() {
     const [list, setList] = useState<ProductDetailProps[]>([]);
