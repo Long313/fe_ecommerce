@@ -1,16 +1,15 @@
 'use client'
+import { addressListProps } from '@/common/type';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { useCitySearch, useDistrictSearch, useWardSearch } from '@/hooks/useProvincesSearch';
-import { useStore } from '@/store/store';
+import { Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import map_pin from '../../../../../images/map_pin.svg';
-import { Tooltip } from 'antd';
 
 export default function AddressBook() {
     const [open, setOpen] = useState<boolean>(false);
-    const userInfor = useStore(state => state.userInfor);
     const [name, setName] = useState<string>("");
     const [phone, setPhone] = useState<string>("");
     const [streetValue, setStreetValue] = useState<string>("");
@@ -27,8 +26,8 @@ export default function AddressBook() {
     const { data: districtData } = useDistrictSearch(cityId ?? "", { page: 0, size: 63 });
     const { data: wardData } = useWardSearch(districtId ?? "", { page: 0, size: 63 });
 
-    const formatData = (data: any) => {
-        return data.map((item: any) => ({
+    const formatData = (data: {name: string, id: string}[]) => {
+        return data.map((item: {name: string, id: string}) => ({
             label: item.name,
             value: item.name,
             id: item.id,
@@ -96,9 +95,9 @@ export default function AddressBook() {
             default: false,
         };
 
-        let listAddressRaw = localStorage.getItem("addressBookStore");
+        const listAddressRaw = localStorage.getItem("addressBookStore");
 
-        let listAddress: any[] = [];
+        let listAddress: addressListProps[] = [];
 
         try {
             const parsed = JSON.parse(listAddressRaw || "[]");

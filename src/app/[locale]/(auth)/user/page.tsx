@@ -3,7 +3,6 @@
 import Button from "@/components/Button";
 import { useStore } from "@/store/store";
 import NextImage from "next/image";
-import { useRef } from "react";
 import QRCode from "react-qr-code";
 
 export default function UserInfor() {

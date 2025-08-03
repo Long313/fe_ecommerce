@@ -9,7 +9,7 @@ export default function ChangePassword() {
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
 
-    const handleGetData = (name: string, value: string, id?: string) => {
+    const handleGetData = (name: string, value: string) => {
         switch (name) {
             case "password":
                 setPassword(value);
