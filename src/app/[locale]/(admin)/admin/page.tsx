@@ -11,7 +11,11 @@ import PriceInput from '@/components/PriceInput';
 import { ProductDetailProps, ProductProps } from '@/common/type';
 import type { SorterResult } from 'antd/es/table/interface';
 import { useProductSearch } from '@/hooks/useProductSearch';
-
+import Image from 'next/image';
+import amax from '@/images/amax.svg';
+import logo from '@/images/logo.svg';
+import { useRouter } from 'next/navigation';
+import useTranslation from '@/hooks/useTranslation';
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -215,7 +219,7 @@ const Admin: React.FC = () => {
                     (!(Array.isArray(value)) || value.length > 0)
             )
         );
-    }, [search, type, startPrice, endPrice, gender, category]);
+    }, [search, type, startPrice, endPrice, gender, category, tableParams]);
     const { data, isPending, isFetching } = useProductSearch(filteredParams);
     useEffect(() => {
         if (data && data?.data.length > 0) {
@@ -244,7 +248,7 @@ const Admin: React.FC = () => {
         {
             title: 'Name',
             dataIndex: 'name',
-            width: '20%',
+            width: '10%',
             // editable: true,
         },
         {
@@ -415,10 +419,18 @@ const Admin: React.FC = () => {
             setProducts([]);
         }
     };
-
+    const { locale } = useTranslation();
+    const router = useRouter();
     return (
-        <div className="mt-[10px]">
-            <div className="flex flex-wrap justify-start gap-x-[5%] items-center mx-[10px]">
+        <div className="mt-[10px] mx-[10px]">
+            <div className="ml-[20px] flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
+                <Image src={logo} alt="logo" width={30} />
+                <Image src={amax} alt="amax_logo" width={90} height={30} />
+            </div>
+            <h1 className="mx-auto text-center text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
+                ADMIN
+            </h1>
+            <div className="flex flex-wrap justify-start gap-x-[5%] items-center">
                 <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
                 <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
                 <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
@@ -436,7 +448,7 @@ const Admin: React.FC = () => {
                 columns={columns as ColumnTypes}
                 rowKey="id"
                 pagination={tableParams.pagination}
-
+                onChange={handleTableChange}
             />
         </div>
     );
