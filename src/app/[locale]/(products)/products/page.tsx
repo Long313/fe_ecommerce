@@ -134,10 +134,10 @@ export default function Products() {
                     <div className="w-full my-[10px] border-b border-[#AEAEAE] px-[10px] pb-[10px]">
                         <p className="font-[600] mb-[10px]">Price</p>
                         <div className="flex items-center w-full">
-                            <PriceInput value={startPrice} title="From" name="start_price" onGetValue={(name, value) => handleGetValue(name, value)} />
+                            <PriceInput minWidth="min-w-[60px]" value={startPrice} title="From" name="start_price" onGetValue={(name, value) => handleGetValue(name, value)} />
                         </div>
                         <div className="flex items-center w-full mt-[10px]">
-                            <PriceInput value={endPrice} title="To" name="end_price" onGetValue={(name, value) => handleGetValue(name, value)} />
+                            <PriceInput minWidth="min-w-[60px]" value={endPrice} title="To" name="end_price" onGetValue={(name, value) => handleGetValue(name, value)} />
                         </div>
                     </div>
                     <div className="my-[10px] border-b border-[#AEAEAE] px-[10px] pb-[10px]">

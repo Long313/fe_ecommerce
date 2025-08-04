@@ -103,7 +103,8 @@ export interface ProductDetailProps {
     price: number | string,
     image_url: string,
     gender: string;
-    size: string;
+    type?: string;
+    size?: string;
     quantity?: number,
     rate?: number | string,
     color?: string,
@@ -137,6 +138,7 @@ export type InputProps = {
     width?: string,
     minWidth?: string,
     height?: string,
+    margin?: string,
     placeholder?: string,
     defaultValue?: string,
     dataSelect?: {
@@ -157,5 +159,9 @@ export type PriceInputProps = {
     name: string,
     title: string,
     value: string,
+    margin?: string,
+    minWidth?: string,
+    maxWidth?: string,
+    width?: string,
     onGetValue: (name: string, value: string) => void
 }

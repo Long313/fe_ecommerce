@@ -1,33 +1,71 @@
 'use client'
 
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
-import type { GetRef, InputRef, TableProps } from 'antd';
+import type { GetRef, InputRef, GetProp, TableProps } from 'antd';
 import { Form, Input, Popconfirm, Table } from 'antd';
 import Button from '@/components/Button';
 import InputComponent from '@/components/Input';
+import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
+import PriceInput from '@/components/PriceInput';
+import { ProductDetailProps, ProductProps } from '@/common/type';
+import type { SorterResult } from 'antd/es/table/interface';
+import { useProductSearch } from '@/hooks/useProductSearch';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
 interface Item {
-    key: string;
+    id: string;
     name: string;
-    age: string;
-    address: string;
+    description: string;
+    category: string;
+    price: number;
+}
+type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
+
+interface TableParams {
+    pagination?: TablePaginationConfig;
+    sortField?: SorterResult<any>['field'];
+    sortOrder?: SorterResult<any>['order'];
+    filters?: Parameters<GetProp<TableProps, 'onChange'>>[1];
 }
 
 interface EditableRowProps {
-    index: number;
+    id: string;
 }
 
-const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
+const getRandomuserParams = (params: TableParams) => {
+    const { pagination, filters, sortField, sortOrder, ...restParams } = params;
+    const result: Record<string, any> = {};
+
+    // https://github.com/mockapi-io/docs/wiki/Code-examples#pagination
+    result.limit = pagination?.pageSize;
+    result.page = pagination?.current;
+
+    // https://github.com/mockapi-io/docs/wiki/Code-examples#filtering
+    if (filters) {
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+                result[key] = value;
+            }
+        });
+    }
+
+    // https://github.com/mockapi-io/docs/wiki/Code-examples#sorting
+    if (sortField) {
+        result.orderby = sortField;
+        result.order = sortOrder === 'ascend' ? 'asc' : 'desc';
+    }
+}
+
+const EditableRow: React.FC<EditableRowProps> = ({ id, ...props }) => {
     const [form] = Form.useForm();
     return (
         <Form form={form} component={false}>
             <EditableContext.Provider value={form}>
-                <tr {...props} />
+                <tr {...props} key={id} />
             </EditableContext.Provider>
         </Form>
     );
@@ -102,89 +140,190 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 interface DataType {
-    key: React.Key;
-    name: string;
-    age: string;
-    address: string;
+    id: string | number,
+    name: string,
+    category: string,
+    description: string,
+    price: number | string,
+    image_url: string,
+    gender: string;
+    type?: string;
+    size?: string;
+    quantity?: number,
+    rate?: number | string,
+    color?: string,
 }
 
 type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
 const Admin: React.FC = () => {
-    const [dataSource, setDataSource] = useState<DataType[]>([
-        {
-            key: '0',
-            name: 'Edward King 0',
-            age: '32',
-            address: 'London, Park Lane no. 0',
-        },
-        {
-            key: '1',
-            name: 'Edward King 1',
-            age: '32',
-            address: 'London, Park Lane no. 1',
-        },
-    ]);
+    // const [dataSource, setDataSource] = useState<DataType[]>([
+    //     {
+    //         id: '0',
+    //         name: 'Product 1',
+    //         image_url: '',
+    //         description: 'Description for produc 1',
+    //         category: 'accesories',
+    //         gender: 'men',
+    //         type: 'sale',
+    //         price: 1000
+    //     },
+    //     {
+    //         id: '1',
+    //         name: 'Product 2',
+    //         image_url: '',
+    //         description: 'Description for produc 1',
+    //         category: 'shirts',
+    //         gender: 'unisex',
+    //         type: 'hot',
+    //         price: 2000
+    //     },
+    // ]);
+    const [search, setSearch] = useState<string>("");
+    const [gender, setGender] = useState<string[]>([]);
+    const [category, setCategory] = useState<string[]>([]);
+    const [type, setType] = useState<string>("");
+    const [startPrice, setStartPrice] = useState<string>("");
+    const [endPrice, setEndPrice] = useState<string>("");
+    const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
     const [count, setCount] = useState(2);
+    const [tableParams, setTableParams] = useState<TableParams>({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
+    const filteredParams = useMemo(() => {
+        const result = {
+            startPrice,
+            endPrice,
+            gender,
+            category,
+            search,
+            type,
+            pageIndex: tableParams.pagination?.current,
+            pageSize: tableParams.pagination?.pageSize
+        };
 
-    const handleDelete = (key: React.Key) => {
-        const newData = dataSource.filter((item) => item.key !== key);
-        setDataSource(newData);
+        return Object.fromEntries(
+            Object.entries(result).filter(
+                ([, value]) =>
+                    value !== '' &&
+                    value !== null &&
+                    value !== undefined &&
+                    (!(Array.isArray(value)) || value.length > 0)
+            )
+        );
+    }, [search, type, startPrice, endPrice, gender, category]);
+    const { data, isPending, isFetching } = useProductSearch(filteredParams);
+    useEffect(() => {
+        if (data && data?.data.length > 0) {
+            console.log("🚀 Fetched data:", data.data); // Log bất kể data là gì
+            setProducts(data.data);
+            setTableParams({
+                ...tableParams,
+                pagination: {
+                    ...tableParams.pagination,
+                    total: data?.pagination.total
+                }
+            })
+        }
+    }, [data]);
+    const handleDelete = (id: string | number) => {
+        const newData = products.filter((item) => item.id !== id);
+        setProducts(newData);
+    };
+
+    const handleEdit = (id: string | number) => {
+        // const newData = dataSource.filter((item) => item.id !== id);
+        // setDataSource(newData);
     };
 
     const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
         {
-            title: 'name',
+            title: 'Name',
             dataIndex: 'name',
-            width: '25%',
-            editable: true,
+            width: '20%',
+            // editable: true,
         },
         {
-            title: 'age',
-            dataIndex: 'age',
-            width: '25%',
-
-            editable: true,
+            title: 'Product Image',
+            dataIndex: 'image_url',
+            width: '10%',
+            // editable: true,
         },
         {
-            title: 'address',
-            dataIndex: 'address',
-            width: '25%',
-            editable: true,
+            title: 'Description',
+            dataIndex: 'description',
+            width: '20%',
+            // editable: true,
+        },
+        {
+            title: 'Category',
+            dataIndex: 'category',
+            width: '10%',
+            // editable: true,
+        },
+        {
+            title: 'Gender',
+            dataIndex: 'gender',
+            width: '10%',
+            // editable: true,
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+            width: '10%',
+            // editable: true,
+        },
+        {
+            title: 'Price',
+            dataIndex: 'price',
+            width: '10%',
+            // editable: true,
         },
         {
             title: 'Action',
             dataIndex: 'operation',
             render: (_, record) =>
-                dataSource.length >= 1 ? (
-                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
-                        <a>Delete</a>
-                    </Popconfirm>
+                products.length >= 1 ? (
+                    <div className='flex justify-between items-center'>
+                        <Popconfirm title="Sure to edit?" onConfirm={() => handleEdit(record.id)}>
+                            <a>Edit</a>
+                        </Popconfirm>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                            <a>Delete</a>
+                        </Popconfirm>
+                    </div>
                 ) : null,
         },
     ];
 
     const handleAdd = () => {
-        const newData: DataType = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
+        const newData: ProductDetailProps = {
+            id: "123",
+            name: 'Product new',
+            image_url: '',
+            description: 'Description for new product',
+            category: 'shoes',
+            gender: 'unisex',
+            type: 'new',
+            price: 0,
         };
-        setDataSource([...dataSource, newData]);
+        setProducts([...products, newData]);
         setCount(count + 1);
     };
 
     const handleSave = (row: DataType) => {
-        const newData = [...dataSource];
-        const index = newData.findIndex((item) => row.key === item.key);
+        const newData = [...products];
+        const index = newData.findIndex((item) => row.id === item.id);
         const item = newData[index];
         newData.splice(index, 1, {
             ...item,
             ...row,
         });
-        setDataSource(newData);
+        setProducts(newData);
     };
 
     const components = {
@@ -210,30 +349,82 @@ const Admin: React.FC = () => {
         };
     });
 
-    const [search, setSearch] = useState<string>("");
-    const [gender, setGender] = useState<string>("");
+
     const handleGetData = (name: string, value: string) => {
         switch (name) {
             case "search":
                 setSearch(value);
                 break;
             case "gender":
-                setGender(value);
+                setGender(pre => [...pre, value]);
                 break;
-
+            case "category":
+                setCategory(pre => [...pre, value]);
+                break;
+            case "type":
+                setType(value);
+                break;
+            case "start_price":
+                setStartPrice(value);
+                break;
+            case "end_price":
+                setEndPrice(value);
+                break;
             default:
                 return;
         }
     }
+
+    // const fetchData = () => {
+    // setLoading(true);
+    // fetch(`https://660d2bd96ddfa2943b33731c.mockapi.io/api/users?${params.toString()}`)
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     setData(Array.isArray(res) ? res : []);
+    //     setLoading(false);
+    //     setTableParams({
+    //       ...tableParams,
+    //       pagination: {
+    //         ...tableParams.pagination,
+    //         total: 100,
+    //         // 100 is mock data, you should read it from server
+    //         // total: data.totalCount,
+    //       },
+    //     });
+    //   });
+    // };
+
+    // useEffect(fetchData, [
+    //     tableParams.pagination?.current,
+    //     tableParams.pagination?.pageSize,
+    //     tableParams?.sortOrder,
+    //     tableParams?.sortField,
+    //     JSON.stringify(tableParams.filters),
+    // ]);
+
+    const handleTableChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            sortOrder: Array.isArray(sorter) ? undefined : sorter.order,
+            sortField: Array.isArray(sorter) ? undefined : sorter.field,
+        });
+
+        // `dataSource` is useless since `pageSize` changed
+        if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+            setProducts([]);
+        }
+    };
+
     return (
         <div className="mt-[10px]">
-            <div className="flex">
-                <InputComponent width="w-[20%]" minWidth='min-w-[20px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
-                <InputComponent width="w-[20%]" minWidth='min-w-[20px]' star={false} defaultValue={gender} dataSelect={[
-                    { label: "Male", value: "men" },
-                    { label: "Female", value: "women" },
-                    { label: "Unisex", value: "unisex" },
-                ]} title="Gender" name="gender" type="string" onGetData={handleGetData} />
+            <div className="flex flex-wrap justify-start gap-x-[5%] items-center mx-[10px]">
+                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
+                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
+                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
+                <InputComponent width="w-[30%]" minWidth='min-w-[105px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
+                <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
+                <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
             </div>
             <Button title="Add a product" onSubmit={handleAdd} margin="m-[16px]" width='w-[140px]' />
 
@@ -241,8 +432,11 @@ const Admin: React.FC = () => {
                 components={components}
                 rowClassName={() => 'editable-row'}
                 bordered
-                dataSource={dataSource}
+                dataSource={products}
                 columns={columns as ColumnTypes}
+                rowKey="id"
+                pagination={tableParams.pagination}
+
             />
         </div>
     );

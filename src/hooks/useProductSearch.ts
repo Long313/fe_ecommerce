@@ -1,10 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { searchProductByName } from '@/service/product';
-import { ParamsSearchType, ProductProps } from '@/common/type';
+import { ParamsSearchType, ProductDetailProps } from '@/common/type';
 
 type ProductSearchResponse = {
   status: number;
-  data: ProductProps[];
+  data: ProductDetailProps[];
   pagination: {
     total: number
   }

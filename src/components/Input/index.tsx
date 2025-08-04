@@ -1,3 +1,5 @@
+'use client'
+
 import { InputProps } from "@/common/type";
 import { useEffect, useState } from "react";
 
@@ -14,6 +16,7 @@ export default function Input(props: InputProps) {
         placeholder,
         defaultValue,
         dataSelect = [],
+        margin
     } = props;
 
     const [value, setValue] = useState<string>("");
@@ -25,10 +28,10 @@ export default function Input(props: InputProps) {
     useEffect(() => {
         if (defaultValue) setValue(defaultValue);
     }, [defaultValue]);
-    const check = name === "city" || name === "district" || name === "ward" || name === "gender";
+    const check = name === "city" || name === "district" || name === "ward" || name === "gender" || name === "category";
 
     return (
-        <div className={`flex ${width ? width : "w-full"} h-full mt-[30px]`}>
+        <div className={`flex ${width ? width : "w-full"} h-full ${margin ? margin : "mt-[30px]"}`}>
             <p className={`text-black font-[600] ${minWidth ? minWidth : "min-w-[100px]"}`}>
                 {title}: <span className={`text-[red] ${star ? 'block' : 'hidden'}`}>&nbsp;*</span>
             </p>
