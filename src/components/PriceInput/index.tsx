@@ -13,7 +13,7 @@ export default function PriceInput(props: PriceInputProps) {
     }
     return (
         <div className={`${margin ? margin : ""} ${width ? width : ""} flex`}>
-            <span className={`${minWidth ? minWidth : "min-w-[40px]"} inline-block`}>{title}:</span>
+            <span className={`${minWidth ? minWidth : "min-w-[40px]"} inline-block font-[600]`}>{title}:</span>
             <input
                 onChange={(e) => handleGetValue(name, e)}
                 type="text"

@@ -1,21 +1,22 @@
 'use client'
 
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import './index.css';
-import type { GetRef, InputRef, GetProp, TableProps } from 'antd';
-import { Form, Input, Popconfirm, Table } from 'antd';
+import { ProductDetailProps } from '@/common/type';
 import Button from '@/components/Button';
 import InputComponent from '@/components/Input';
-import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import PriceInput from '@/components/PriceInput';
-import { ProductDetailProps, ProductProps } from '@/common/type';
-import type { SorterResult } from 'antd/es/table/interface';
+import ProductPopup from '@/components/ProductPopup';
+import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { useProductSearch } from '@/hooks/useProductSearch';
-import Image from 'next/image';
+import useTranslation from '@/hooks/useTranslation';
 import amax from '@/images/amax.svg';
 import logo from '@/images/logo.svg';
+import type { GetProp, GetRef, InputRef, TableProps } from 'antd';
+import { Form, Input, Popconfirm, Table } from 'antd';
+import type { SorterResult } from 'antd/es/table/interface';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import useTranslation from '@/hooks/useTranslation';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import './index.css';
 type FormInstance<T> = GetRef<typeof Form<T>>;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
@@ -235,13 +236,18 @@ const Admin: React.FC = () => {
         }
     }, [data]);
     const handleDelete = (id: string | number) => {
+        console.log("delete", id);
         const newData = products.filter((item) => item.id !== id);
         setProducts(newData);
     };
-
+    const [open, setOpen] = useState<boolean>(false);
+    const [idSelect, setIdSelect] = useState<string | number>("");
+    const [typePopup, setTypePopup] = useState<string>("");
     const handleEdit = (id: string | number) => {
-        // const newData = dataSource.filter((item) => item.id !== id);
-        // setDataSource(newData);
+        console.log("edit", id);
+        setOpen(true);
+        setIdSelect(id);
+        setTypePopup("edit");
     };
 
     const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
@@ -305,18 +311,20 @@ const Admin: React.FC = () => {
     ];
 
     const handleAdd = () => {
-        const newData: ProductDetailProps = {
-            id: "123",
-            name: 'Product new',
-            image_url: '',
-            description: 'Description for new product',
-            category: 'shoes',
-            gender: 'unisex',
-            type: 'new',
-            price: 0,
-        };
-        setProducts([...products, newData]);
-        setCount(count + 1);
+        // const newData: ProductDetailProps = {
+        //     id: "123",
+        //     name: 'Product new',
+        //     image_url: '',
+        //     description: 'Description for new product',
+        //     category: 'shoes',
+        //     gender: 'unisex',
+        //     type: 'new',
+        //     price: 0,
+        // };
+        // setProducts([...products, newData]);
+        // setCount(count + 1);
+        setOpen(true);
+        setType("create")
     };
 
     const handleSave = (row: DataType) => {
@@ -421,24 +429,31 @@ const Admin: React.FC = () => {
     };
     const { locale } = useTranslation();
     const router = useRouter();
+
+    const handleClosePopup = () => {
+        setOpen(false);
+        setType("");
+    }
     return (
         <div className="mt-[10px] mx-[10px]">
-            <div className="ml-[20px] flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
-                <Image src={logo} alt="logo" width={30} />
-                <Image src={amax} alt="amax_logo" width={90} height={30} />
+            <div className="border-b border-[#E5E5E5] pb-[10px] mb-[20px]">
+                <div className="flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
+                    <Image src={logo} alt="logo" width={30} />
+                    <Image src={amax} alt="amax_logo" width={90} height={30} />
+                </div>
+                <h1 className="mx-auto text-center text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
+                    ADMIN
+                </h1>
+                <div className="flex flex-wrap justify-start gap-x-[5%] items-center">
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[105px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
+                    <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
+                    <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
+                </div>
+                <Button title="Add a product" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' />
             </div>
-            <h1 className="mx-auto text-center text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
-                ADMIN
-            </h1>
-            <div className="flex flex-wrap justify-start gap-x-[5%] items-center">
-                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
-                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
-                <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
-                <InputComponent width="w-[30%]" minWidth='min-w-[105px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
-                <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
-                <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
-            </div>
-            <Button title="Add a product" onSubmit={handleAdd} margin="m-[16px]" width='w-[140px]' />
 
             <Table<DataType>
                 components={components}
@@ -450,6 +465,7 @@ const Admin: React.FC = () => {
                 pagination={tableParams.pagination}
                 onChange={handleTableChange}
             />
+            {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} />}
         </div>
     );
 };
