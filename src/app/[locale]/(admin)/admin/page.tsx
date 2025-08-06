@@ -2,38 +2,41 @@
 
 import { ProductDetailProps } from '@/common/type';
 import Button from '@/components/Button';
+import ImageWithFallback from '@/components/ImageWithFallback';
 import InputComponent from '@/components/Input';
 import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
-import { useProductSearch } from '@/hooks/useProductSearch';
+import { useCreateProduct, useProductSearch } from '@/hooks/useProductSearch';
 import useTranslation from '@/hooks/useTranslation';
 import amax from '@/images/amax.svg';
 import logo from '@/images/logo.svg';
+import { deleteProduct } from '@/service/product';
+import { useMutation } from '@tanstack/react-query';
 import type { GetProp, GetRef, InputRef, TableProps } from 'antd';
 import { Form, Input, Popconfirm, Table } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
+import Loader from '@/components/Loader';
+
 type FormInstance<T> = GetRef<typeof Form<T>>;
-
-const EditableContext = React.createContext<FormInstance<any> | null>(null);
-
-interface Item {
-    id: string;
-    name: string;
-    description: string;
-    category: string;
-    price: number;
-}
+// interface Item {
+//     id: string;
+//     name: string;
+//     description: string;
+//     category: string;
+//     price: number;
+// }
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
 
 interface TableParams {
     pagination?: TablePaginationConfig;
-    sortField?: SorterResult<any>['field'];
-    sortOrder?: SorterResult<any>['order'];
+    sortField?: SorterResult<ProductDetailProps>['field'];
+    sortOrder?: SorterResult<ProductDetailProps>['order'];
     filters?: Parameters<GetProp<TableProps, 'onChange'>>[1];
 }
 
@@ -41,29 +44,15 @@ interface EditableRowProps {
     id: string;
 }
 
-const getRandomuserParams = (params: TableParams) => {
-    const { pagination, filters, sortField, sortOrder, ...restParams } = params;
-    const result: Record<string, any> = {};
 
-    // https://github.com/mockapi-io/docs/wiki/Code-examples#pagination
-    result.limit = pagination?.pageSize;
-    result.page = pagination?.current;
-
-    // https://github.com/mockapi-io/docs/wiki/Code-examples#filtering
-    if (filters) {
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value !== undefined && value !== null) {
-                result[key] = value;
-            }
-        });
-    }
-
-    // https://github.com/mockapi-io/docs/wiki/Code-examples#sorting
-    if (sortField) {
-        result.orderby = sortField;
-        result.order = sortOrder === 'ascend' ? 'asc' : 'desc';
-    }
+interface EditableCellProps {
+    title: React.ReactNode;
+    editable: boolean;
+    dataIndex: keyof ProductDetailProps;
+    record: ProductDetailProps;
+    handleSave: (record: ProductDetailProps) => void;
 }
+const EditableContext = React.createContext<FormInstance<ProductDetailProps> | null>(null);
 
 const EditableRow: React.FC<EditableRowProps> = ({ id, ...props }) => {
     const [form] = Form.useForm();
@@ -75,14 +64,6 @@ const EditableRow: React.FC<EditableRowProps> = ({ id, ...props }) => {
         </Form>
     );
 };
-
-interface EditableCellProps {
-    title: React.ReactNode;
-    editable: boolean;
-    dataIndex: keyof Item;
-    record: Item;
-    handleSave: (record: Item) => void;
-}
 
 const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     title,
@@ -145,13 +126,13 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 interface DataType {
-    id: string | number,
-    name: string,
-    category: string,
-    description: string,
-    price: number | string,
-    image_url: string,
-    gender: string;
+    id?: string | number,
+    name?: string,
+    category?: string,
+    description?: string,
+    price?: number | string,
+    image_url?: string,
+    gender?: string;
     type?: string;
     size?: string;
     quantity?: number,
@@ -162,28 +143,6 @@ interface DataType {
 type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
 const Admin: React.FC = () => {
-    // const [dataSource, setDataSource] = useState<DataType[]>([
-    //     {
-    //         id: '0',
-    //         name: 'Product 1',
-    //         image_url: '',
-    //         description: 'Description for produc 1',
-    //         category: 'accesories',
-    //         gender: 'men',
-    //         type: 'sale',
-    //         price: 1000
-    //     },
-    //     {
-    //         id: '1',
-    //         name: 'Product 2',
-    //         image_url: '',
-    //         description: 'Description for produc 1',
-    //         category: 'shirts',
-    //         gender: 'unisex',
-    //         type: 'hot',
-    //         price: 2000
-    //     },
-    // ]);
     const [search, setSearch] = useState<string>("");
     const [gender, setGender] = useState<string[]>([]);
     const [category, setCategory] = useState<string[]>([]);
@@ -192,7 +151,7 @@ const Admin: React.FC = () => {
     const [endPrice, setEndPrice] = useState<string>("");
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
-    const [count, setCount] = useState(2);
+    // const [count, setCount] = useState(2);
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
@@ -221,10 +180,9 @@ const Admin: React.FC = () => {
             )
         );
     }, [search, type, startPrice, endPrice, gender, category, tableParams]);
-    const { data, isPending, isFetching } = useProductSearch(filteredParams);
+    const { data, isPending } = useProductSearch(filteredParams);
     useEffect(() => {
         if (data && data?.data.length > 0) {
-            console.log("🚀 Fetched data:", data.data); // Log bất kể data là gì
             setProducts(data.data);
             setTableParams({
                 ...tableParams,
@@ -235,15 +193,26 @@ const Admin: React.FC = () => {
             })
         }
     }, [data]);
-    const handleDelete = (id: string | number) => {
+
+    const { mutate } = useMutation({
+        mutationFn: deleteProduct,
+        onSuccess: (res) => {
+            console.log("res", res);
+        },
+        onError: (error: { status: number, message: string }) => {
+            console.log(error);
+        }
+    });
+    const handleDelete = (id: string) => {
         console.log("delete", id);
         const newData = products.filter((item) => item.id !== id);
         setProducts(newData);
+        mutate(id);
     };
     const [open, setOpen] = useState<boolean>(false);
-    const [idSelect, setIdSelect] = useState<string | number>("");
+    const [idSelect, setIdSelect] = useState<string>("");
     const [typePopup, setTypePopup] = useState<string>("");
-    const handleEdit = (id: string | number) => {
+    const handleEdit = (id: string) => {
         console.log("edit", id);
         setOpen(true);
         setIdSelect(id);
@@ -262,6 +231,10 @@ const Admin: React.FC = () => {
             dataIndex: 'image_url',
             width: '10%',
             // editable: true,
+            render: (image_url: string) => (
+                <div className="flex justify-center items-center">
+                    <ImageWithFallback src={image_url} alt="product" />
+                </div>),
         },
         {
             title: 'Description',
@@ -294,15 +267,21 @@ const Admin: React.FC = () => {
             // editable: true,
         },
         {
+            title: 'Last Update',
+            dataIndex: 'updated_at',
+            width: '10%',
+            render: (updated_at: string) => dayjs(updated_at).format('HH:mm DD/MM/YYYY'),
+        },
+        {
             title: 'Action',
             dataIndex: 'operation',
             render: (_, record) =>
                 products.length >= 1 ? (
                     <div className='flex justify-between items-center'>
-                        <Popconfirm title="Sure to edit?" onConfirm={() => handleEdit(record.id)}>
+                        <Popconfirm title="Sure to edit?" onConfirm={() => handleEdit(String(record.id))}>
                             <a>Edit</a>
                         </Popconfirm>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(String(record.id))}>
                             <a>Delete</a>
                         </Popconfirm>
                     </div>
@@ -324,7 +303,7 @@ const Admin: React.FC = () => {
         // setProducts([...products, newData]);
         // setCount(count + 1);
         setOpen(true);
-        setType("create")
+        setTypePopup("create")
     };
 
     const handleSave = (row: DataType) => {
@@ -434,8 +413,30 @@ const Admin: React.FC = () => {
         setOpen(false);
         setType("");
     }
+
+    const { mutate: createProduct } = useCreateProduct();
+
+    const handleGetFormData = (typePopup: string, data: ProductDetailProps) => {
+        console.log("type ", typePopup);
+        console.log("Data ", data);
+        const formData = new FormData();
+        if (data.name) formData.append("name", data.name);
+        if (data.gender) formData.append("gender", data.gender);
+        if (data.category) formData.append("category", data.category);
+        if (data.type) formData.append("type", data.type);
+        if (data.price) formData.append("price", String(data.price));
+        if (data.description) formData.append("description", data.description);
+        if (data.image) formData.append("image", data.image);
+        formData.append("discountRate", String(5));
+        formData.append("taxRate", String(5));
+        formData.append("inventoryCount", String(5));
+        formData.append("star", String(5));
+        createProduct(formData);
+    }
+
     return (
         <div className="mt-[10px] mx-[10px]">
+            {isPending && <Loader />}
             <div className="border-b border-[#E5E5E5] pb-[10px] mb-[20px]">
                 <div className="flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
                     <Image src={logo} alt="logo" width={30} />
@@ -465,7 +466,7 @@ const Admin: React.FC = () => {
                 pagination={tableParams.pagination}
                 onChange={handleTableChange}
             />
-            {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} />}
+            {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />}
         </div>
     );
 };

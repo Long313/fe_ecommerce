@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 const PUBLIC_FILE = /\.(.*)$/;
 const locales = ['vi', 'en', 'de', 'fr'];
@@ -24,13 +24,14 @@ export function middleware(req: NextRequest) {
   // Nếu truy cập admin -> phải có token + role === 'admin'
   if (section === 'admin') {
     try {
-      const decoded: any = jwtDecode(accessToken!);
+      const decoded: { role: string } = jwtDecode(accessToken!);
       const role = decoded?.role;
 
       if (role !== 'admin') {
         return NextResponse.redirect(new URL(`/${locale}/unauthorized`, req.url));
       }
     } catch (err) {
+      console.log(err)
       return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     }
   }

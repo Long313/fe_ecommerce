@@ -8,6 +8,11 @@ const nextConfig: NextConfig = {
         hostname: 'www.example.com', // đúng hostname trong URL ảnh
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'raw.githubusercontent.com',
+        pathname: '/**',
+      },
     ],
   },
 };

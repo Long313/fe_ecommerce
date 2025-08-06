@@ -1,37 +1,57 @@
 import InputComponent from '@/components/Input';
+import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
+import { getDetailProduct } from '@/service/product';
+import { useMutation } from '@tanstack/react-query';
 import type { StaticImageData } from 'next/image';
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import place_holder_img from '../../images/place_holder_product.png';
 import Button from "../Button";
-import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
-import PriceInput from '../PriceInput';
+import { ProductDetailProps } from '@/common/type';
 
 type ProductPopupProps = {
     open: boolean,
-    id: string | number,
+    id: string,
     typePopup: string,
     onClose: () => void;
+    onGetData: (type: string, data: ProductDetailProps) => void;
 };
 
 export default function ProductPopup(props: ProductPopupProps) {
-    const { open, id, typePopup, onClose } = props;
+    const { open, id, typePopup, onClose, onGetData } = props;
     const [image, setImage] = useState<string | StaticImageData>(place_holder_img);
+    const [imageFile, setImageFile] = useState<File | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [search, setSearch] = useState<string>("");
-    const [gender, setGender] = useState<string[]>([]);
-    const [category, setCategory] = useState<string[]>([]);
+    const [name, setName] = useState<string>("");
+    const [gender, setGender] = useState<string>("");
+    const [category, setCategory] = useState<string>("");
     const [type, setType] = useState<string>("");
     const [price, setPrice] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const handleSave = () => {
-        onClose();
 
+    const resetField = () => {
+        setName("");
+        setGender("");
+        setCategory("");
+        setType("");
+        setPrice("");
+        setDescription("");
+        setImage(place_holder_img);
+        setImageFile(null);
+    }
+
+    const handleSave = () => {
+        onGetData(typePopup, { name, gender, category, type, price, description, image: imageFile });
+        onClose();
+        resetField();
     };
+
 
     const handleDiscard = () => {
         onClose();
+        resetField();
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +59,7 @@ export default function ProductPopup(props: ProductPopupProps) {
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setImage(imageUrl);
+            setImageFile(file);
         }
     };
 
@@ -48,14 +69,14 @@ export default function ProductPopup(props: ProductPopupProps) {
 
     const handleGetData = (name: string, value: string) => {
         switch (name) {
-            case "search":
-                setSearch(value);
+            case "name":
+                setName(value);
                 break;
             case "gender":
-                setGender(pre => [...pre, value]);
+                setGender(value);
                 break;
             case "category":
-                setCategory(pre => [...pre, value]);
+                setCategory(value);
                 break;
             case "type":
                 setType(value);
@@ -71,10 +92,39 @@ export default function ProductPopup(props: ProductPopupProps) {
         }
     }
 
+    useEffect(() => {
+        if (open) {
+            if (typePopup === "edit" && id) {
+                mutate(id);
+            } else if (typePopup === "create") {
+                resetField();
+            }
+        }
+    }, [open, id, typePopup]);
+
+    const { mutate } = useMutation({
+        mutationFn: getDetailProduct,
+        onSuccess: (res) => {
+            if (res.status === 200) {
+                const { name, gender, category, type, price, description, image_url } = res.data;
+                setName(name);
+                setGender(gender);
+                setCategory(category);
+                setType(type);
+                setPrice(price);
+                setDescription(description);
+                setImage(image_url);
+            };
+        },
+        onError: (error: { status: number, message: string }) => {
+            console.log(error);
+        }
+    });
+
     return (
         <div className={`${open ? "block" : "hidden"} fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-[rgb(0,0,0,0.2)]`}>
             <div className="bg-white w-[700px] h-max rounded-[8px] py-[20px] px-[30px]">
-                <h1 className="font-[700] text-[20px] uppercase text-center">{type === "edit" ? "Update Product" : "Create New Product"}</h1>
+                <h1 className="font-[700] text-[20px] uppercase text-center">{typePopup === "edit" ? "Update Product" : "Create New Product"}</h1>
                 <div className="mb-[20px]">
                     <div className="flex justify-between">
                         <div className="flex flex-col items-center w-[45%] mt-[30px]">
@@ -97,9 +147,9 @@ export default function ProductPopup(props: ProductPopupProps) {
                             />
                         </div>
                         <div className="flex-1 flex flex-col">
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={search} title="Name" name="search" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={name} title="Name" name="name" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={price} title="Price" name="price" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={description} title="Description" name="description" type="string" onGetData={(name, value) => handleGetData(name, value)} />

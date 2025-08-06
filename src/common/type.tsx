@@ -81,7 +81,7 @@ export interface ProvincesProps {
 
 export interface ProductProps {
     id?: string | number,
-    image_url: string,
+    image_url?: string ,
     width?: number,
     height?: number,
     name?: string,
@@ -96,13 +96,14 @@ export interface ProductBtnProps extends ProductProps {
 }
 
 export interface ProductDetailProps {
-    id: string | number,
-    name: string,
-    category: string,
-    description: string,
-    price: number | string,
-    image_url: string,
-    gender: string;
+    id?: string | number,
+    name?: string,
+    category?: string,
+    description?: string,
+    price?: number | string,
+    image_url?: string,
+    image?: File | null,
+    gender?: string;
     type?: string;
     size?: string;
     quantity?: number,
@@ -165,3 +166,4 @@ export type PriceInputProps = {
     width?: string,
     onGetValue: (name: string, value: string) => void
 }
+

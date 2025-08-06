@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { baseURL } from '@/constants';
 
 export async function POST(req: Request) {
@@ -23,8 +23,12 @@ export async function POST(req: Request) {
         }
 
         return response;
-    } catch (error: any) {
-        return NextResponse.json(
+    } catch (error) {
+        const axiosError = error as AxiosError;
+
+        console.error(
+            axiosError.response?.data || axiosError.message || 'Unknown error'
+        ); return NextResponse.json(
             { success: false, message: 'Login failed' },
             { status: 401 }
         );

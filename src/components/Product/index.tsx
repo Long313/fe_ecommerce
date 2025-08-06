@@ -11,7 +11,7 @@ import useTranslation from "@/hooks/useTranslation";
 function Product(props: ProductProps) {
     const { id, image_url, width, height, name, price, star } = props;
     const { locale } = useTranslation();
-    const [imgSrc, setImgSrc] = useState(image_url);
+    const [imgSrc, setImgSrc] = useState(image_url );
 
     const handleError = () => {
         setImgSrc(item);

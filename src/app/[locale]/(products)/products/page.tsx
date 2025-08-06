@@ -1,5 +1,6 @@
 'use client';
 
+import { ProductDetailProps } from "@/common/type";
 import Loader from "@/components/Loader";
 import Product from "@/components/Product";
 import { CATEGORIES, GENDER } from "@/constants";
@@ -19,7 +20,7 @@ export default function Products() {
     const searchParams = useStore(state => state.paramsSearch);
     const { setParamsSearch } = useStore();
     const searchParamsRouter = useSearchParams();
-    const [sort, setSort] = useState('');
+    const [sortOrder, setSortOrder] = useState('');
     const [startPrice, setStartPrice] = useState('');
     const [endPrice, setEndPrice] = useState('');
     const [gender, setGender] = useState<string[]>([]);
@@ -29,7 +30,7 @@ export default function Products() {
     const debouncedStartPrice = useDebounce(startPrice, 500);
     const debouncedEndPrice = useDebounce(endPrice, 500);
     const [pageIndex, setPageIndex] = useState(1);
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
     // Lấy giá trị từ URL
     useEffect(() => {
@@ -47,13 +48,14 @@ export default function Products() {
     const filteredParams = useMemo(() => {
         const result = {
             ...searchParams,
-            sort,
+            sortOrder,
             startPrice: debouncedStartPrice,
             endPrice: debouncedEndPrice,
             gender,
             category,
             search,
-            type
+            type,
+            sortField: "price"
         };
 
         return Object.fromEntries(
@@ -66,7 +68,7 @@ export default function Products() {
                     (!(Array.isArray(value)) || value.length > 0)
             )
         );
-    }, [searchParams, search, type, sort, debouncedStartPrice, debouncedEndPrice, gender, category]);
+    }, [searchParams, search, type, sortOrder, debouncedStartPrice, debouncedEndPrice, gender, category]);
 
     const { data, isPending, isFetching } = useProductSearch({ ...filteredParams, pageIndex });
 
@@ -95,7 +97,7 @@ export default function Products() {
     };
 
     const handleSort = (value: string) => {
-        setSort(value);
+        setSortOrder(value);
         setParamsSearch({ ...searchParams, sort: value });
     };
 
@@ -158,7 +160,7 @@ export default function Products() {
                 <div className="w-[80%] h-full flex flex-col items-end">
                     <div className="min-w-[120px] border border-[#AEAEAE] rounded-[8px] mb-[20px]">
                         <Select
-                            value={sort}
+                            value={sortOrder}
                             onChange={handleSort}
                             size="small"
                             className="w-full h-[36px] text-center"
@@ -180,7 +182,7 @@ export default function Products() {
                                     image_url={item.image_url}
                                     name={item.name}
                                     price={item.price}
-                                    star={item.star} />
+                                    star={item.rate} />
                             </div>
                         ))}
                     </div>

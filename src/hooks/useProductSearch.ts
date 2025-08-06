@@ -1,6 +1,6 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { searchProductByName } from '@/service/product';
 import { ParamsSearchType, ProductDetailProps } from '@/common/type';
+import { createNewProduct, searchProductByName } from '@/service/product';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 type ProductSearchResponse = {
   status: number;
@@ -27,3 +27,37 @@ export const useProductSearch = (params: ParamsSearchType) => {
     }
   });
 };
+
+export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData: FormData) => createNewProduct(formData),
+
+    onSuccess: () => {
+      // ✅ Xóa cache để lần sau refetch danh sách
+      queryClient.invalidateQueries({ queryKey: ['product-create'] });
+    },
+
+    onError: (error) => {
+      console.error('Create product failed:', error);
+    },
+  });
+};
+
+// export const useDeleteProduct = () => {
+//   const queryClient = useQueryClient();
+
+//   return useMutation({
+//     mutationFn: (id: string) => deleteProduct(id),
+
+//     onSuccess: () => {
+//       // ✅ Xóa cache để lần sau refetch danh sách
+//       queryClient.invalidateQueries({ queryKey: ['product-delete'] });
+//     },
+
+//     onError: (error) => {
+//       console.error('Delete product failed:', error);
+//     },
+//   });
+// };
