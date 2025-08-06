@@ -16,12 +16,10 @@ export function middleware(req: NextRequest) {
 
   const isProtected = locales.includes(locale) && protectedRoutes.includes(section);
 
-  // Nếu là route cần bảo vệ mà không có token -> redirect
   if (isProtected && !accessToken) {
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
 
-  // Nếu truy cập admin -> phải có token + role === 'admin'
   if (section === 'admin') {
     try {
       const decoded: { role: string } = jwtDecode(accessToken!);
@@ -36,7 +34,6 @@ export function middleware(req: NextRequest) {
     }
   }
 
-  // Bỏ qua các file tĩnh, API, Next.js assets
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
@@ -45,7 +42,6 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Thêm locale mặc định nếu thiếu
   const pathnameIsMissingLocale = !locales.some((locale) =>
     pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );

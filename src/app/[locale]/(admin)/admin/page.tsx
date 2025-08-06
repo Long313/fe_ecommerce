@@ -4,6 +4,7 @@ import { ProductDetailProps } from '@/common/type';
 import Button from '@/components/Button';
 import ImageWithFallback from '@/components/ImageWithFallback';
 import InputComponent from '@/components/Input';
+import Loader from '@/components/Loader';
 import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
@@ -21,7 +22,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import './index.css';
-import Loader from '@/components/Loader';
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 // interface Item {
@@ -366,25 +366,6 @@ const Admin: React.FC = () => {
         }
     }
 
-    // const fetchData = () => {
-    // setLoading(true);
-    // fetch(`https://660d2bd96ddfa2943b33731c.mockapi.io/api/users?${params.toString()}`)
-    //   .then((res) => res.json())
-    //   .then((res) => {
-    //     setData(Array.isArray(res) ? res : []);
-    //     setLoading(false);
-    //     setTableParams({
-    //       ...tableParams,
-    //       pagination: {
-    //         ...tableParams.pagination,
-    //         total: 100,
-    //         // 100 is mock data, you should read it from server
-    //         // total: data.totalCount,
-    //       },
-    //     });
-    //   });
-    // };
-
     // useEffect(fetchData, [
     //     tableParams.pagination?.current,
     //     tableParams.pagination?.pageSize,
@@ -401,7 +382,6 @@ const Admin: React.FC = () => {
             sortField: Array.isArray(sorter) ? undefined : sorter.field,
         });
 
-        // `dataSource` is useless since `pageSize` changed
         if (pagination.pageSize !== tableParams.pagination?.pageSize) {
             setProducts([]);
         }
