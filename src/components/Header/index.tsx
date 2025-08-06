@@ -11,11 +11,13 @@ import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import Button from "../Button";
 import LanguageSwitcher from "../LanguageSwitcher";
+import { LiaUserSecretSolid } from "react-icons/lia";
 
 function Header() {
     const { setSearch } = useStore();
     const accessToken = useAccessToken(state => state.accessToken);
     const { setAccessToken } = useAccessToken();
+    const role = useStore(state => state.userInfor.role);
 
     const router = useRouter();
     const { t, locale } = useTranslation();
@@ -25,6 +27,8 @@ function Header() {
 
     const handleRouterLogout = () => {
         setAccessToken("");
+        document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        router.push(`/${locale}/login`)
     }
 
     const handleOpenSearchBar = () => {
@@ -100,11 +104,12 @@ function Header() {
                     </ul>
                 </nav>
             </div>
-            <div className="flex ml-auto">
+            <div className="flex ml-[10%]">
                 <IoSearchOutline size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={handleOpenSearchBar} />
                 <PiBag size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/bag`)} />
                 <IoIosHeartEmpty size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/favorite`)} />
                 {accessToken && <SlUser size={18} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/user`)} />}
+                {accessToken && role === "admin" && <LiaUserSecretSolid size={22} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/admin`)} />}
             </div>
             <div>
                 {accessToken ?

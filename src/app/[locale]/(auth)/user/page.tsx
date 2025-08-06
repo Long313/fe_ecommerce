@@ -5,10 +5,21 @@ import { useStore } from "@/store/store";
 import NextImage from "next/image";
 import QRCode from "react-qr-code";
 
+export const dynamic = "force-dynamic";
+
 export default function UserInfor() {
     const userInfor = useStore(state => state.userInfor);
     const { avatar, fullname, phone_number, gender, email, birthday, address } = userInfor;
+    // const accessToken = useAccessToken(state => state.accessToken);
+    // const router = useRouter();
+    // const { locale } = useTranslation();
+    // useEffect(() => {
+    //     if (!accessToken) {
+    //         router.push(`/${locale}/login`); 
+    //     }
+    // }, [accessToken]);
 
+    // if (!accessToken) return null;
     // const qrRef = useRef<SVGSVGElement | null>(null);
 
     function getInitials(name: string): string {

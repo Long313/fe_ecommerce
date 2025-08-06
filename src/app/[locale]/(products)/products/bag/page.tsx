@@ -127,12 +127,12 @@ export default function Bag() {
     };
 
     return (
-        <div className="w-full h-full my-[200px] px-[var(--padding-screen)] flex flex-col">
+        <div className="w-full h-max mt-[150px] px-[var(--padding-screen)] flex flex-col">
             <div className="flex flex-row">
                 <div className="w-[70%] pr-[40px]">
                     <p className="text-left mb-[40px] font-[600]">BAG</p>
                     {listItem.length > 0 ? (
-                        <div>
+                        <div className="">
                             {listItem.map((item, index) => (
                                 <div className="pb-[20px] mb-[40px] flex flex-row border-b border-[#E5E5E5]" key={`${item.id}-${index}`}>
                                     <div className="w-[20%] flex flex-col justify-center items-center">
