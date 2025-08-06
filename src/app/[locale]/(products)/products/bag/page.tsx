@@ -33,7 +33,10 @@ export default function Bag() {
         setQuantities(initialQuantities);
 
         const listFavorite: ProductDetailProps[] = JSON.parse(localStorage.getItem("listFavorite") ?? "[]");
-        const likedIds = listFavorite.map((item) => item.id);
+        const likedIds = listFavorite
+            .map((item) => item.id)
+            .filter((id): id is string | number => id !== undefined);
+
         setLike(likedIds);
 
     }, []);
@@ -122,7 +125,10 @@ export default function Bag() {
 
         localStorage.setItem("listFavorite", JSON.stringify(newList));
 
-        const newLikeIds = newList.map((i) => i.id);
+        const newLikeIds = newList
+            .map((i) => i.id)
+            .filter((id): id is string | number => id !== undefined);
+
         setLike(newLikeIds);
     };
 
