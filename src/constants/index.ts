@@ -14,6 +14,7 @@ export const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
 export const phoneRegex = /^\+?[1-9]\d{1,14}$/;
 
 export const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+export const PORT_API = process.env.NEXT_PUBLIC_API_PORT;
 
 export const GENDERS_LIST = [
     { label: "Select", value: "" },

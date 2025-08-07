@@ -7,8 +7,8 @@ import InputComponent from '@/components/Input';
 import Loader from '@/components/Loader';
 import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
-import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
-import { useCreateProduct, useProductSearch } from '@/hooks/useProductSearch';
+import { CATEGORIES_LIST, GENDERS_LIST, PORT_API } from '@/constants';
+import { useCreateProduct, useProductSearch, useUpdateProduct } from '@/hooks/useProductSearch';
 import useTranslation from '@/hooks/useTranslation';
 import amax from '@/images/amax.svg';
 import logo from '@/images/logo.svg';
@@ -126,7 +126,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 interface DataType {
-    id?: string | number,
+    id?: string,
     name?: string,
     category?: string,
     description?: string,
@@ -183,7 +183,14 @@ const Admin: React.FC = () => {
     const { data, isPending } = useProductSearch(filteredParams);
     useEffect(() => {
         if (data && data?.data.length > 0) {
-            setProducts(data.data);
+            const newData = data.data.map(item => (
+                {
+                    ...item,
+                    image_url: `${PORT_API}${item.image_url}`
+                }
+            ))
+            setProducts(newData);
+
             setTableParams({
                 ...tableParams,
                 pagination: {
@@ -191,6 +198,9 @@ const Admin: React.FC = () => {
                     total: data?.pagination.total
                 }
             })
+        } else if (data && data?.data.length === 0) {
+            setProducts([]);
+
         }
     }, [data]);
 
@@ -395,23 +405,42 @@ const Admin: React.FC = () => {
     }
 
     const { mutate: createProduct } = useCreateProduct();
+    const { mutate: updateProduct } = useUpdateProduct();
 
-    const handleGetFormData = (typePopup: string, data: ProductDetailProps) => {
-        console.log("type ", typePopup);
-        console.log("Data ", data);
+    const handleGetFormData = async (typePopup: string, data: ProductDetailProps) => {
         const formData = new FormData();
+
         if (data.name) formData.append("name", data.name);
         if (data.gender) formData.append("gender", data.gender);
         if (data.category) formData.append("category", data.category);
         if (data.type) formData.append("type", data.type);
-        if (data.price) formData.append("price", String(data.price));
+        if (data.price) formData.append("price", String(Number(data.price)));
         if (data.description) formData.append("description", data.description);
-        if (data.image) formData.append("image", data.image);
-        formData.append("discountRate", String(5));
-        formData.append("taxRate", String(5));
-        formData.append("inventoryCount", String(5));
-        formData.append("star", String(5));
-        createProduct(formData);
+        if (data.image instanceof File) {
+            formData.append("image", data.image);
+        } else if (typeof data.image === "string") {
+            try {
+                const response = await fetch(data.image);
+                const blob = await response.blob();
+                const filename = data.image.split("/").pop() || "image.jpg";
+                const file = new File([blob], filename, { type: blob.type });
+                formData.append("image", file);
+            } catch (error) {
+                console.error("Lỗi khi fetch ảnh từ URL:", error);
+            }
+        }
+
+        formData.append("discountRate", String(Number(5)));
+        formData.append("taxRate", String(Number(5)));
+        formData.append("inventoryCount", String(Number(5)));
+        formData.append("star", String(Number(5)));
+        if (typePopup !== "edit") {
+            createProduct(formData);
+        } else {
+            if (data.id) formData.append("id", data.id);
+            formData.append("isActive", "1");
+            updateProduct(formData);
+        }
     }
 
     return (

@@ -1,5 +1,5 @@
 import { ParamsSearchType, ProductDetailProps } from '@/common/type';
-import { createNewProduct, searchProductByName } from '@/service/product';
+import { createNewProduct, searchProductByName, updateProduct } from '@/service/product';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 type ProductSearchResponse = {
@@ -41,6 +41,23 @@ export const useCreateProduct = () => {
 
     onError: (error) => {
       console.error('Create product failed:', error);
+    },
+  });
+};
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData: FormData) => updateProduct(formData),
+
+    onSuccess: () => {
+      // ✅ Xóa cache để lần sau refetch danh sách
+      queryClient.invalidateQueries({ queryKey: ['product-update'] });
+    },
+
+    onError: (error) => {
+      console.error('Update product failed:', error);
     },
   });
 };

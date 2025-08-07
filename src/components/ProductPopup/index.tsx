@@ -1,5 +1,5 @@
 import InputComponent from '@/components/Input';
-import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
+import { CATEGORIES_LIST, GENDERS_LIST, PORT_API } from '@/constants';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
 import type { StaticImageData } from 'next/image';
@@ -21,7 +21,7 @@ type ProductPopupProps = {
 export default function ProductPopup(props: ProductPopupProps) {
     const { open, id, typePopup, onClose, onGetData } = props;
     const [image, setImage] = useState<string | StaticImageData>(place_holder_img);
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [imageFile, setImageFile] = useState<File | string | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [name, setName] = useState<string>("");
@@ -43,7 +43,11 @@ export default function ProductPopup(props: ProductPopupProps) {
     }
 
     const handleSave = () => {
-        onGetData(typePopup, { name, gender, category, type, price, description, image: imageFile });
+        if (typePopup === "edit") {
+            onGetData(typePopup, { id, name, gender, category, type, price, description, image: imageFile });
+        } else {
+            onGetData(typePopup, { name, gender, category, type, price, description, image: imageFile });
+        }
         onClose();
         resetField();
     };
@@ -113,7 +117,9 @@ export default function ProductPopup(props: ProductPopupProps) {
                 setType(type);
                 setPrice(price);
                 setDescription(description);
-                setImage(image_url);
+                const fullImageUrl = `${PORT_API}${image_url}`;
+                setImage(fullImageUrl);
+                setImageFile(fullImageUrl);
             };
         },
         onError: (error: { status: number, message: string }) => {
