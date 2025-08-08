@@ -35,7 +35,7 @@ export default function Bag() {
         const listFavorite: ProductDetailProps[] = JSON.parse(localStorage.getItem("listFavorite") ?? "[]");
         const likedIds = listFavorite
             .map((item) => item.id)
-            .filter((id): id is string | number => id !== undefined);
+            .filter((id): id is string => id !== undefined);
 
         setLike(likedIds);
 
@@ -127,7 +127,7 @@ export default function Bag() {
 
         const newLikeIds = newList
             .map((i) => i.id)
-            .filter((id): id is string | number => id !== undefined);
+            .filter((id): id is string => id !== undefined);
 
         setLike(newLikeIds);
     };

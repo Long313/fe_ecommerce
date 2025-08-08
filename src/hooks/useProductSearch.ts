@@ -1,5 +1,5 @@
 import { ParamsSearchType, ProductDetailProps } from '@/common/type';
-import { createNewProduct, searchProductByName } from '@/service/product';
+import { createNewProduct, searchProductByName, updateProduct } from '@/service/product';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 type ProductSearchResponse = {
@@ -19,7 +19,7 @@ export const useProductSearch = (params: ParamsSearchType) => {
     staleTime: 1000 * 60 * 3,
     refetchOnWindowFocus: false,
 
-    // ✅ Sử dụng placeholderData để giữ data cũ
+    // placeholderData để giữ data cũ
     placeholderData: () => {
       // Lấy dữ liệu từ query trước đó (nếu có)
       const previous = queryClient.getQueryData<ProductSearchResponse>(['product-search', params]);
@@ -35,12 +35,29 @@ export const useCreateProduct = () => {
     mutationFn: (formData: FormData) => createNewProduct(formData),
 
     onSuccess: () => {
-      // ✅ Xóa cache để lần sau refetch danh sách
+      // Xóa cache để lần sau refetch danh sách
       queryClient.invalidateQueries({ queryKey: ['product-create'] });
     },
 
     onError: (error) => {
       console.error('Create product failed:', error);
+    },
+  });
+};
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (formData: FormData) => updateProduct(formData),
+
+    onSuccess: () => {
+      // ✅ Xóa cache để lần sau refetch danh sách
+      queryClient.invalidateQueries({ queryKey: ['product-update'] });
+    },
+
+    onError: (error) => {
+      console.error('Update product failed:', error);
     },
   });
 };

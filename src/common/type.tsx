@@ -81,7 +81,7 @@ export interface ProvincesProps {
 
 export interface ProductProps {
     id?: string | number,
-    image_url?: string ,
+    image_url?: string,
     width?: number,
     height?: number,
     name?: string,
@@ -96,13 +96,13 @@ export interface ProductBtnProps extends ProductProps {
 }
 
 export interface ProductDetailProps {
-    id?: string | number,
+    id?: string,
     name?: string,
     category?: string,
     description?: string,
     price?: number | string,
     image_url?: string,
-    image?: File | null,
+    image?: File | string | null;
     gender?: string;
     type?: string;
     size?: string;

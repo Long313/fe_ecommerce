@@ -3,12 +3,11 @@
 import { ProductDetailProps } from '@/common/type';
 import Button from '@/components/Button';
 import ImageWithFallback from '@/components/ImageWithFallback';
-import InputComponent from '@/components/Input';
 import Loader from '@/components/Loader';
 import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
-import { useCreateProduct, useProductSearch } from '@/hooks/useProductSearch';
+import { useCreateProduct, useProductSearch, useUpdateProduct } from '@/hooks/useProductSearch';
 import useTranslation from '@/hooks/useTranslation';
 import amax from '@/images/amax.svg';
 import logo from '@/images/logo.svg';
@@ -18,10 +17,15 @@ import type { GetProp, GetRef, InputRef, TableProps } from 'antd';
 import { Form, Input, Popconfirm, Table } from 'antd';
 import type { SorterResult } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 import './index.css';
+
+
+const InputComponent = dynamic(() => import("@/components/Input"), { ssr: false });
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 // interface Item {
@@ -126,7 +130,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
 };
 
 interface DataType {
-    id?: string | number,
+    id?: string,
     name?: string,
     category?: string,
     description?: string,
@@ -152,6 +156,7 @@ const Admin: React.FC = () => {
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
     // const [count, setCount] = useState(2);
+
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
             current: 1,
@@ -180,10 +185,17 @@ const Admin: React.FC = () => {
             )
         );
     }, [search, type, startPrice, endPrice, gender, category, tableParams]);
-    const { data, isPending } = useProductSearch(filteredParams);
+    const { data, isPending, refetch } = useProductSearch(filteredParams);
     useEffect(() => {
         if (data && data?.data.length > 0) {
-            setProducts(data.data);
+            const newData = data.data.map(item => (
+                {
+                    ...item,
+                    image_url: item.image_url
+                }
+            ))
+            setProducts(newData);
+
             setTableParams({
                 ...tableParams,
                 pagination: {
@@ -191,29 +203,33 @@ const Admin: React.FC = () => {
                     total: data?.pagination.total
                 }
             })
+        } else if (data && data?.data.length === 0) {
+            setProducts([]);
+
         }
     }, [data]);
 
     const { mutate } = useMutation({
         mutationFn: deleteProduct,
-        onSuccess: (res) => {
-            console.log("res", res);
+        onSuccess: (res, idDeleted) => {
+            console.log(res);
+            setProducts((prev) => prev.filter((item) => item.id !== idDeleted));
+            refetch();
+            toast.success('Xóa sản phẩm thành công!');
+
         },
-        onError: (error: { status: number, message: string }) => {
-            console.log(error);
-        }
+        onError: (error) => {
+            console.log(error)
+            toast.error('Xóa sản phẩm thất bại!');
+        },
     });
     const handleDelete = (id: string) => {
-        console.log("delete", id);
-        const newData = products.filter((item) => item.id !== id);
-        setProducts(newData);
         mutate(id);
     };
     const [open, setOpen] = useState<boolean>(false);
     const [idSelect, setIdSelect] = useState<string>("");
     const [typePopup, setTypePopup] = useState<string>("");
     const handleEdit = (id: string) => {
-        console.log("edit", id);
         setOpen(true);
         setIdSelect(id);
         setTypePopup("edit");
@@ -239,50 +255,49 @@ const Admin: React.FC = () => {
         {
             title: 'Description',
             dataIndex: 'description',
-            width: '20%',
-            // editable: true,
+            ellipsis: true,
+            render: (text: string) => (
+                <span title={text} className="truncate-description">{text}</span>
+            ),
         },
         {
             title: 'Category',
             dataIndex: 'category',
             width: '10%',
-            // editable: true,
         },
         {
             title: 'Gender',
             dataIndex: 'gender',
             width: '10%',
-            // editable: true,
         },
         {
             title: 'Type',
             dataIndex: 'type',
             width: '10%',
-            // editable: true,
         },
         {
             title: 'Price',
             dataIndex: 'price',
             width: '10%',
-            // editable: true,
         },
         {
             title: 'Last Update',
             dataIndex: 'updated_at',
-            width: '10%',
-            render: (updated_at: string) => dayjs(updated_at).format('HH:mm DD/MM/YYYY'),
+            width: '12%',
+            render: (updated_at: string) => dayjs(updated_at).format('DD/MM/YYYY HH:mm'),
         },
         {
             title: 'Action',
             dataIndex: 'operation',
+            width: '10%',
             render: (_, record) =>
                 products.length >= 1 ? (
                     <div className='flex justify-between items-center'>
                         <Popconfirm title="Sure to edit?" onConfirm={() => handleEdit(String(record.id))}>
-                            <a>Edit</a>
+                            <a className="font-[600]">Edit</a>
                         </Popconfirm>
                         <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(String(record.id))}>
-                            <a>Delete</a>
+                            <a className="font-[600] !text-[red] hover:opacity-45">Delete</a>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -290,18 +305,6 @@ const Admin: React.FC = () => {
     ];
 
     const handleAdd = () => {
-        // const newData: ProductDetailProps = {
-        //     id: "123",
-        //     name: 'Product new',
-        //     image_url: '',
-        //     description: 'Description for new product',
-        //     category: 'shoes',
-        //     gender: 'unisex',
-        //     type: 'new',
-        //     price: 0,
-        // };
-        // setProducts([...products, newData]);
-        // setCount(count + 1);
         setOpen(true);
         setTypePopup("create")
     };
@@ -395,23 +398,47 @@ const Admin: React.FC = () => {
     }
 
     const { mutate: createProduct } = useCreateProduct();
+    const { mutate: updateProduct } = useUpdateProduct();
 
-    const handleGetFormData = (typePopup: string, data: ProductDetailProps) => {
-        console.log("type ", typePopup);
-        console.log("Data ", data);
+    const handleGetFormData = async (typePopup: string, data: ProductDetailProps) => {
         const formData = new FormData();
+
         if (data.name) formData.append("name", data.name);
         if (data.gender) formData.append("gender", data.gender);
         if (data.category) formData.append("category", data.category);
         if (data.type) formData.append("type", data.type);
-        if (data.price) formData.append("price", String(data.price));
+        if (data.price) formData.append("price", String(Number(data.price)));
         if (data.description) formData.append("description", data.description);
-        if (data.image) formData.append("image", data.image);
-        formData.append("discountRate", String(5));
-        formData.append("taxRate", String(5));
-        formData.append("inventoryCount", String(5));
-        formData.append("star", String(5));
-        createProduct(formData);
+        if (data.image instanceof File) {
+            formData.append("image", data.image);
+        }
+        formData.append("discountRate", String(Number(5)));
+        formData.append("taxRate", String(Number(5)));
+        formData.append("inventoryCount", String(Number(5)));
+        formData.append("star", String(Number(5)));
+        if (typePopup !== "edit") {
+            createProduct(formData, {
+                onSuccess: () => {
+                    refetch();
+                    toast.success('Tạo sản phẩm thành công!');
+                },
+                onError: () => {
+                    toast.error('Tạo sản phẩm thất bại!');
+                }
+            });
+        } else {
+            if (data.id) formData.append("id", data.id);
+            formData.append("isActive", "1");
+            updateProduct(formData, {
+                onSuccess: () => {
+                    refetch();
+                    toast.success('Cập nhật sản phẩm thành công!');
+                },
+                onError: () => {
+                    toast.error('Cập nhật sản phẩm thất bại!');
+                }
+            });
+        }
     }
 
     return (
@@ -433,7 +460,7 @@ const Admin: React.FC = () => {
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
                 </div>
-                <Button title="Add a product" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' />
+                <Button title="Add a product" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             </div>
 
             <Table<DataType>
@@ -447,6 +474,7 @@ const Admin: React.FC = () => {
                 onChange={handleTableChange}
             />
             {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />}
+            <Toaster position="top-right" />
         </div>
     );
 };

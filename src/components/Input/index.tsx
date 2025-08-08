@@ -19,17 +19,24 @@ export default function Input(props: InputProps) {
         margin
     } = props;
 
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState<string>(defaultValue ?? "");
 
     const handleGetValue = () => {
         onGetData(name, value);
     };
 
-    useEffect(() => {
-        if (defaultValue) setValue(defaultValue);
-    }, [defaultValue]);
-    const check = name === "city" || name === "district" || name === "ward" || name === "gender" || name === "category";
+    const check = new Set(["city", "district", "ward", "gender", "category"]).has(name);
+    const [mounted, setMounted] = useState(false);
 
+    useEffect(() => {
+        setValue(defaultValue ?? "");
+    }, [defaultValue]);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null; // hoặc return một loader/placeholder
     return (
         <div className={`flex ${width ? width : "w-full"} h-full ${margin ? margin : "mt-[30px]"}`}>
             <p className={`text-black font-[600] ${minWidth ? minWidth : "min-w-[100px]"}`}>
