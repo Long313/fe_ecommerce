@@ -19,7 +19,7 @@ export const useProductSearch = (params: ParamsSearchType) => {
     staleTime: 1000 * 60 * 3,
     refetchOnWindowFocus: false,
 
-    // ✅ Sử dụng placeholderData để giữ data cũ
+    // placeholderData để giữ data cũ
     placeholderData: () => {
       // Lấy dữ liệu từ query trước đó (nếu có)
       const previous = queryClient.getQueryData<ProductSearchResponse>(['product-search', params]);
@@ -35,7 +35,7 @@ export const useCreateProduct = () => {
     mutationFn: (formData: FormData) => createNewProduct(formData),
 
     onSuccess: () => {
-      // ✅ Xóa cache để lần sau refetch danh sách
+      // Xóa cache để lần sau refetch danh sách
       queryClient.invalidateQueries({ queryKey: ['product-create'] });
     },
 

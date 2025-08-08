@@ -1,5 +1,6 @@
+import { ProductDetailProps } from '@/common/type';
 import InputComponent from '@/components/Input';
-import { CATEGORIES_LIST, GENDERS_LIST, PORT_API } from '@/constants';
+import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
 import type { StaticImageData } from 'next/image';
@@ -8,7 +9,6 @@ import { useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import place_holder_img from '../../images/place_holder_product.png';
 import Button from "../Button";
-import { ProductDetailProps } from '@/common/type';
 
 type ProductPopupProps = {
     open: boolean,
@@ -117,7 +117,7 @@ export default function ProductPopup(props: ProductPopupProps) {
                 setType(type);
                 setPrice(price);
                 setDescription(description);
-                const fullImageUrl = `${PORT_API}${image_url}`;
+                const fullImageUrl = image_url;
                 setImage(fullImageUrl);
                 setImageFile(fullImageUrl);
             };
