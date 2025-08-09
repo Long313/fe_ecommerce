@@ -92,7 +92,8 @@ export interface ProductProps {
 }
 
 export interface ProductBtnProps extends ProductProps {
-    onRemove?: () => void;
+    onRemove: () => void;
+    onAdd: () => void;
 }
 
 export interface ProductDetailProps {
@@ -107,7 +108,7 @@ export interface ProductDetailProps {
     type?: string;
     size?: string;
     quantity?: number,
-    rate?: number | string,
+    star?: number | string,
     color?: string,
 }
 

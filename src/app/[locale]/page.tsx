@@ -6,9 +6,6 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import home_img from '../../images/home_img.svg';
 import item from "../../images/item.svg";
-// import Clock from "@/components/Clock/page";
-// import FeedbackCard from "@/components/FeedbackCard/page";
-// import SearchBar from "@/components/SearchBar/page";
 import { useStore } from "@/store/store";
 import dynamic from "next/dynamic";
 import { useProductSearch } from "@/hooks/useProductSearch";
@@ -89,7 +86,8 @@ export default function Home() {
             {isTyping && <span className="animate-blink">|</span>}
           </p>
           <p className="font-[500] text-[20px] text-[var(--text-color)] mt-[60px] mb-[30px]">Elevate your game with curated athletic <br /> fashion and sleek accessories – tailored to <br /> your lifestyle.</p>
-          <Button title="EXPLORE NOW" onSubmit={handleExplore} width="w-[160px]" height="h-[46px]" />
+          <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
+            title="EXPLORE NOW" onSubmit={handleExplore} width="w-[160px]" height="h-[46px]" />
         </div>
         <div className="w-[45%] ml-auto">
           <div className="relative aspect-[632/795] w-3/4 ml-auto">
@@ -113,7 +111,8 @@ export default function Home() {
           ))}
         </div>
         <div className="mt-[80px] mb-[60px]">
-          <Button title="See all" onSubmit={handleRouterSale} width="w-[160px]" height="h-[46px]" arrow={true} />
+          <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
+            title="SEE ALL" onSubmit={handleRouterSale} width="w-[160px]" height="h-[46px]" arrow={true} />
         </div>
       </section>
       <section className="flex flex-col mt-[100px] items-center">
@@ -155,7 +154,7 @@ export default function Home() {
             <h2 className="font-[700] text-[40px]">Exclusive offer</h2>
             <p className="my-[50px] font-[600]">Unlock the ultimate style upgrade with our exclusive <br /> offer Enjoy savings of up to 40% off on our latest New <br /> Arrivals</p>
             <Clock targetDate={targetDate} />
-            <Button title="BUY NOW" onSubmit={() => { }} width="w-[200px]" height="h-[50px]" margin="my-[50px]" />
+            <Button title="BUY NOW" onSubmit={() => { }} width="w-[200px]" height="h-[50px]" margin="my-[50px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
           </div>
         </div>
       </section>

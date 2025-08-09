@@ -14,7 +14,7 @@ type ButtonProps = {
     height?: string;
     heightLogo?: number;
     color?: string;
-    onSubmit: () => void;
+    onSubmit: (e: React.MouseEvent<HTMLButtonElement>) => void;
     image?: string | StaticImport;
     border?: string;
     margin?: string;

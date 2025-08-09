@@ -116,7 +116,7 @@ export default function Login() {
       )}
       <div className="w-1/2 flex flex-col items-center justify-center">
         <div className="text-center mb-[20px]">
-          <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
+          <h2 className="font-[700] text-[34px] uppercase bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
             {t("loginTitle")}
           </h2>
           <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
@@ -125,19 +125,19 @@ export default function Login() {
           <InputField valueDefault={email ? email : emailAuthen} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
           <InputField valueDefault={password ? password : passwordAuthen} title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
         </div>
-        <div className="w-full max-w-[315px] flex justify-between items-center mb-[10px]">
+        <div className="w-full max-w-[315px] flex justify-between items-center mb-[20px]">
           <div className="flex items-center">
             <input onChange={() => setRemember(!remember)} checked={remember}
               type="checkbox" name="remember" className="inline-block w-[20px] mr-[4px]" />
             <span className="font-[500] text-[12px] inline-block">{t("Remember me")}</span>
           </div>
-          <p onClick={() => router.push(`/${locale}/forgot-password`)} className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer">{t("forgotPasswordTitle")}</p>
+          <p onClick={() => router.push(`/${locale}/forgot-password`)} className="font-[500] text-[12px] inline-block text-[#822FFF] cursor-pointer hover:opacity-80">{t("forgotPasswordTitle")}</p>
         </div>
         <Button title={t("signIn")} onSubmit={handleLogin} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
         <Button margin="mt-[10px]" widthLogo={16} heightLogo={16} image={google_logo} color="text-black" border="border-[1.78px] border-[rgba(0,0,0,0.25)]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" backgroundColor="bg-white" title={t("signInWithGoogle")} onSubmit={() => signIn("google", { callbackUrl: `/${locale}` })} />
-        <div className="font-[500] text-[12px] mt-[8px]">
+        <div className="font-[500] text-[12px] mt-[16px]">
           {t("dontHaveAccountTitle")}
-          <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1">{t("signUpFreeTitle")}</Link>
+          <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1 hover:opacity-80">{t("signUpFreeTitle")}</Link>
         </div>
       </div>
       <div

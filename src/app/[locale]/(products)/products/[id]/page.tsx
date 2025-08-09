@@ -98,14 +98,14 @@ export default function ProductDetail() {
     return (
         <>
             {isPending && <Loader />}
-            {data.image_url && (
-                <div className="w-full h-full my-[200px] px-[var(--padding-screen)] flex justify-around">
+            {data && (
+                <div className="w-full h-full mt-[120px] mb-[200px] px-[var(--padding-screen)] flex justify-around">
                     <div className="relative w-[30%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] h-[480px] rounded-[4px]">
-                        <Image onError={handleError} src={data.image_url} alt="product" fill className='object-contain' />
+                        <Image onError={handleError} src={data.image_url?.trim() || item} alt="product" fill className='object-contain' />
                     </div>
 
                     <div className="relative w-[40%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] p-[20px] flex flex-col items-center rounded-[4px]">
-                        <h2 className="text-black text-[30px] font-[600]">{data.name}</h2>
+                        <h2 className="bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[30px] font-[600]">{data.name}</h2>
                         <p className="text-black text-left">{data.description}</p>
                         <p className="text-[28px] font-[600] my-[20px]">${data.price}</p>
 
@@ -137,8 +137,7 @@ export default function ProductDetail() {
                         </div>
 
                         <p className='mb-[20px] text-[12px] cursor-pointer'>FIND YOUR SIZE  |  MEASUREMENT GUIDE</p>
-                        <Button type="cart" title="ADD TO CART" onSubmit={handleAddToBag} width="w-[80%]" height="h-[36px]" />
-
+                        <Button type="cart" title="ADD TO CART" onSubmit={handleAddToBag} width="w-[80%]" height="h-[36px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
                         <div className='absolute top-[10px] -right-[30px] group overflow-visible'>
                             <div className="relative w-fit top-0 right-[40px]">
                                 <Tooltip

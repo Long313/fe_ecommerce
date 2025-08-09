@@ -68,7 +68,7 @@ function InputField(props: InputFeildProps) {
 
     return (<div className="flex flex-col">
         <label className="inline-block font-[500]" onClick={handleFocus}>
-            {title}<span className="text-[red]">*</span>
+            {title}<span className="text-[red]">&nbsp;*</span>
         </label>
         <div className="relative">
             <input
