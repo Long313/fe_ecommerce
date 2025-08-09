@@ -113,7 +113,7 @@ export interface ProductDetailProps {
 }
 
 export interface UserInfor {
-    id?: string;
+    id: string;
     fullname: string | null;
     email: string | null;
     phone_number?: string;
@@ -154,6 +154,10 @@ export type addressListProps =
         name: string,
         phone: string,
         address: string,
+        street: string,
+        ward: string,
+        district: string,
+        city: string,
         default: boolean
     }
 

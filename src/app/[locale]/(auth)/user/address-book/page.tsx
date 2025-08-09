@@ -26,22 +26,20 @@ export default function AddressBook() {
     const { data: districtData } = useDistrictSearch(cityId ?? "", { page: 0, size: 63 });
     const { data: wardData } = useWardSearch(districtId ?? "", { page: 0, size: 63 });
 
-    const formatData = (data: {name: string, id: string}[]) => {
-        return data.map((item: {name: string, id: string}) => ({
+    const formatData = (data: { name: string, id: string }[]) => {
+        return data.map((item: { name: string, id: string }) => ({
             label: item.name,
             value: item.name,
             id: item.id,
         }));
     };
 
-    // Load cities
     useEffect(() => {
         if (cityData && cityData?.data?.length > 0) {
             setCity(formatData(cityData.data));
         }
     }, [cityData]);
 
-    // Load districts
     useEffect(() => {
         if (districtData && districtData?.data?.length > 0) {
             setDistrict(formatData(districtData.data));
@@ -50,7 +48,6 @@ export default function AddressBook() {
         }
     }, [districtData]);
 
-    // Load wards
     useEffect(() => {
         if (wardData && wardData?.data?.length > 0) {
             setWard(formatData(wardData.data));
@@ -92,6 +89,10 @@ export default function AddressBook() {
             name,
             phone,
             address: `${streetValue}, ${wardValue}, ${districtValue}, ${cityValue}`,
+            street: streetValue,
+            ward: wardValue,
+            district: districtValue,
+            city: cityValue,
             default: false,
         };
 
@@ -126,7 +127,7 @@ export default function AddressBook() {
         setOpen(false);
     };
 
-    const [addressList, setAddressList] = useState<{ name: string, phone: string, address: string, default: boolean }[]>([]);
+    const [addressList, setAddressList] = useState<{ name: string, phone: string, address: string, street: string, ward: string, district: string, city: string, default: boolean }[]>([]);
     useEffect(() => {
         const addressBookStore = JSON.parse(localStorage.getItem("addressBookStore") || "[]");
         setAddressList(addressBookStore);
@@ -191,12 +192,12 @@ export default function AddressBook() {
                             </p>
                             <p className="ml-[20px]">Please enter details for the new address:</p>
                             <div className="mt-[20px] w-[80%] mx-auto">
-                                <Input defaultValue={name} title="Name" name="name" type="string" onGetData={handleGetData} />
-                                <Input defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
-                                <Input defaultValue={streetValue} title="Street" name="street" type="string" onGetData={handleGetData} />
-                                <Input dataSelect={city} title="City" name="city" type="string" onGetData={handleGetData} />
-                                <Input dataSelect={district} title="District" name="district" type="string" onGetData={handleGetData} />
-                                <Input dataSelect={ward} title="Ward" name="ward" type="string" onGetData={handleGetData} />
+                                <Input star={false} defaultValue={name} title="Name" name="name" type="string" onGetData={handleGetData} />
+                                <Input star={false} defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
+                                <Input star={false} defaultValue={streetValue} title="Street" name="street" type="string" onGetData={handleGetData} />
+                                <Input star={false} dataSelect={city} title="City" name="city" type="string" onGetData={handleGetData} />
+                                <Input star={false} dataSelect={district} title="District" name="district" type="string" onGetData={handleGetData} />
+                                <Input star={false} dataSelect={ward} title="Ward" name="ward" type="string" onGetData={handleGetData} />
                             </div>
                             <div className="flex justify-end w-[80%] mx-auto my-[40px]">
                                 <button onClick={handleDiscard} className="cursor-pointer mr-[20px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent bg-white border border-[#C4C4C4] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)] w-[100px] h-[36px] flex justify-center items-center rounded-[12px] hover:scale-101">
