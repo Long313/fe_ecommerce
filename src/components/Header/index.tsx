@@ -6,12 +6,11 @@ import { useRouter } from "next/navigation";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { PiBag } from "react-icons/pi";
-import { SlUser } from "react-icons/sl";
+import { SlUser, SlUserFollowing } from "react-icons/sl";
 import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import Button from "../Button";
 import LanguageSwitcher from "../LanguageSwitcher";
-import { LiaUserSecretSolid } from "react-icons/lia";
 
 function Header() {
     const { setSearch } = useStore();
@@ -109,7 +108,7 @@ function Header() {
                 <PiBag size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/bag`)} />
                 <IoIosHeartEmpty size={20} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/products/favorite`)} />
                 {accessToken && <SlUser size={18} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/user`)} />}
-                {accessToken && role === "admin" && <LiaUserSecretSolid size={22} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/admin`)} />}
+                {accessToken && role === "admin" && <SlUserFollowing size={18} className="hover:scale-105 mr-[40px] cursor-pointer" onClick={() => router.push(`/${locale}/admin`)} />}
             </div>
             <div>
                 {accessToken ?

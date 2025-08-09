@@ -1,7 +1,8 @@
 'use client'
 
 import { InputProps } from "@/common/type";
-import { useEffect, useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
+import { ChangeEvent, useEffect, useState } from "react";
 
 export default function Input(props: InputProps) {
     const {
@@ -20,10 +21,11 @@ export default function Input(props: InputProps) {
     } = props;
 
     const [value, setValue] = useState<string>(defaultValue ?? "");
+    const debouncedValue = useDebounce(value, 500);
 
-    const handleGetValue = () => {
-        onGetData(name, value);
-    };
+    // const handleGetValue = () => {
+    //     onGetData(name, value);
+    // };
 
     const check = new Set(["city", "district", "ward", "gender", "category"]).has(name);
     const [mounted, setMounted] = useState(false);
@@ -31,6 +33,11 @@ export default function Input(props: InputProps) {
     useEffect(() => {
         setValue(defaultValue ?? "");
     }, [defaultValue]);
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+        setValue(e.target.value);
+        onGetData(name, e.target.value);
+    }
 
     useEffect(() => {
         setMounted(true);
@@ -44,7 +51,7 @@ export default function Input(props: InputProps) {
             </p>
             {check ? (
                 <select
-                    value={value}
+                    value={debouncedValue}
                     onChange={(e) => {
                         const selectedValue = e.target.value;
                         setValue(selectedValue);
@@ -63,22 +70,22 @@ export default function Input(props: InputProps) {
                 </select>
             ) : name === "description" ? (
                 <textarea
-                    onBlur={handleGetValue}
+                    // onBlur={handleGetValue}
                     className={`cursor-pointer outline-none flex-1 ml-[20px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black resize-none ${width ? width : "w-full"} ${height ? height : "h-[60px]"}`}
-                    value={value}
+                    value={debouncedValue}
                     placeholder={placeholder}
                     name={name}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={(e) => handleChange(e)}
                 />
             ) : (
                 <input
-                    onBlur={handleGetValue}
+                    // onBlur={handleGetValue}
                     className={`cursor-pointer outline-none flex-1 ml-[20px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black ${width ? width : "w-full"} ${height ? height : "h-[30px]"}`}
-                    value={value}
+                    value={debouncedValue}
                     placeholder={placeholder}
                     type={type}
                     name={name}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={(e) => handleChange(e)}
                 />
             )}
         </div>

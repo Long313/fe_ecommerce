@@ -158,7 +158,11 @@ export default function Bag() {
                                     <div className="flex-1 ml-[20px]">
                                         <p className="uppercase font-[600]">{item.name}</p>
                                         <p className="capitalize my-[10px]">{item.category}</p>
-                                        <p className="flex items-center"><span>Color</span> <span className={`bg-[${item.color}] w-[20px] h-[20px] ml-[10px] inline-block`}></span></p>
+                                        <p className="flex items-center"><span>Color</span>
+                                            <span style={{ backgroundColor: item.color }}
+                                                className={`w-[20px] h-[20px] ml-[10px] inline-block`}>
+                                            </span>
+                                        </p>
                                         <p className="my-[10px]">Size: <span className="underline">{item.size}</span></p>
                                         <p className="font-[16px] text-[600]">${item.price}</p>
                                     </div>
@@ -203,7 +207,7 @@ export default function Bag() {
                         </p>
                         <p className="py-[10px] border-b border-[#E5E5E5]">Total</p>
                     </div>
-                    <Button title="Checkout" onSubmit={handleCheckout} width="w-full" />
+                    <Button title="CHECKOUT" onSubmit={handleCheckout} width="w-full" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
                 </div>
             </div>
         </div>

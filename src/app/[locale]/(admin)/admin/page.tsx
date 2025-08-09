@@ -3,7 +3,6 @@
 import { ProductDetailProps } from '@/common/type';
 import Button from '@/components/Button';
 import ImageWithFallback from '@/components/ImageWithFallback';
-import Loader from '@/components/Loader';
 import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
@@ -28,13 +27,6 @@ import './index.css';
 const InputComponent = dynamic(() => import("@/components/Input"), { ssr: false });
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
-// interface Item {
-//     id: string;
-//     name: string;
-//     description: string;
-//     category: string;
-//     price: number;
-// }
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
 
 interface TableParams {
@@ -148,13 +140,12 @@ type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
 const Admin: React.FC = () => {
     const [search, setSearch] = useState<string>("");
-    const [gender, setGender] = useState<string[]>([]);
-    const [category, setCategory] = useState<string[]>([]);
+    const [gender, setGender] = useState<string>();
+    const [category, setCategory] = useState<string>();
     const [type, setType] = useState<string>("");
     const [startPrice, setStartPrice] = useState<string>("");
     const [endPrice, setEndPrice] = useState<string>("");
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
-
     // const [count, setCount] = useState(2);
 
     const [tableParams, setTableParams] = useState<TableParams>({
@@ -185,7 +176,7 @@ const Admin: React.FC = () => {
             )
         );
     }, [search, type, startPrice, endPrice, gender, category, tableParams]);
-    const { data, isPending, refetch } = useProductSearch(filteredParams);
+    const { data, refetch } = useProductSearch(filteredParams);
     useEffect(() => {
         if (data && data?.data.length > 0) {
             const newData = data.data.map(item => (
@@ -205,7 +196,6 @@ const Admin: React.FC = () => {
             })
         } else if (data && data?.data.length === 0) {
             setProducts([]);
-
         }
     }, [data]);
 
@@ -297,7 +287,7 @@ const Admin: React.FC = () => {
                             <a className="font-[600]">Edit</a>
                         </Popconfirm>
                         <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(String(record.id))}>
-                            <a className="font-[600] !text-[red] hover:opacity-45">Delete</a>
+                            <a className="font-[600] !text-[red] opacity-100 hover:opacity-50">Delete</a>
                         </Popconfirm>
                     </div>
                 ) : null,
@@ -350,10 +340,10 @@ const Admin: React.FC = () => {
                 setSearch(value);
                 break;
             case "gender":
-                setGender(pre => [...pre, value]);
+                setGender(value);
                 break;
             case "category":
-                setCategory(pre => [...pre, value]);
+                setCategory(value);
                 break;
             case "type":
                 setType(value);
@@ -443,7 +433,7 @@ const Admin: React.FC = () => {
 
     return (
         <div className="mt-[10px] mx-[10px]">
-            {isPending && <Loader />}
+            {/* {isPending && <Loader />} */}
             <div className="border-b border-[#E5E5E5] pb-[10px] mb-[20px]">
                 <div className="flex items-center cursor-pointer" onClick={() => router.push(`/${locale}/`)}>
                     <Image src={logo} alt="logo" width={30} />
@@ -454,15 +444,14 @@ const Admin: React.FC = () => {
                 </h1>
                 <div className="flex flex-wrap justify-start gap-x-[5%] items-center">
                     <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
-                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender[0]} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
-                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category[0]} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
                     <InputComponent width="w-[30%]" minWidth='min-w-[105px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
                 </div>
-                <Button title="Add a product" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+                <Button title="ADD A PRODUCT" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             </div>
-
             <Table<DataType>
                 components={components}
                 rowClassName={() => 'editable-row'}
@@ -474,7 +463,7 @@ const Admin: React.FC = () => {
                 onChange={handleTableChange}
             />
             {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />}
-            <Toaster position="top-right" />
+            <Toaster position="bottom-right" />
         </div>
     );
 };

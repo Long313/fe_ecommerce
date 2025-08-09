@@ -118,7 +118,7 @@ export default function Register() {
       )}
       <div className="w-1/2 flex flex-col items-center">
         <div className="text-center">
-          <h2 className="font-[700] text-[34px] uppercase text-[#822FFF]">
+          <h2 className="font-[700] text-[34px] uppercase bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
             {t("registerTitle")}
           </h2>
           <p className="font-[400] text-[14px] text-[#636364]">{t("registerText")}</p>
@@ -139,7 +139,7 @@ export default function Register() {
           {policyError ? policyError : "\u00A0"}
         </p>
         <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} height="h-[36px]" onSubmit={handleRegister} />
-        <div className="font-[500] text-[12px] mt-[8px]">
+        <div className="font-[500] text-[12px] mt-[8px] hover:opacity-80">
           {t("doHaveAccountTitle")}
           <Link href={`/${locale}/login`} className="text-[#822FFF] ml-1">{t("signInNowTitle")}</Link>
         </div>
