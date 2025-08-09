@@ -130,7 +130,7 @@ export default function ProductPopup(props: ProductPopupProps) {
     return (
         <div className={`${open ? "block" : "hidden"} fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-[rgb(0,0,0,0.2)]`}>
             <div className="bg-white w-[700px] h-max rounded-[8px] py-[20px] px-[30px]">
-                <h1 className="font-[700] text-[20px] uppercase text-center">{typePopup === "edit" ? "Update Product" : "Create New Product"}</h1>
+                <h1 className="font-[700] text-[26px] uppercase text-center bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">{typePopup === "edit" ? "Update Product" : "Create New Product"}</h1>
                 <div className="mb-[20px]">
                     <div className="flex justify-between">
                         <div className="flex flex-col items-center w-[45%] mt-[30px]">

@@ -32,7 +32,6 @@ export default function Products() {
     const [pageIndex, setPageIndex] = useState(1);
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
-    // Lấy giá trị từ URL
     useEffect(() => {
         const genders = searchParamsRouter.getAll("gender");
         const categories = searchParamsRouter.getAll("category");
@@ -129,16 +128,21 @@ export default function Products() {
                                     name="gender"
                                     value={g}
                                     checked={gender.includes(g)}
-                                    onChange={() => handleGenderChange(g)} />
+                                    onChange={() => handleGenderChange(g)}
+                                    className="cursor-pointer appearance-none w-4 h-4 border border-[#822FFF] bg-[rgb(255,53,196,0.06)]
+                                    checked:bg-[#FF35C4] checked:border-[#822FFF] rounded-[2px]
+                                    relative checked:before:content-['✓'] checked:before:absolute checked:before:inset-0
+                                    checked:before:flex checked:before:items-center checked:before:justify-center
+                                    checked:before:text-white checked:before:text-sm"                                     />
                             </div>
                         ))}
                     </div>
                     <div className="w-full my-[10px] border-b border-[#AEAEAE] px-[10px] pb-[10px]">
                         <p className="font-[600] mb-[10px]">Price</p>
-                        <div className="flex items-center w-full">
+                        <div className="flex items-center w-full font-normal">
                             <PriceInput minWidth="min-w-[60px]" value={startPrice} title="From" name="start_price" onGetValue={(name, value) => handleGetValue(name, value)} />
                         </div>
-                        <div className="flex items-center w-full mt-[10px]">
+                        <div className="flex items-center w-full mt-[10px] font-normal">
                             <PriceInput minWidth="min-w-[60px]" value={endPrice} title="To" name="end_price" onGetValue={(name, value) => handleGetValue(name, value)} />
                         </div>
                     </div>
@@ -152,18 +156,22 @@ export default function Products() {
                                     name="category"
                                     value={c}
                                     checked={category.includes(c)}
-                                    onChange={() => handleCategoryChange(c)} />
-                            </div>
+                                    onChange={() => handleCategoryChange(c)}
+                                    className="cursor-pointer appearance-none w-4 h-4 border border-[#822FFF] bg-[rgb(255,53,196,0.06)]
+                                    checked:bg-[#FF35C4] checked:border-[#822FFF] rounded-[2px]
+                                    relative checked:before:content-['✓'] checked:before:absolute checked:before:inset-0
+                                    checked:before:flex checked:before:items-center checked:before:justify-center
+                                    checked:before:text-white checked:before:text-sm"/>                             </div>
                         ))}
                     </div>
                 </aside>
                 <div className="w-[80%] h-full flex flex-col items-end">
-                    <div className="min-w-[120px] border border-[#AEAEAE] rounded-[8px] mb-[20px]">
+                    <div className="min-w-[120px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[8px] mb-[20px]">
                         <Select
                             value={sortOrder}
                             onChange={handleSort}
                             size="small"
-                            className="w-full h-[36px] text-center"
+                            className="w-full h-[36px] text-center font-[600]"
                             variant="borderless"
                         >
                             <Option value="" className="w-full">Sort by price</Option>
@@ -171,18 +179,18 @@ export default function Products() {
                             <Option value="asc" className="w-full">Low to High</Option>
                         </Select>
                     </div>
-                    <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-[140px] max-w-7xl mx-auto mt-[120px]">
+                    <div className="w-full flex flex-wrap justify-start gap-x-[30px] gap-y-[140px] max-w-7xl mt-[120px] pl-[20px]">
                         {products.map(item => (
                             <div
                                 key={item.id}
-                                className="w-full sm:w-[48%] lg:w-[22%] xl:w-[22%] max-w-[250px]"
+                                className="w-full sm:w-[48%] lg:w-[24%] xl:w-[22%] max-w-[250px]"
                             >
                                 <Product
                                     id={item.id}
                                     image_url={item.image_url}
                                     name={item.name}
                                     price={item.price}
-                                    star={item.rate} />
+                                    star={item.star} />
                             </div>
                         ))}
                     </div>

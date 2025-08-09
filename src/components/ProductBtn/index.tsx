@@ -9,7 +9,7 @@ import useTranslation from "@/hooks/useTranslation";
 import { ProductBtnProps } from "@/common/type";
 
 function ProductBtn(props: ProductBtnProps) {
-    const { id, image_url, width, height, name, price, star, onRemove } = props;
+    const { id, image_url, width, height, name, price, star, onRemove, onAdd } = props;
     const { locale } = useTranslation();
     const [imgSrc, setImgSrc] = useState(image_url);
 
@@ -25,7 +25,6 @@ function ProductBtn(props: ProductBtnProps) {
         const exists = currentBag.find(item => item.id === id);
 
         if (exists) {
-            // Nếu đã tồn tại thì tăng số lượng
             const updatedBag = currentBag.map(item => {
                 if (item.id === id) {
                     return {
@@ -37,7 +36,6 @@ function ProductBtn(props: ProductBtnProps) {
             });
             localStorage.setItem("bag", JSON.stringify(updatedBag));
         } else {
-            // Nếu chưa có thì thêm mới
             const newItem = {
                 ...props,
                 quantity: 1
@@ -45,8 +43,7 @@ function ProductBtn(props: ProductBtnProps) {
             const updatedBag = [...currentBag, newItem];
             localStorage.setItem("bag", JSON.stringify(updatedBag));
         }
-
-        alert("Added to cart!");
+        onAdd();
     };
 
     const handleClear = (e: React.MouseEvent<SVGElement>, id: string | number | undefined) => {
@@ -61,16 +58,22 @@ function ProductBtn(props: ProductBtnProps) {
     };
     return (<div className={`hover:scale-101 transition-transform duration-300 cursor-pointer flex justify-center items-center flex-col ${width ? width : "max-w-[240px]"} ${height ? height : "max-h-[calc(240px+100px)]"}`}>
         <Link href={`/${locale}/products/${id}`}>
-            <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1">
+            <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1 min-w-[222px] min-h-[296px]">
                 {imgSrc ? <Image onError={handleError}
-                    src={imgSrc} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
+                    src={imgSrc.trim() || item} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
                 <CiTrash
                     size={26}
                     onClick={(e: React.MouseEvent<SVGElement>) => handleClear(e, id)}
                     className="z-20 p-[4px] hover:scale-105 cursor-pointer absolute top-[4px] right-[4px]"
                 />
             </div>
-            <Button type="cart" title="Add To Cart" onSubmit={() => handleAddCart(id)} width="w-full" margin="my-[20px]" />
+            <Button type="cart" title="ADD TO CART"
+                onSubmit={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddCart(id)
+                }}
+                width="w-full" margin="my-[20px]" />
             <div className="h-[200px] flex-col justify-center">
                 <p className="font-[500] text-center mt-[20px] m-b-[10px]">{name}</p>
                 <div className="flex items-center justify-center">
@@ -81,7 +84,6 @@ function ProductBtn(props: ProductBtnProps) {
                 </div>
             </div>
         </Link>
-
     </div>);
 }
 
