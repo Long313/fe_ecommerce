@@ -1,0 +1,106 @@
+'use client';
+import { addressListProps } from "@/common/type";
+import InputField from "@/components/InputFeild";
+import { useStore } from "@/store/store";
+import { useEffect, useState } from "react";
+
+export default function Checkout() {
+    const [email, setEmail] = useState<string>("");
+    const [phone, setPhone] = useState<string>("");
+    const [fullName, setFullName] = useState<string>("");
+    const [street, setStreet] = useState<string>("");
+    const [ward, setWard] = useState<string>("");
+    const [district, setDistrict] = useState<string>("");
+    const [city, setCity] = useState<string>("");
+    const userInfor = useStore((state) => state.userInfor);
+    const { email: emailUser, phone_number: phoneUser, fullname: fullnameUser, address: addressUser } = userInfor;
+    useEffect(() => {
+        const listAddress: addressListProps[] = JSON.parse(localStorage.getItem("addressBookStore") || "[]");
+        if (listAddress.length > 0) {
+            const result = listAddress.find((item: addressListProps) => item.default);
+            if (result) {
+                setStreet(result?.street);
+                setWard(result?.ward);
+                setDistrict(result?.district);
+                setCity(result?.city);
+            }
+        }
+    }, [])
+    const handleGetDataInput = (typeName: string, value: string) => {
+        switch (typeName) {
+            case "email":
+                setEmail(value);
+                break;
+            case "phone":
+                setPhone(value);
+                break;
+            case "fullName":
+                setFullName(value);
+                break;
+            case "street":
+                setStreet(value);
+                break;
+            case "ward":
+                setWard(value);
+                break;
+            case "district":
+                setDistrict(value);
+                break;
+            case "city":
+                setCity(value);
+                break;
+            default:
+                return;
+        }
+    }
+
+
+    return (
+        <div className="w-full h-full mt-[120px] mb-[200px] px-[var(--padding-screen)] flex">
+            <div className="">
+                <div className="border-b border-[#E5E5E5] pb-[40px]">
+                    <h2 className="font-[600] text-[20px] mb-[40px]">DELIVERY</h2>
+                    <div className="w-full flex justify-between">
+                        <div>
+                            <InputField star={false} valueDefault={email ? email : emailUser} title="Email" type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                        <div className="ml-[20px]">
+                            <InputField star={false} valueDefault={phone ? phone : phoneUser} title="Phone Number" type="string" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                    </div>
+                    <div className="w-full flex justify-between">
+                        <div>
+                            <InputField star={false} valueDefault={fullName ? fullName : fullnameUser} title="Full Name" type="string" name="name" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                        <div className="ml-[20px]">
+                            <InputField star={false} valueDefault={city ? city : ""} title="City" type="string" name="city" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                    </div>
+                    <div className="w-full flex justify-between">
+                        <div>
+                            <InputField star={false} valueDefault={district ? district : ""} title="District" type="string" name="district" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                        <div className="ml-[20px]">
+                            <InputField star={false} valueDefault={ward ? ward : ""} title="Ward" type="string" name="ward" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+
+                    </div>
+                    <div className="w-full flex justify-between">
+                        <div className="">
+                            <InputField star={false} valueDefault={street ? street : ""} title="Street" type="string" name="address" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                        </div>
+                    </div>
+                </div>
+                <div className="border-b border-[#E5E5E5] mt-[20px] pb-[40px]">
+                    <h2 className="font-[600] text-[20px] mb-[40px]">SHIPPING</h2>
+                    <p className="text-[636364]">10$ Shipping</p>
+                    <p className="my-[10px] text-[636364]">Shipment One</p>
+                    <p className="text-[636364]">Arrives Fri, Aug 1 - Sun, Aug 3</p>
+                </div>
+            </div>
+            <div className="w-[30%] ml-[40px]">
+                <h2 className="font-[600] text-[20px] mb-[40px]">ORDER SUMMARY</h2>
+
+            </div>
+        </div>)
+}

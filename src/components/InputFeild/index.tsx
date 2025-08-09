@@ -11,12 +11,13 @@ type InputFeildProps = {
     placeholder?: string,
     type?: string,
     name: string,
-    valueDefault?: string,
+    star?: boolean,
+    valueDefault?: string | null,
     onSave: (name: string, value: string) => void,
     getError?: Record<string, string>
 }
 function InputField(props: InputFeildProps) {
-    const { title, placeholder, name, onSave, getError, valueDefault } = props;
+    const { title, placeholder, name, onSave, getError, valueDefault, star = true } = props;
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");
@@ -68,7 +69,7 @@ function InputField(props: InputFeildProps) {
 
     return (<div className="flex flex-col">
         <label className="inline-block font-[500]" onClick={handleFocus}>
-            {title}<span className="text-[red]">&nbsp;*</span>
+            {title}{star ? <span className="text-[red]">&nbsp;*</span> : null}
         </label>
         <div className="relative">
             <input

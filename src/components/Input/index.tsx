@@ -1,7 +1,6 @@
 'use client'
 
 import { InputProps } from "@/common/type";
-import { useDebounce } from "@/hooks/useDebounce";
 import { ChangeEvent, useEffect, useState } from "react";
 
 export default function Input(props: InputProps) {
@@ -21,7 +20,6 @@ export default function Input(props: InputProps) {
     } = props;
 
     const [value, setValue] = useState<string>(defaultValue ?? "");
-    const debouncedValue = useDebounce(value, 500);
 
     // const handleGetValue = () => {
     //     onGetData(name, value);
@@ -43,7 +41,7 @@ export default function Input(props: InputProps) {
         setMounted(true);
     }, []);
 
-    if (!mounted) return null; // hoặc return một loader/placeholder
+    if (!mounted) return null; 
     return (
         <div className={`flex ${width ? width : "w-full"} h-full ${margin ? margin : "mt-[30px]"}`}>
             <p className={`text-black font-[600] ${minWidth ? minWidth : "min-w-[100px]"}`}>
@@ -51,7 +49,7 @@ export default function Input(props: InputProps) {
             </p>
             {check ? (
                 <select
-                    value={debouncedValue}
+                    value={value}
                     onChange={(e) => {
                         const selectedValue = e.target.value;
                         setValue(selectedValue);
@@ -72,7 +70,7 @@ export default function Input(props: InputProps) {
                 <textarea
                     // onBlur={handleGetValue}
                     className={`cursor-pointer outline-none flex-1 ml-[20px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black resize-none ${width ? width : "w-full"} ${height ? height : "h-[60px]"}`}
-                    value={debouncedValue}
+                    value={value}
                     placeholder={placeholder}
                     name={name}
                     onChange={(e) => handleChange(e)}
@@ -81,7 +79,7 @@ export default function Input(props: InputProps) {
                 <input
                     // onBlur={handleGetValue}
                     className={`cursor-pointer outline-none flex-1 ml-[20px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black ${width ? width : "w-full"} ${height ? height : "h-[30px]"}`}
-                    value={debouncedValue}
+                    value={value}
                     placeholder={placeholder}
                     type={type}
                     name={name}

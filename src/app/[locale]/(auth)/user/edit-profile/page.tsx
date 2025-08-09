@@ -2,10 +2,12 @@
 
 import Button from "@/components/Button";
 import Input from "@/components/Input";
+import { useGetUser, useUpdateUser } from "@/hooks/useUser";
 import { useStore } from "@/store/store";
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react";
 import { CiCamera } from "react-icons/ci";
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function EditProfile() {
     const userInfor = useStore(state => state.userInfor);
@@ -16,10 +18,11 @@ export default function EditProfile() {
     const [phone, setPhone] = useState<string>("");
     const [gender, setGender] = useState<string>("");
     const [previewAvatar, setPreviewAvatar] = useState<string | null>(null);
+    const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { avatar, fullname, phone_number, gender: genderUser, birthday: birthdayUser, address: addressUser } = userInfor;
+    const { id, avatar, fullname, phone_number, gender: genderUser, birthday: birthdayUser, address: addressUser } = userInfor;
 
     function getInitials(name: string): string {
         const words = name.trim().split(" ");
@@ -31,12 +34,15 @@ export default function EditProfile() {
     }
 
     useEffect(() => {
+        console.log("userInfor: ", userInfor);
         if (fullname) setName(fullname);
-        if (birthdayUser) setBirthday(birthdayUser);
-        // if (emailUser) setEmail(emailUser);
+        if (birthdayUser) {
+            setBirthday(formatDateToInput(birthdayUser));
+        }
         if (addressUser) setAddress(addressUser);
         if (phone_number) setPhone(phone_number);
         if (genderUser) setGender(genderUser);
+        if (avatar) setPreviewAvatar(avatar);
     }, [userInfor])
 
     const handleGetData = (name: string, value: string) => {
@@ -63,15 +69,54 @@ export default function EditProfile() {
                 return;
         }
     }
+    const { data: userData } = useGetUser(id);
+    const { mutate: updateUser } = useUpdateUser();
+    const { setUserInfor } = useStore();
+    function formatDateToInput(dateString: string) {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    useEffect(() => {
+        if (userData) {
+            setUserInfor(userData.data);
+            const { avatar_url } = userData.data;
+            setPreviewAvatar(avatar_url)
+        }
+    }, [userData, setUserInfor]);
 
     const handleSave = () => {
         console.log(name, birthday, address, phone, gender);
-        // TODO: Submit data (including previewAvatar) to backend if needed
+        const formData = new FormData();
+
+        if (name) formData.append("fullname", name);
+        if (birthday) formData.append("birthday", birthday);
+        if (address) formData.append("address", address);
+        if (phone) formData.append("phoneNumber", phone);
+        if (gender) formData.append("gender", gender);
+        if (avatarFile instanceof File) {
+            formData.append("avatar", avatarFile);
+        }
+        updateUser(formData, {
+            onSuccess: () => {
+                toast.success('Cập nhật thông tin thành công!');
+                // setPreviewAvatar(null);
+            },
+            onError: () => {
+                toast.error('Cập nhật thông tin thất bại!');
+            }
+        });
     }
 
     const handleDiscard = () => {
-        setPreviewAvatar(null);
-        // reset other states if needed
+        if (avatar) setPreviewAvatar(avatar);
+        if (fullname) setName(fullname);
+        if (birthdayUser) setBirthday(birthdayUser);
+        if (addressUser) setAddress(addressUser);
+        if (phone_number) setPhone(phone_number);
+        if (genderUser) setGender(genderUser);
     }
 
     const handleImageClick = () => {
@@ -82,10 +127,8 @@ export default function EditProfile() {
         const file = e.target.files?.[0];
         if (file) {
             const url = URL.createObjectURL(file);
+            setAvatarFile(file);
             setPreviewAvatar(url);
-
-            // TODO: Optionally store the file object to upload to backend
-            // setAvatarFile(file)
         }
     }
 
@@ -128,12 +171,12 @@ export default function EditProfile() {
                     </div>
 
                     <div className="mt-[20px] w-[80%] mx-auto">
-                        <Input defaultValue={name} title="Name" name="name" type="string" onGetData={handleGetData} />
-                        <Input defaultValue={birthday} title="Birthday" name="birthday" type="date" onGetData={handleGetData} />
+                        <Input star={false} defaultValue={name} title="Name" name="name" type="string" onGetData={handleGetData} />
+                        <Input star={false} defaultValue={birthday} title="Birthday" name="birthday" type="date" onGetData={handleGetData} />
                         {/* <Input defaultValue={email} title="Email" name="email" type="string" onGetData={handleGetData} /> */}
-                        <Input defaultValue={address} title="Address" name="address" type="string" onGetData={handleGetData} />
-                        <Input defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
-                        <Input defaultValue={gender} dataSelect={[
+                        <Input star={false} defaultValue={address} title="Address" name="address" type="string" onGetData={handleGetData} />
+                        <Input star={false} defaultValue={phone} title="Phone" name="phone" type="string" onGetData={handleGetData} />
+                        <Input star={false} defaultValue={gender} dataSelect={[
                             { label: "Male", value: "men" },
                             { label: "Female", value: "women" },
                             { label: "Unisex", value: "unisex" },
@@ -148,6 +191,7 @@ export default function EditProfile() {
                     </div>
                 </div>
             </div>
+            <Toaster position="bottom-right" />
         </div>
     )
 }

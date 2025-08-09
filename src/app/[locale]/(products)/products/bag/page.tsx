@@ -41,7 +41,6 @@ export default function Bag() {
 
     }, []);
 
-    // Lưu quantities vào localStorage mỗi khi quantities thay đổi
     useEffect(() => {
         localStorage.setItem('quantities', JSON.stringify(quantities));
     }, [quantities]);
@@ -59,28 +58,12 @@ export default function Bag() {
         setQuantities(prev => {
             const updated = { ...prev };
             delete updated[key];
-            localStorage.setItem("quantities", JSON.stringify(updated)); // cập nhật localStorage sau khi xóa
+            localStorage.setItem("quantities", JSON.stringify(updated));
             return updated;
         });
 
         localStorage.setItem("bag", JSON.stringify(newList));
     };
-
-    // const handleSub = (id: string | number) => {
-    //     const key = String(id);
-    //     setQuantities(prev => ({
-    //         ...prev,
-    //         [key]: Math.max(1, (prev[key] || 1) - 1)
-    //     }));
-    // };
-
-    // const handleAdd = (id: string | number) => {
-    //     const key = String(id);
-    //     setQuantities(prev => ({
-    //         ...prev,
-    //         [key]: (prev[key] || 1) + 1
-    //     }));
-    // };
 
     const handleSub = (id: string | number) => {
         setListItem(prevList => {
