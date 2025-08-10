@@ -1,8 +1,9 @@
 'use client'
 
 import Button from "@/components/Button";
-import Input from "@/components/Input"
+import Input from "@/components/Input";
 import { useChangePassword } from "@/hooks/usePassword";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
 
@@ -53,14 +54,18 @@ export default function ChangePassword() {
                     onSuccess: () => {
                         toast.success('Thay đổi mật khẩu thành công!');
                     },
-                    onError: (error: any) => {
-                        if (error?.response?.status === 400) {
-                            toast.error('Thay đổi mật khẩu thất bại!');
-                            setError('Mật khẩu cũ nhập sai!')
+                    onError: (error) => {
+                        if (axios.isAxiosError(error)) {
+                            if (error.response?.status === 400) {
+                                toast.error('Thay đổi mật khẩu thất bại!');
+                                setError('Mật khẩu cũ nhập sai!');
+                            } else {
+                                toast.error('Thay đổi mật khẩu thất bại!');
+                            }
                         } else {
-                            toast.error('Thay đổi mật khẩu thất bại!');
+                            toast.error('Đã xảy ra lỗi không xác định!');
                         }
-                    },
+                    }
                 }
             );
         }

@@ -16,7 +16,7 @@ export default function Checkout() {
     const [city, setCity] = useState<string>("");
     const userInfor = useStore((state) => state.userInfor);
     const promoCodeUser = useStore((state) => state.promoCodeName);
-    const { email: emailUser, phone_number: phoneUser, fullname: fullnameUser, address: addressUser } = userInfor;
+    const { email: emailUser, phone_number: phoneUser, fullname: fullnameUser} = userInfor;
     useEffect(() => {
         const listAddress: addressListProps[] = JSON.parse(localStorage.getItem("addressBookStore") || "[]");
         if (listAddress.length > 0) {
@@ -66,10 +66,6 @@ export default function Checkout() {
     const [open, setOpen] = useState<boolean>(false);
     const handleClosePopup = () => {
         setOpen(false);
-    }
-
-    const handleGetData = (data: string) => {
-
     }
 
     const handleGetPromoCode = () => {
