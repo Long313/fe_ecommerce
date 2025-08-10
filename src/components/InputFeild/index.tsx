@@ -2,14 +2,14 @@
 
 import { emailRegex, passwordRegex, phoneRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
-import { Eye, EyeOff } from "lucide-react"; // Hoặc dùng bất kỳ icon lib nào
+import { Eye, EyeOff } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-
 
 type InputFeildProps = {
     title: string,
     placeholder?: string,
     type?: string,
+    isError?: boolean,
     name: string,
     star?: boolean,
     valueDefault?: string | null,
@@ -17,12 +17,12 @@ type InputFeildProps = {
     getError?: Record<string, string>
 }
 function InputField(props: InputFeildProps) {
-    const { title, placeholder, name, onSave, getError, valueDefault, star = true } = props;
+    const { title, placeholder, type, name, onSave, getError, valueDefault, star = true, isError = true } = props;
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");
     const [showPassword, setShowPassword] = useState<boolean>(false)
-    const [mounted, setMounted] = useState(false); // 👈 kiểm soát render
+    const [mounted, setMounted] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -63,7 +63,7 @@ function InputField(props: InputFeildProps) {
     }, [getError]);
 
 
-    const isPasswordField = name === "password" || name === "confirmPassword"
+    const isPasswordField = type === "password";
     const inputType = isPasswordField && !showPassword ? "password" : "text"
     if (!mounted) return null; // tránh hydration mismatch
 
@@ -92,9 +92,9 @@ function InputField(props: InputFeildProps) {
                 </button>
             )}
         </div>
-        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+        {isError && <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
             {error || "\u00A0"}
-        </p>
+        </p>}
     </div>);
 }
 

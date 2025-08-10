@@ -5,7 +5,9 @@ import ProductNoPrice from "@/components/ProductNoPrice";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import home_img from '../../images/home_img.svg';
-import item from "../../images/item.svg";
+import clothes from "@/images/clothes.svg";
+import shoes from "@/images/shoes.svg";
+import accessories from "@/images/accessories.svg";
 import { useStore } from "@/store/store";
 import dynamic from "next/dynamic";
 import { useProductSearch } from "@/hooks/useProductSearch";
@@ -165,13 +167,13 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap justify-between mb-[100px] w-full">
           <div className="w-[30%]" onClick={() => handeRouter("clothes")}>
-            <ProductNoPrice name="Clothes" description="Finish your athletic look with essential sportswear – from sweat-wicking shirts to stretch-fit pants and training sets." image={item} />
+            <ProductNoPrice name="Clothes" description="Finish your athletic look with essential sportswear – from sweat-wicking shirts to stretch-fit pants and training sets." image={clothes} />
           </div>
           <div className="w-[30%]" onClick={() => handeRouter("shoes")}>
-            <ProductNoPrice name="Shoes" description="Discover sporty footwear that blends comfort, function, and style – perfect for workouts or street-ready looks." image={item} />
+            <ProductNoPrice name="Shoes" description="Discover sporty footwear that blends comfort, function, and style – perfect for workouts or street-ready looks." image={shoes} />
           </div>
           <div className="w-[30%]" onClick={() => handeRouter("accessories")}>
-            <ProductNoPrice name="Accessories" description="Complete your sporty look with essential accessories like caps, gym bags, socks, and water bottles." image={item} />
+            <ProductNoPrice name="Accessories" description="Complete your sporty look with essential accessories like caps, gym bags, socks, and water bottles." image={accessories} />
           </div>
         </div>
       </section>

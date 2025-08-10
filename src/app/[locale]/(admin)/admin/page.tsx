@@ -462,7 +462,7 @@ const Admin: React.FC = () => {
                 pagination={tableParams.pagination}
                 onChange={handleTableChange}
             />
-            {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />}
+            <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />
             <Toaster position="bottom-right" />
         </div>
     );

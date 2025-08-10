@@ -15,6 +15,10 @@ export type PasswordType = {
     password: string;
 }
 
+export type CurrentPasswordType = {
+    currentPassword: string;
+}
+
 export type NewPasswordType = {
     newPassword: string;
 }
@@ -46,6 +50,8 @@ export enum ISACTIVE {
 export type LoginType = EmailType & PasswordType;
 
 export type ResetPasswordType = EmailType & NewPasswordType;
+
+export type ChangePasswordType = CurrentPasswordType & NewPasswordType;
 
 export type RegisterType = EmailType & PasswordType & PhoneType;
 

@@ -1,6 +1,8 @@
 'use client';
 import { addressListProps } from "@/common/type";
+import Button from "@/components/Button";
 import InputField from "@/components/InputFeild";
+import PromoCodePopup from "@/components/PromoCodePopup";
 import { useStore } from "@/store/store";
 import { useEffect, useState } from "react";
 
@@ -13,6 +15,7 @@ export default function Checkout() {
     const [district, setDistrict] = useState<string>("");
     const [city, setCity] = useState<string>("");
     const userInfor = useStore((state) => state.userInfor);
+    const promoCodeUser = useStore((state) => state.promoCodeName);
     const { email: emailUser, phone_number: phoneUser, fullname: fullnameUser, address: addressUser } = userInfor;
     useEffect(() => {
         const listAddress: addressListProps[] = JSON.parse(localStorage.getItem("addressBookStore") || "[]");
@@ -54,6 +57,24 @@ export default function Checkout() {
         }
     }
 
+    useEffect(() => {
+        if (promoCodeUser) setPromoCode(promoCodeUser);
+    }, [promoCodeUser])
+
+
+    const [promoCode, setPromoCode] = useState<string>("");
+    const [open, setOpen] = useState<boolean>(false);
+    const handleClosePopup = () => {
+        setOpen(false);
+    }
+
+    const handleGetData = (data: string) => {
+
+    }
+
+    const handleGetPromoCode = () => {
+        setOpen(true);
+    };
 
     return (
         <div className="w-full h-full mt-[120px] mb-[200px] px-[var(--padding-screen)] flex">
@@ -97,10 +118,22 @@ export default function Checkout() {
                     <p className="my-[10px] text-[636364]">Shipment One</p>
                     <p className="text-[636364]">Arrives Fri, Aug 1 - Sun, Aug 3</p>
                 </div>
+                <div className="border-b border-[#E5E5E5] mt-[20px] pb-[40px]">
+                    <h2 className="font-[600] text-[20px] mb-[40px]">PAYMENT</h2>
+                    <div>
+                        <p className="text-[#636364] mb-[20px]">Have a promo code?</p>
+                        <div className="w-[60%] flex items-center h-[36px] gap-x-[20px]">
+                            <InputField isError={false} star={false} title="" valueDefault={promoCode ? promoCode : ""} onSave={(typeName, value) => handleGetDataInput(typeName, value)} name="promo_code" type="string" placeholder="Promo" />
+                            <Button title="ADD" onSubmit={handleGetPromoCode} width="w-[120px]" height="h-full" margin="mt-[8px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+                        </div>
+                    </div>
+
+                </div>
             </div>
             <div className="w-[30%] ml-[40px]">
                 <h2 className="font-[600] text-[20px] mb-[40px]">ORDER SUMMARY</h2>
 
             </div>
+            <PromoCodePopup open={open} onClose={handleClosePopup} />
         </div>)
 }
