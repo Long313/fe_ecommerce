@@ -81,10 +81,10 @@ export default function Input(props: InputProps) {
                     onChange={(e) => handleChange(e)}
                 />
             ) : (
-                <div className="relative flex-1">
+                <div className={`relative flex-1 ml-[20px] ${width ? width : "w-full"} ${height ? height : "h-[30px]"}`}>
                     <input
                         // onBlur={handleGetValue}
-                        className={`cursor-pointer w-full outline-none ml-[20px] border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black ${width ? width : "w-full"} ${height ? height : "h-[30px]"}`}
+                        className={`cursor-pointer w-full h-full outline-none border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black `}
                         value={value}
                         placeholder={placeholder}
                         type={inputType}

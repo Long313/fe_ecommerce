@@ -1,3 +1,5 @@
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+
 export type ServerError = {
     status: number;
     message: string;
@@ -108,7 +110,7 @@ export interface ProductDetailProps {
     category?: string,
     description?: string,
     price?: number | string,
-    image_url?: string,
+    image_url?: string | StaticImport,
     image?: File | string | null;
     gender?: string;
     type?: string;

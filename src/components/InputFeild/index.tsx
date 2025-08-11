@@ -26,9 +26,12 @@ function InputField(props: InputFeildProps) {
     const { t } = useTranslation();
 
     useEffect(() => {
-        setValue(valueDefault || "");
+        const val = valueDefault || "";
+        setValue(val);
+        onSave(name, val);
         setMounted(true);
     }, [valueDefault]);
+
     const handleFocus = () => {
         inputRef.current?.focus();
     };
@@ -36,6 +39,7 @@ function InputField(props: InputFeildProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setError("")
         setValue(e.target.value);
+        onSave(name, e.target.value);
     }
 
     const handleValidate = () => {

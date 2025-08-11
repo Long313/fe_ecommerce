@@ -17,18 +17,13 @@ export default function DiscountCard(props: DiscountCardProps) {
     }
     return (
         <div className="flex h-max w-[400px] rounded-[20px] overflow-hidden shadow-[5px_7px_7px_0px_#00000040]">
-            {/* Left label */}
             <div
                 className="relative text-[20px] leading-[20px] tracking-wider flex items-center justify-center bg-[#822FFF] text-white px-4 w-[20%] rounded-r-[20px] rotate-180"
                 style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
             >
                 DISCOUNT
-
-                {/* Nửa hình tròn khuyết để giả hiệu ứng cắt */}
                 <div className="absolute -right-[20px] top-1/2 transform -translate-y-1/2 w-[40px] h-[40px] rounded-full bg-white"></div>
             </div>
-
-            {/* Nội dung bên phải */}
             <div className="flex flex-col justify-between bg-white rounded-r-[20px] p-[16px] flex-1">
                 <div>
                     <div className="flex justify-between">
