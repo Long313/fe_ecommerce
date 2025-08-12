@@ -89,7 +89,7 @@ export interface ProvincesProps {
 
 export interface ProductProps {
     id?: string | number,
-    image_url?: string,
+    image_url?: string | StaticImport | undefined,
     width?: number,
     height?: number,
     name?: string,
@@ -121,7 +121,7 @@ export interface ProductDetailProps {
 }
 
 export interface UserInfor {
-    id: string;
+    id?: string;
     fullname: string | null;
     email: string | null;
     phone_number?: string;

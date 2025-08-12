@@ -25,7 +25,7 @@ export default function EditProfile() {
     const [avatarFile, setAvatarFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { data: userData } = useGetUser(id);
+    const { data: userData } = useGetUser(id ?? "");
     const { mutate: updateUser } = useUpdateUser();
 
     useEffect(() => {

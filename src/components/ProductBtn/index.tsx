@@ -60,7 +60,7 @@ function ProductBtn(props: ProductBtnProps) {
         <Link href={`/${locale}/products/${id}`}>
             <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1 min-w-[222px] min-h-[296px]">
                 {imgSrc ? <Image onError={handleError}
-                    src={imgSrc.trim() || item} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
+                    src={imgSrc || item} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
                 <CiTrash
                     size={26}
                     onClick={(e: React.MouseEvent<SVGElement>) => handleClear(e, id)}
