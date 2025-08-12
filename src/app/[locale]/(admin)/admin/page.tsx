@@ -432,6 +432,15 @@ const Admin: React.FC = () => {
         }
     }
 
+    const handleClear = () => {
+        setSearch("");
+        setGender("");
+        setCategory("");
+        setType("");
+        setStartPrice("");
+        setEndPrice("");
+    }
+
     return (
         <div className="mt-[10px] mx-[10px]">
             {/* {isPending && <Loader />} */}
@@ -451,7 +460,16 @@ const Admin: React.FC = () => {
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
                 </div>
-                <Button title="ADD A PRODUCT" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+
+                <div className='flex items-center'>
+                    <Button title="ADD A PRODUCT" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+                    <button
+                        onClick={handleClear}
+                        className="w-[140px] h-[40px] cursor-pointer ml-[20px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent bg-white border border-[#C4C4C4] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)] flex justify-center items-center rounded-[12px] hover:scale-101"
+                    >
+                        CLEAR
+                    </button>
+                </div>
             </div>
             <Table<DataType>
                 components={components}

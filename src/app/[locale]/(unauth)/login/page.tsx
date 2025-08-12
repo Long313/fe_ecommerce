@@ -26,6 +26,8 @@ export default function Login() {
   const emailAuthen = useStore((state) => state.emailAuthen);
   const passwordAuthen = useStore((state) => state.passwordAuthen);
   const router = useRouter();
+  const { setAccessToken } = useAccessToken();
+
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberEmail');
     const savedPassword = localStorage.getItem('rememberPassword');
@@ -36,14 +38,28 @@ export default function Login() {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (session) {
+  //     setUserInfor({
+  //       email: session?.user?.email || "",
+  //       fullname: session?.user?.name || "",
+  //     });
+  //   }
+  // }, [])
   useEffect(() => {
     if (session) {
       setUserInfor({
-        email: session?.user?.email || "",
-        fullname: session?.user?.name || "",
+        email: session.user?.email || "",
+        fullname: session.user?.name || "",
       });
+
+      const token = (session as any).accessToken;
+      if (token) {
+        setAccessToken(token);
+      }
     }
-  }, [])
+  }, [session, setUserInfor, setAccessToken]);
+
   const handleLogin = () => {
 
     const checkConditionSubmit = !email || !password;
@@ -51,7 +67,6 @@ export default function Login() {
     mutate({ email, password });
   };
 
-  const { setAccessToken } = useAccessToken();
   const {
     mutate,
     isPending

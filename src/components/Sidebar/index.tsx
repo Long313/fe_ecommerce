@@ -21,7 +21,7 @@ export default function Sidebar() {
     return (
         <div className="flex flex-col w-40%">
             <div>
-                <p className="text-[#822FFF] text-[30px] font-[600]">Hello&nbsp;{userInfor.fullname ?? userInfor.email}!</p>
+                <p className="text-[#822FFF] text-[30px] font-[600] overflow-hidden text-ellipsis whitespace-nowrap max-w-[300px]">Hello&nbsp;{userInfor.fullname ?? userInfor.email}!</p>
                 <p className="text-[#FF35C4] text-[30px] font-[600]">Welcome back</p>
             </div>
             <div className="mt-[20px] flex flex-col pb-[10px] border-b border-[#E5E5E5]">

@@ -6,6 +6,7 @@ import PromoCodePopup from "@/components/PromoCodePopup";
 import google from '@/images/icon_google.png';
 import mdi_voucher from '@/images/mdi_voucher.svg';
 import paypal from '@/images/paypal_logo.svg';
+import item_img from '@/images/item.svg';
 import { useStore } from "@/store/store";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
@@ -324,9 +325,9 @@ export default function Checkout() {
                 <div className="flex flex-col">
                     {listProduct.length > 0 && (
                         listProduct.map(item =>
-                            <div key={item.id} className="w-full flex mt-[20px] items-start justify-start">
-                                <div className="bg-[#D9D9D9] max-w-[160px] h-[200px] relative">
-                                    <Image src={item.image_url ?? ""} fill className="object-contain" alt="product" />
+                            <div key={`${item.id}-${item.name}`} className="w-full flex mt-[20px] items-start justify-start">
+                                <div className="bg-[#D9D9D9] w-[160px] max-w-[160px] h-[200px] relative">
+                                    <Image src={item.image_url || item_img} fill className="object-contain" alt="product" />
                                 </div>
                                 <div className="ml-[20px]">
                                     <p className="uppercase font-[600]">{item.name}</p>
@@ -336,7 +337,7 @@ export default function Checkout() {
                                             className={`w-[20px] h-[20px] ml-[10px] inline-block`}>
                                         </span>
                                     </p>
-                                    <p className=" my-[10px]">Size: <span className="underline">{item.size}</span></p>
+                                    <p className="my-[10px]">Size: <span className="underline">{item.size}</span></p>
                                     <p className="font-[16px]">Quantity: <span>{item.quantity}</span></p>
                                     <p className="text-[16px] font-[600] mt-[10px]">${item.price}</p>
                                 </div>
