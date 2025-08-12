@@ -1,5 +1,6 @@
 'use client'
 
+import dayjs from 'dayjs';
 import Button from "@/components/Button";
 import { useStore } from "@/store/store";
 import NextImage from "next/image";
@@ -88,29 +89,29 @@ export default function UserInfor() {
                             )}
                         </div>
                         <div className="flex flex-col ml-[40px]">
-                            <div>
+                            <div className='min-w-[160px] min-h-[80px]'>
                                 <p className="font-[600]">Name</p>
-                                <p>{fullname}</p>
+                                <p >{fullname}</p>
                             </div>
-                            <div className="mt-[30px]">
+                            <div className="mt-[30px] min-w-[160px] min-h-[80px]">
                                 <p className="font-[600]">Birthday</p>
-                                <p>{birthday ? birthday : "01/01/2001"}</p>
+                                <p>{birthday ? dayjs(birthday).format('MM/DD/YYYY') : "01/01/2001"}</p>
                             </div>
-                            <div className="mt-[30px]">
+                            <div className="mt-[30px] min-w-[160px] min-h-[80px]">
                                 <p className="font-[600]">Mobile phone</p>
                                 <p>{phone_number}</p>
                             </div>
                         </div>
                         <div className="flex flex-col ml-[40px]">
-                            <div>
+                            <div className="min-h-[80px]">
                                 <p className="font-[600]">Email address</p>
                                 <p>{email}</p>
                             </div>
-                            <div className="mt-[30px]">
+                            <div className="mt-[30px] min-h-[80px]">
                                 <p className="font-[600]">Address</p>
-                                <p className="max-w-[420px]">{address ? address : "Sky Building , 12 Tran Hung Dao Street, District 1, HCM City"}</p>
+                                <p className="max-w-[420px]">{address ?? ""}</p>
                             </div>
-                            <div className="mt-[30px]">
+                            <div className="mt-[30px] min-h-[80px]">
                                 <p className="font-[600]">Gender</p>
                                 <p className="capitalize">{gender}</p>
                             </div>
@@ -122,7 +123,7 @@ export default function UserInfor() {
                             <QRCode id="qr-code" value={email ? `amax-${email}` : "no-membership"} className="w-full h-full" />
                         </div>
                         <p className="my-[20px]">Please show your membership QR-code at the cashier when you purchase items.</p>
-                        <Button title="DOWNLOAD QR-CODE" onSubmit={handleDownloadQr} width="w-[200px]" height="h-[36px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+                        <Button title="DOWNLOAD QR-CODE" onSubmit={handleDownloadQr} width="w-[200px]" height="h-[40px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
                     </div>
                 </div>
             </div>

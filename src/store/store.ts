@@ -29,6 +29,8 @@ interface StoreState {
   typeOtpAuthen: string;
   passwordAuthen: string;
   search: boolean;
+  promoCodeName: string;
+  promoCodeValue: string;
   paramsSearch: {
     search?: string;
     gender?: string;
@@ -44,6 +46,8 @@ interface StoreState {
   setUserInfor: (state: UserInfor) => void;
   setMode: (state: boolean) => void;
   setSearch: (state: boolean) => void;
+  setPromoCodeValue: (state: string) => void;
+  setPromoCodeName: (state: string) => void;
   setEmailAuthen: (state: string) => void;
   setTypeOtpAuthen: (state: string) => void;
   setPasswordAuthen: (state: string) => void;
@@ -56,6 +60,8 @@ export const useStore = create<StoreState>()(
     (set) => ({
       mode: false,
       search: false,
+      promoCodeValue: "",
+      promoCodeName: "",
       emailAuthen: '',
       typeOtpAuthen: '',
       passwordAuthen: '',
@@ -98,6 +104,8 @@ export const useStore = create<StoreState>()(
         })),
       setMode: (state) => set({ mode: state }),
       setSearch: (state) => set({ search: state }),
+      setPromoCodeValue: (state) => set({ promoCodeValue: state }),
+      setPromoCodeName: (state) => set({ promoCodeName: state }),
       setEmailAuthen: (state) => set({ emailAuthen: state }),
       setTypeOtpAuthen: (state) => set({ typeOtpAuthen: state }),
       setPasswordAuthen: (state) => set({ passwordAuthen: state }),

@@ -2,32 +2,36 @@
 
 import { emailRegex, passwordRegex, phoneRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
-import { Eye, EyeOff } from "lucide-react"; // Hoặc dùng bất kỳ icon lib nào
+import { Eye, EyeOff } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-
 
 type InputFeildProps = {
     title: string,
     placeholder?: string,
     type?: string,
+    isError?: boolean,
     name: string,
-    valueDefault?: string,
+    star?: boolean,
+    valueDefault?: string | null,
     onSave: (name: string, value: string) => void,
     getError?: Record<string, string>
 }
 function InputField(props: InputFeildProps) {
-    const { title, placeholder, name, onSave, getError, valueDefault } = props;
+    const { title, placeholder, type, name, onSave, getError, valueDefault, star = true, isError = true } = props;
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [error, setError] = useState<string | boolean>("");
     const [showPassword, setShowPassword] = useState<boolean>(false)
-    const [mounted, setMounted] = useState(false); // 👈 kiểm soát render
+    const [mounted, setMounted] = useState(false);
     const { t } = useTranslation();
 
     useEffect(() => {
-        setValue(valueDefault || "");
+        const val = valueDefault || "";
+        setValue(val);
+        onSave(name, val);
         setMounted(true);
     }, [valueDefault]);
+
     const handleFocus = () => {
         inputRef.current?.focus();
     };
@@ -35,6 +39,7 @@ function InputField(props: InputFeildProps) {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setError("")
         setValue(e.target.value);
+        onSave(name, e.target.value);
     }
 
     const handleValidate = () => {
@@ -62,13 +67,13 @@ function InputField(props: InputFeildProps) {
     }, [getError]);
 
 
-    const isPasswordField = name === "password" || name === "confirmPassword"
+    const isPasswordField = type === "password";
     const inputType = isPasswordField && !showPassword ? "password" : "text"
     if (!mounted) return null; // tránh hydration mismatch
 
     return (<div className="flex flex-col">
         <label className="inline-block font-[500]" onClick={handleFocus}>
-            {title}<span className="text-[red]">&nbsp;*</span>
+            {title}{star ? <span className="text-[red]">&nbsp;*</span> : null}
         </label>
         <div className="relative">
             <input
@@ -91,9 +96,9 @@ function InputField(props: InputFeildProps) {
                 </button>
             )}
         </div>
-        <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+        {isError && <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
             {error || "\u00A0"}
-        </p>
+        </p>}
     </div>);
 }
 

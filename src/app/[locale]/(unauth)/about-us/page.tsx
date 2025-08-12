@@ -1,3 +1,5 @@
+'use client';
+
 import about_1 from '@/images/about_1.svg';
 import about_2 from '@/images/about_2.svg';
 import about_3 from '@/images/about_3.svg';
@@ -18,7 +20,11 @@ import line_3 from '../../../../images/line_3.svg';
 import line_4 from '../../../../images/line_4.svg';
 import line_5 from '../../../../images/line_5.svg';
 import line_6 from '../../../../images/line_6.svg';
+import { useRouter } from 'next/navigation';
+import useTranslation from '@/hooks/useTranslation';
 function AboutUs() {
+    const router = useRouter();
+    const { locale } = useTranslation();
     return (
         <div className="flex flex-col w-full h-screen overflow-auto">
             <div className="w-full mt-[60px]">
@@ -26,10 +32,10 @@ function AboutUs() {
                     <Image src={line_top} alt="line-top" fill className="object-contain" />
                 </div>
                 <div className='w-[30%] mx-auto my-[40px]'>
-                    <div className='w-full h-[60px] relative'>
+                    <div className='w-full h-[60px] relative cursor-pointer' onClick={() => router.push(`/${locale}/`)}>
                         <Image src={logo} alt="logo" fill className="object-contain" />
                     </div>
-                    <p className='mb-[20px] text-[#373737] text-center text-[24px] mt-[2px]'>AMAX</p>
+                    <p className='mb-[20px] text-[#373737] text-center text-[24px] mt-[2px] cursor-pointer' onClick={() => router.push(`/${locale}/`)}>AMAX</p>
                     <div className='w-full h-[60px] ml-auto relative' >
                         <Image src={about_us} alt="about-us" fill className="object-contain" />
                     </div>

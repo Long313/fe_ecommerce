@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import place_holder_img from '../../images/place_holder_product.png';
 import Button from "../Button";
+import { IoCloseOutline } from 'react-icons/io5';
 
 type ProductPopupProps = {
     open: boolean,
@@ -129,8 +130,11 @@ export default function ProductPopup(props: ProductPopupProps) {
 
     return (
         <div className={`${open ? "block" : "hidden"} fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-[rgb(0,0,0,0.2)]`}>
-            <div className="bg-white w-[700px] h-max rounded-[8px] py-[20px] px-[30px]">
-                <h1 className="font-[700] text-[26px] uppercase text-center bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">{typePopup === "edit" ? "Update Product" : "Create New Product"}</h1>
+            <div className="relative bg-white w-[700px] h-max rounded-[8px] py-[20px] px-[30px]">
+                <div onClick={() => onClose()} className='cursor-pointer absolute top-[10px] right-[10px] hover:scale-105' >
+                    <IoCloseOutline size={30} />
+                </div>
+                <h1 className="mt-[20px] font-[700] text-[26px] uppercase text-center bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">{typePopup === "edit" ? "Update Product" : "Create New Product"}</h1>
                 <div className="mb-[20px]">
                     <div className="flex justify-between">
                         <div className="flex flex-col items-center w-[45%] mt-[30px]">
@@ -152,13 +156,13 @@ export default function ProductPopup(props: ProductPopupProps) {
                                 className="hidden"
                             />
                         </div>
-                        <div className="flex-1 flex flex-col">
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={name} title="Name" name="name" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={price} title="Price" name="price" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent width="w-full" minWidth='min-w-[90px]' star={false} defaultValue={description} title="Description" name="description" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                        <div className="flex-1 flex flex-col ml-[20px]">
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={name} title="Name" name="name" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={price} title="Price" name="price" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={description} title="Description" name="description" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                         </div>
                     </div>
                     <div>

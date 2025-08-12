@@ -22,6 +22,7 @@ import { useRouter } from 'next/navigation';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import './index.css';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 
 const InputComponent = dynamic(() => import("@/components/Input"), { ssr: false });
@@ -127,7 +128,7 @@ interface DataType {
     category?: string,
     description?: string,
     price?: number | string,
-    image_url?: string,
+    image_url?: string | StaticImport,
     gender?: string;
     type?: string;
     size?: string;
@@ -446,7 +447,7 @@ const Admin: React.FC = () => {
                     <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={search} title="Name product" name="search" type="string" onGetData={handleGetData} />
                     <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={handleGetData} />
                     <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={handleGetData} />
-                    <InputComponent width="w-[30%]" minWidth='min-w-[105px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
+                    <InputComponent width="w-[30%]" minWidth='min-w-[100px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={handleGetData} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={startPrice} width="w-[30%]" title="Price From" name="start_price" onGetValue={(name, value) => handleGetData(name, value)} />
                     <PriceInput maxWidth="max-w-none" minWidth='min-w-[115px]' margin="mt-[30px]" value={endPrice} width="w-[30%]" title="Price To" name="end_price" onGetValue={(name, value) => handleGetData(name, value)} />
                 </div>
@@ -462,7 +463,7 @@ const Admin: React.FC = () => {
                 pagination={tableParams.pagination}
                 onChange={handleTableChange}
             />
-            {open && <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />}
+            <ProductPopup id={idSelect} open={open} typePopup={typePopup} onClose={handleClosePopup} onGetData={handleGetFormData} />
             <Toaster position="bottom-right" />
         </div>
     );

@@ -101,7 +101,7 @@ export default function ProductDetail() {
             {data && (
                 <div className="w-full h-full mt-[120px] mb-[200px] px-[var(--padding-screen)] flex justify-around">
                     <div className="relative w-[30%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] h-[480px] rounded-[4px]">
-                        <Image onError={handleError} src={data.image_url?.trim() || item} alt="product" fill className='object-contain' />
+                        <Image onError={handleError} src={data.image_url || item} alt="product" fill className='object-contain' />
                     </div>
 
                     <div className="relative w-[40%] shadow-[0_4px_12px_rgba(0,0,0,0.15)] p-[20px] flex flex-col items-center rounded-[4px]">
