@@ -61,10 +61,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 /* Màu phần scrollable (thanh kéo) */
-.custom-scroll::-webkit-scrollbar-thumb {
+/* .custom-scroll::-webkit-scrollbar-thumb {
   background-color: rgb(255, 0, 204, 0.5);
   border-radius: 4px;
-}
+} */
 
 .custom-scroll::-webkit-scrollbar-thumb {
   background-color: rgb(255, 0, 204, 0.5);
@@ -77,4 +77,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 .ant-table-thead>tr>th {
   text-align: center !important;
+}
+
+.custom-color.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: rgb(130, 47, 255, 0.5);
 }

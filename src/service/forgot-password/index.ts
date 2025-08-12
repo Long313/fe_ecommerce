@@ -1,5 +1,6 @@
-import { EmailType, ResetPasswordType, VerifyOtpType } from '@/common/type';
+import { ChangePasswordType, EmailType, ResetPasswordType, VerifyOtpType } from '@/common/type';
 import { baseURL } from '@/constants';
+import axiosInstance from '@/utils/axiosInstance';
 import axios from 'axios';
 
 export const forgotPassword = async (body: EmailType) => {
@@ -34,5 +35,12 @@ export const resetPassword = async (body: ResetPasswordType) => {
   } catch (error) {
     console.error(error)
   }
+};
+
+export const changePassword = async (body: ChangePasswordType) => {
+  const response = await axiosInstance.post(`${baseURL}/user/change-password`, body, {
+    withCredentials: true
+  });
+  return response.data;
 };
 

@@ -1,3 +1,5 @@
+import { StaticImport } from "next/dist/shared/lib/get-img-props";
+
 export type ServerError = {
     status: number;
     message: string;
@@ -13,6 +15,10 @@ export type PurposeType = {
 
 export type PasswordType = {
     password: string;
+}
+
+export type CurrentPasswordType = {
+    currentPassword: string;
 }
 
 export type NewPasswordType = {
@@ -46,6 +52,8 @@ export enum ISACTIVE {
 export type LoginType = EmailType & PasswordType;
 
 export type ResetPasswordType = EmailType & NewPasswordType;
+
+export type ChangePasswordType = CurrentPasswordType & NewPasswordType;
 
 export type RegisterType = EmailType & PasswordType & PhoneType;
 
@@ -81,7 +89,7 @@ export interface ProvincesProps {
 
 export interface ProductProps {
     id?: string | number,
-    image_url?: string,
+    image_url?: string | StaticImport | undefined,
     width?: number,
     height?: number,
     name?: string,
@@ -102,7 +110,7 @@ export interface ProductDetailProps {
     category?: string,
     description?: string,
     price?: number | string,
-    image_url?: string,
+    image_url?: string | StaticImport,
     image?: File | string | null;
     gender?: string;
     type?: string;
@@ -154,6 +162,10 @@ export type addressListProps =
         name: string,
         phone: string,
         address: string,
+        street: string,
+        ward: string,
+        district: string,
+        city: string,
         default: boolean
     }
 
