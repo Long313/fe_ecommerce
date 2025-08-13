@@ -19,7 +19,7 @@ export default function PurchaseHistory() {
                     </div>
                     <div className="mt-[20px]">
                         <p className="mb-[20px]">4 ITEMS</p>
-                        <div className="flex flex-col max-h-[580px] pb-[40px] overflow-y-scroll custom-scroll">
+                        <div className="flex flex-col max-h-[580px] pb-[40px] overflow-y-scroll custom-scroll custom-color">
                             <div className="flex flex-row items-center mb-[20px]">
                                 <div className="bg-[#F8F8F8] w-[162px] h-[178px] relative">
                                     <Image src={item} alt="product" fill className="object-contain" />

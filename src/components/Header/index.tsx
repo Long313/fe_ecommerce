@@ -1,8 +1,10 @@
+import { ROLE } from "@/common/type";
 import useTranslation from "@/hooks/useTranslation";
 import { useAccessToken, useStore } from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { PiBag } from "react-icons/pi";
@@ -16,16 +18,24 @@ function Header() {
     const { setSearch } = useStore();
     const accessToken = useAccessToken(state => state.accessToken);
     const { setAccessToken } = useAccessToken();
+    const { setUserInfor } = useStore();
     const role = useStore(state => state.userInfor.role);
+    const [activeTab, setActiveTab] = useState<string>('');
+    const searchParams = useSearchParams();
 
     const router = useRouter();
     const { t, locale } = useTranslation();
     const handleRouterLogin = () => {
         router.push(`/${locale}/login`)
     }
+    const userInfor = useStore(state => state.userInfor);
 
     const handleRouterLogout = () => {
         setAccessToken("");
+        setUserInfor({
+            ...userInfor,
+            role: ROLE.CUSTOMER
+        });
         document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         router.push(`/${locale}/login`)
     }
@@ -52,9 +62,26 @@ function Header() {
             default:
                 return;
         }
-
         router.push(`/${locale}/products?${query}`);
     };
+
+    useEffect(() => {
+        const gender = searchParams.get("gender");
+        const category = searchParams.get("category");
+        const type = searchParams.get("type");
+
+        if (gender === "men") {
+            setActiveTab("men");
+        } else if (gender === "women") {
+            setActiveTab("women");
+        } else if (type === "kid") {
+            setActiveTab("kids");
+        } else if (category === "accessories") {
+            setActiveTab("accessories");
+        } else {
+            setActiveTab('');
+        }
+    }, [searchParams]);
 
 
     return (<header className="z-[30] fixed top-0 right-0 left-0 max-w-[1920px] w-full mx-auto">
@@ -77,28 +104,41 @@ function Header() {
                             <Link href="/men" className="relative z-10">
                                 MEN
                             </Link>
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            <span
+                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
+                                ${activeTab === "men" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                                `}
+                            />
                         </li>
-
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("women")}>
                             <Link href="/women" className="relative z-10">
                                 WOMEN
                             </Link>
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            <span
+                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
+                                ${activeTab === "women" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                                `}
+                            />
                         </li>
-
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("kids")}>
                             <Link href="/kids" className="relative z-10">
                                 KIDS
                             </Link>
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            <span
+                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
+                                ${activeTab === "kids" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                                `}
+                            />
                         </li>
-
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("accessories")}>
                             <Link href="/accessories" className="relative z-10">
                                 ACCESSORIES
                             </Link>
-                            <span className="absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                            <span
+                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
+                                ${activeTab === "accessories" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+                                `}
+                            />
                         </li>
                     </ul>
                 </nav>
