@@ -25,6 +25,9 @@ function InputField(props: InputFeildProps) {
     // const { t } = useTranslation();
 
     useEffect(() => {
+        if (valueDefault) {
+            setValue(valueDefault);
+        }
         setMounted(true);
     }, [valueDefault]);
 
