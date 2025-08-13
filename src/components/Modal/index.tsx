@@ -9,6 +9,7 @@ import { useRef, useState } from 'react';
 import Button from "../Button";
 import CountdownTimer from "../CountDown";
 import Loader from "../Loader";
+import { toast, Toaster } from 'react-hot-toast';
 
 function Modal() {
     const otpLength = 4;
@@ -61,6 +62,7 @@ function Modal() {
 
 
     const handleResendOtp = () => {
+        setError('')
         setResetTime(!resetTime);
         if (typeOtpAuthen === "reset") {
             mutate({ email: emailAuthen, purpose: "reset" });
@@ -98,7 +100,7 @@ function Modal() {
         mutationFn: resendOtp,
         onSuccess: (res) => {
             if (res.status === 200) {
-                console.log("res", res);
+                toast.success("Check your email!");
             }
         },
         onError: (error) => {
@@ -128,12 +130,19 @@ function Modal() {
             if (res.status === 200) {
                 router.push(`/${locale}/success`);
             } else {
-                setError("OTP code not valid")
+                setError("OTP invalid or expired");
+                // toast.error("OTP code not valid!");
             }
         },
-        onError: (error) => {
-            console.log(error.message || "Có lỗi xảy ra");
-            setError("OTP code not valid")
+        onError: (error: { status: number, message: string }) => {
+            console.log("error", error)
+            if (Number(error.status) === 400) {
+                setError("OTP invalid or expired")
+                // toast.error(error.message);
+            } else {
+                setError("OTP invalid or expired")
+                // toast.error("OTP invalid or expired!");
+            }
         }
 
     });
@@ -152,8 +161,15 @@ function Modal() {
                 router.refresh();
             }
         },
-        onError: (error) => {
-            console.log(error.message || "Có lỗi xảy ra");
+        onError: (error: { status: number, message: string }) => {
+            console.log("error", error)
+            if (Number(error.status) === 400) {
+                setError("OTP invalid or expired")
+                // toast.error(error.message);
+            } else {
+                setError("OTP invalid or expired")
+                // toast.error("Verify OTP failed!");
+            }
         }
 
     });
@@ -187,6 +203,7 @@ function Modal() {
             <Button title={t("verifyOtp")} width="w-[70%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             <p className="text-[14px] mt-[20px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p>
         </div>
+        <Toaster position="bottom-right" />
     </div>);
 }
 

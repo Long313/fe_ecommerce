@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import InputField from "@/components/InputFeild";
 import Loader from "@/components/Loader";
+import { emailRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
 import { forgotPassword } from "@/service/forgot-password";
 import { useStore } from "@/store/store";
@@ -16,6 +17,10 @@ function ModalForgotPassWord() {
     const { setEmailAuthen, setTypeOtpAuthen } = useStore();
 
     const handleVerifyOtp = () => {
+        if (!emailRegex.test(email)) {
+            setError("Please enter a valid email");
+            return;
+        }
         mutateResetPassword({ email });
         setEmailAuthen(email);
         setTypeOtpAuthen("reset")
@@ -49,8 +54,11 @@ function ModalForgotPassWord() {
         console.log(typeName);
     }
 
-    const handleBlur = (typeName : string, value : string) => {
-        console.log(typeName, value);
+    const handleBlur = (typeName: string, value: string) => {
+        if (!value.trim()) return;
+        if (typeName === "email" && !emailRegex.test(value)) {
+            setError("Please enter a valid email");
+        }
     }
 
     return (<div className="max-w-[700px]">
@@ -63,11 +71,14 @@ function ModalForgotPassWord() {
             <p className="text-[16px] text-[#636364] text-center">{t("enterMail")}</p>
         </div>
         <div className="w-[70%] mx-auto mt-[20px]">
-            <InputField getError={{ email: error }} placeholder="Enter your email" title="" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)}  onGetBlur={(typeName, value) => handleBlur(typeName, value)}/>
+            <InputField placeholder="Enter your email" star={false} title="Email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
+            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {error || "\u00A0"}
+            </p>
         </div>
 
-        <div className="flex-col mb-[30px] mx-auto flex justify-center items-center">
-            <Button title={t("confirm")} width="w-[70%]" height="h-[50px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+        <div className="flex-col mt-[20px] mb-[30px] mx-auto flex justify-center items-center">
+            <Button title={t("confirm")} width="w-[70%]" height="h-[40px]" rounded="rounded-[12px]" onSubmit={handleVerifyOtp} boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
             {/* <p className="text-[14px] mt-[10px] text-[#B9B9B9]">Didn’t you receive the OTP? <span onClick={handleResendOtp} className="cursor-pointer text-[#822FFF]">Resend OTP</span></p> */}
         </div>
     </div>);
