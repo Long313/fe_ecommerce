@@ -101,18 +101,13 @@ export default function Home() {
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Best selling</h2>
         <p className="text-[var(--text-color)] mt-[20px] mb-[150px] font-[600]">Stay on trend with our best-selling sportwear picks.</p>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-8 w-full max-w-7xl mx-auto">
-          {/* {productData.slice(0, 4).map((data, i) => (
-            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
-              <Product {...data} />
-            </div>
-          ))} */}
           {productSaleData?.data?.map((data, i) => (
-            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px] flex justify-center items-center">
               <Product {...data} />
             </div>
           ))}
         </div>
-        <div className="mt-[80px] mb-[60px]">
+        <div className="mt-[80px] mb-[60px] mx-auto">
           <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
             title="SEE ALL" onSubmit={handleRouterSale} width="w-[160px]" height="h-[46px]" arrow={true} />
         </div>
@@ -144,7 +139,7 @@ export default function Home() {
         </div>
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-32 w-full max-w-7xl mx-auto">
           {productData?.data?.map((data, i) => (
-            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px]">
+            <div key={i} className="w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] max-w-[250px] flex justify-center items-center">
               <Product {...data} />
             </div>
           ))}

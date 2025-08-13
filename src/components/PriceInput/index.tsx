@@ -12,11 +12,13 @@ export default function PriceInput(props: PriceInputProps) {
         onGetValue(name, e.target.value);
     }
     const [mounted, setMounted] = useState(false);
-
+    useEffect(() => {
+        setPrice(value);
+    }, [value])
     useEffect(() => {
         setMounted(true);
     }, []);
-    if (!mounted) return null; // hoặc return một loader/placeholder
+    if (!mounted) return null;
 
     return (
         <div className={`${margin ? margin : ""} ${width ? width : ""} flex`}>
