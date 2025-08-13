@@ -46,6 +46,11 @@ function ModalForgotPassWord() {
     const handleGetDataInput = (typeName: string, value: string) => {
         setError("")
         setMail(value);
+        console.log(typeName);
+    }
+
+    const handleBlur = (typeName : string, value : string) => {
+        console.log(typeName, value);
     }
 
     return (<div className="max-w-[700px]">
@@ -58,7 +63,7 @@ function ModalForgotPassWord() {
             <p className="text-[16px] text-[#636364] text-center">{t("enterMail")}</p>
         </div>
         <div className="w-[70%] mx-auto mt-[20px]">
-            <InputField getError={{ email: error }} placeholder="Enter your email" title="" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+            <InputField getError={{ email: error }} placeholder="Enter your email" title="" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)}  onGetBlur={(typeName, value) => handleBlur(typeName, value)}/>
         </div>
 
         <div className="flex-col mb-[30px] mx-auto flex justify-center items-center">

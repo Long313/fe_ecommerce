@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { MdCreditCard } from "react-icons/md";
 import { toast, Toaster } from 'react-hot-toast';
+// import { emailRegex, passwordRegex } from "@/constants";
 
 export default function Checkout() {
     const [email, setEmail] = useState<string>("");
@@ -33,7 +34,15 @@ export default function Checkout() {
     const [open, setOpen] = useState<boolean>(false);
     const [errorInfor, setErrorInfor] = useState<string>("");
     const [errorCard, setErrorCard] = useState<string>("");
-
+    // const [formErrors, setFormErrors] = useState<Record<string, string>>({
+    //     email: "",
+    //     phone: "",
+    //     fullName: "",
+    //     street: "",
+    //     ward: "",
+    //     district: "",
+    //     city: "",
+    // });
     const shippingFee = 10;
 
     const userInfor = useStore((state) => state.userInfor);
@@ -178,6 +187,37 @@ export default function Checkout() {
         }
         toast.success('Order thành công!');
     }
+
+    const handleBlur = (typeName: string, value: string) => {
+        console.log(typeName, value);
+        // if (!value.trim()) return;
+
+        // if (typeName === "email" && !emailRegex.test(value)) {
+        //     setFormErrors(prev => ({ ...prev, email: "Please enter a valid email" }));
+        // }
+
+        // if (typeName === "phone" && !passwordRegex.test(value)) {
+        //     setFormErrors(prev => ({ ...prev, phone: "Please enter a valid phone" }));
+        // }
+        // if (typeName === "fullName" && !value) {
+        //     setFormErrors(prev => ({ ...prev, fullName: "Please enter a valid Full Name" }));
+        // }
+
+        // if (typeName === "street" && !value) {
+        //     setFormErrors(prev => ({ ...prev, street: "Please enter a valid street" }));
+        // }
+        // if (typeName === "ward" && !value) {
+        //     setFormErrors(prev => ({ ...prev, ward: "Please enter a valid ward" }));
+        // }
+
+        // if (typeName === "district" && !value) {
+        //     setFormErrors(prev => ({ ...prev, district: "Please enter a valid district" }));
+        // }
+        // if (typeName === "city" && !value) {
+        //     setFormErrors(prev => ({ ...prev, city: "Please enter a valid city" }));
+        // }
+    };
+
     return (
         <div className="w-full h-max mt-[120px] mb-[100px] px-[var(--padding-screen)] flex">
             <div className="">
@@ -185,31 +225,31 @@ export default function Checkout() {
                     <h2 ref={inforRef} className="font-[600] text-[20px] mb-[40px]">DELIVERY</h2>
                     <div className="w-full flex justify-between">
                         <div>
-                            <InputField star={false} valueDefault={email ? email : emailUser} title="Email" type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField star={false} valueDefault={email ? email : emailUser} title="Email" type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                         <div className="ml-[20px]">
-                            <InputField valueDefault={phone ? phone : phoneUser} title="Phone Number" type="string" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={phone ? phone : phoneUser} title="Phone Number" type="string" name="phone" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                     </div>
                     <div className="w-full flex justify-between">
                         <div>
-                            <InputField valueDefault={fullName ? fullName : fullnameUser} title="Full Name" type="string" name="fullName" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={fullName ? fullName : fullnameUser} title="Full Name" type="string" name="fullName" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                         <div className="ml-[20px]">
-                            <InputField valueDefault={city ? city : ""} title="City" type="string" name="city" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={city ? city : ""} title="City" type="string" name="city" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                     </div>
                     <div className="w-full flex justify-between">
                         <div>
-                            <InputField valueDefault={district ? district : ""} title="District" type="string" name="district" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={district ? district : ""} title="District" type="string" name="district" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                         <div className="ml-[20px]">
-                            <InputField valueDefault={ward ? ward : ""} title="Ward" type="string" name="ward" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={ward ? ward : ""} title="Ward" type="string" name="ward" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                     </div>
                     <div className="w-full flex justify-between">
                         <div className="">
-                            <InputField valueDefault={street ? street : ""} title="Street" type="string" name="address" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                            <InputField valueDefault={street ? street : ""} title="Street" type="string" name="address" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                         </div>
                     </div>
                     <p className="text-[red] text-[12px]">{errorInfor}</p>
@@ -225,7 +265,7 @@ export default function Checkout() {
                     <div>
                         <p className="text-[#636364] mb-[10px] font-[600]">Have a promo code?</p>
                         <div className="w-[60%] flex items-center h-[36px] gap-x-[20px]">
-                            <InputField isError={false} star={false} title="" valueDefault={promoCode ? promoCode : ""} onSave={(typeName, value) => handleGetDataInput(typeName, value)} name="promo_code" type="string" placeholder="Promo" />
+                            <InputField isError={false} star={false} title="" valueDefault={promoCode ? promoCode : ""} onSave={(typeName, value) => handleGetDataInput(typeName, value)} name="promo_code" type="string" placeholder="Promo" onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                             <Button title="ADD" onSubmit={handleGetPromoCode} width="w-[120px]" height="h-full" margin="mt-[8px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
                         </div>
                         <p className={`text-[12px] ml-[4px] mt-[8px] ${promoCode ? "text-[#13B253]" : "text-[#636364]"}`}>{promoCode ? "Promo code applied successfully" : "Limit 1 promo per order"}</p>
@@ -277,18 +317,18 @@ export default function Checkout() {
                         <p className="text-[#636364] mb-[10px] font-[600]">Enter your payment details</p>
                         <div className="w-full flex justify-between">
                             <div>
-                                <InputField placeholder="Name on card" star={false} valueDefault={nameCard} title="" type="string" name="name-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                                <InputField placeholder="Name on card" star={false} valueDefault={nameCard} title="" type="string" name="name-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                             </div>
                             <div className="ml-[20px]">
-                                <InputField placeholder="Card number" star={false} valueDefault={numberCard} title="" type="string" name="number-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                                <InputField placeholder="Card number" star={false} valueDefault={numberCard} title="" type="string" name="number-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                             </div>
                         </div>
                         <div className="w-full flex justify-between">
                             <div>
-                                <InputField placeholder="MM/YY" star={false} valueDefault={dateCard} title="" type="string" name="date-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                                <InputField placeholder="MM/YY" star={false} valueDefault={dateCard} title="" type="string" name="date-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                             </div>
                             <div className="ml-[20px]">
-                                <InputField placeholder="CVV" star={false} valueDefault={cvvCard} title="" type="string" name="cvv-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+                                <InputField placeholder="CVV" star={false} valueDefault={cvvCard} title="" type="string" name="cvv-card" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
                             </div>
                         </div>
                         <p className="text-[red] text-[12px]">{errorCard}</p>
