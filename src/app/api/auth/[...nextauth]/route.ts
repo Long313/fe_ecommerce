@@ -1,6 +1,6 @@
 // app/api/auth/[...nextauth]/route.ts
+import NextAuth, { DefaultSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -50,3 +50,4 @@ const handler = NextAuth({
 });
 
 export { handler as GET, handler as POST };
+

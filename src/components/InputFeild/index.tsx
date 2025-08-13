@@ -17,7 +17,7 @@ type InputFeildProps = {
     getError?: Record<string, string>
 }
 function InputField(props: InputFeildProps) {
-    const { title, placeholder, type, name, onSave, onGetBlur, valueDefault, star = true, isError = true } = props;
+    const { title, placeholder, type, name, onSave, onGetBlur, valueDefault, star = true } = props;
     const [value, setValue] = useState<string>("");
     const inputRef = useRef<HTMLInputElement>(null);
     const [showPassword, setShowPassword] = useState<boolean>(false)
