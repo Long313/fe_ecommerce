@@ -1,3 +1,4 @@
+import { ROLE } from "@/common/type";
 import useTranslation from "@/hooks/useTranslation";
 import { useAccessToken, useStore } from "@/store/store";
 import Image from "next/image";
@@ -12,7 +13,6 @@ import amax from '../../images/amax.svg';
 import logo from '../../images/logo.svg';
 import Button from "../Button";
 import LanguageSwitcher from "../LanguageSwitcher";
-import { ROLE, UserInfor } from "@/common/type";
 
 function Header() {
     const { setSearch } = useStore();

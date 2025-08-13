@@ -12,19 +12,21 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import google_logo from '../../../../images/icon_google.png';
 import login_background from '../../../../images/login_background.svg';
+import { emailRegex, passwordRegex } from "@/constants";
+import { toast, Toaster } from 'react-hot-toast';
 
 export default function Login() {
-
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [remember, setRemember] = useState<boolean>(false);
-  // const [isError, setIsError] = useState<boolean>(false);
   const { setUserInfor } = useStore();
-
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({
+    email: "",
+    password: "",
+  });
   const { t, locale } = useTranslation();
   const { data: session } = useSession();
-  const emailAuthen = useStore((state) => state.emailAuthen);
-  const passwordAuthen = useStore((state) => state.passwordAuthen);
+
   const router = useRouter();
   const { setAccessToken } = useAccessToken();
 
@@ -38,22 +40,13 @@ export default function Login() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (session) {
-  //     setUserInfor({
-  //       email: session?.user?.email || "",
-  //       fullname: session?.user?.name || "",
-  //     });
-  //   }
-  // }, [])
   useEffect(() => {
     if (session) {
       setUserInfor({
         email: session.user?.email || "",
         fullname: session.user?.name || "",
       });
-
-      const token = (session as any).accessToken;
+      const token = session.accessToken;
       if (token) {
         setAccessToken(token);
       }
@@ -61,9 +54,17 @@ export default function Login() {
   }, [session, setUserInfor, setAccessToken]);
 
   const handleLogin = () => {
-
     const checkConditionSubmit = !email || !password;
-    if (checkConditionSubmit) return;
+    if (checkConditionSubmit) {
+      toast.error('Nhập đầy đủ các trường trước khi đăng nhập !');
+      return
+    } else if (password && !passwordRegex.test(password)) {
+      setFormErrors(prev => ({ ...prev, password: "Please enter a valid password" }));
+      return
+    } else if (email && !emailRegex.test(email)) {
+      setFormErrors(prev => ({ ...prev, email: "Please enter a valid email" }));
+      return
+    }
     mutate({ email, password });
   };
 
@@ -105,24 +106,35 @@ export default function Login() {
       }
     },
     onError: (error: { status: number, message: string }) => {
-      if (error.status === 400) {
-
+      if (Number(error.status) === 400) {
+        if (error.message === "Wrong credentials") {
+          toast.error("Wrong password!");
+        } else {
+          toast.error("Login failed!");
+        }
       } else {
-        console.log(error.message || "Có lỗi xảy ra");
+        toast.error(error.message || "Login failed");
       }
     }
-
   });
 
-  const handleGetDataInput = (typeName: string, value: string) => {
-    if (typeName == "email") {
-      setEmail(value);
-    }
-    if (typeName == "password") {
-      setPassword(value);
+  const handleChange = (typeName: string, value: string) => {
+    setFormErrors(prev => ({ ...prev, [typeName]: "" }));
+    if (typeName === "email") setEmail(value);
+    if (typeName === "password") setPassword(value);
+  };
+
+  const handleBlur = (typeName: string, value: string) => {
+    if (!value.trim()) return;
+
+    if (typeName === "email" && !emailRegex.test(value)) {
+      setFormErrors(prev => ({ ...prev, email: "Please enter a valid email" }));
     }
 
-  }
+    if (typeName === "password" && !passwordRegex.test(value)) {
+      setFormErrors(prev => ({ ...prev, password: "Please enter a valid password" }));
+    }
+  };
 
   return (
     <div className="flex w-full h-full">
@@ -137,8 +149,18 @@ export default function Login() {
           <p className="font-[400] text-[14px] text-[#636364]">{t("loginText")}</p>
         </div>
         <div className="">
-          <InputField valueDefault={email ? email : emailAuthen} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
-          <InputField valueDefault={password ? password : passwordAuthen} title={t("password")} type="password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} />
+          <div>
+            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleChange(typeName, value)} />
+            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+              {formErrors.email || "\u00A0"}
+            </p>
+          </div>
+          <div>
+            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("password")} type="password" name="password" placeholder={t("passwordPlaceHolder")} onSave={(typeName, value) => handleChange(typeName, value)} />
+            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+              {formErrors.password || "\u00A0"}
+            </p>
+          </div>
         </div>
         <div className="w-full max-w-[315px] flex justify-between items-center mb-[20px]">
           <div className="flex items-center">
@@ -159,6 +181,7 @@ export default function Login() {
         className="w-1/2 h-screen bg-cover bg-center"
         style={{ backgroundImage: `url(${login_background.src})` }}
       ></div>
+      <Toaster position="bottom-right" />
     </div>
   );
 }

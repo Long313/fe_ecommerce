@@ -1,7 +1,19 @@
 // app/api/auth/[...nextauth]/route.ts
-import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
 
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string;
+    user?: DefaultSession["user"];
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string;
+  }
+}
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -20,7 +32,7 @@ const handler = NextAuth({
     },
 
     async session({ session, token }) {
-      (session as any).accessToken = token.accessToken;
+      session.accessToken = token.accessToken;
       return session;
     },
 
@@ -30,10 +42,10 @@ const handler = NextAuth({
   },
 
   pages: {
-    signIn: '/login',     // Trang đăng nhập (tùy chọn)
-    signOut: '/goodbye',  // Trang đăng xuất (tùy chọn)
-    error: '/error',      // Trang lỗi
-    newUser: '/',         // Trang chuyển về sau khi người dùng đăng nhập lần đầu tiên
+    signIn: '/login',     
+    signOut: '/goodbye',  
+    error: '/error',      
+    newUser: '/',         
   },
 });
 
