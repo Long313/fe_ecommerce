@@ -44,7 +44,7 @@ export default function Input(props: InputProps) {
         setMounted(true);
     }, []);
     const isPasswordField = type === "password";
-    const inputType = isPasswordField && !showPassword ? "password" : "text"
+    const inputType = type === "password" ? (showPassword ? "text" : "password") : type;
 
     if (!mounted) return null;
     return (

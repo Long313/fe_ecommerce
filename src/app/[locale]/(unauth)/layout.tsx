@@ -1,5 +1,6 @@
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { ReactNode } from "react";
+
 function LayoutAuthen({ children }: { children: ReactNode }) {
     return (
         <div className="h-screen w-full overflow-hidden">

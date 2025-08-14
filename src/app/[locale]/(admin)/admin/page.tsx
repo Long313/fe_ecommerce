@@ -1,9 +1,7 @@
 'use client'
 
 import { ProductDetailProps } from '@/common/type';
-import Button from '@/components/Button';
 import ImageWithFallback from '@/components/ImageWithFallback';
-import PriceInput from '@/components/PriceInput';
 import ProductPopup from '@/components/ProductPopup';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { useCreateProduct, useProductSearch, useUpdateProduct } from '@/hooks/useProductSearch';
@@ -24,7 +22,8 @@ import { toast, Toaster } from 'react-hot-toast';
 import './index.css';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
-
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
+const PriceInput = dynamic(() => import('@/components/PriceInput'), { ssr: false });
 const InputComponent = dynamic(() => import("@/components/Input"), { ssr: false });
 
 type FormInstance<T> = GetRef<typeof Form<T>>;

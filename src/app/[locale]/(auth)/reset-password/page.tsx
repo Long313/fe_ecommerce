@@ -1,7 +1,10 @@
 'use client';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
-import ModalResetPassword from '@/components/Modal/ModalResetPassword';
-import register_background from '../../../../images/register_background.svg';
+import dynamic from 'next/dynamic';
+const ModalResetPassword = dynamic(
+  () => import('@/components/Modal/ModalResetPassword'),
+  { ssr: false }
+);
 
 export default function ResetPassWord() {
 
@@ -14,8 +17,7 @@ export default function ResetPassWord() {
         <ModalResetPassword />
       </div>
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
-        style={{ backgroundImage: `url(${register_background.src})` }}
+        className="w-1/2 h-screen bg-cover bg-center bg-[url('/images/register_background.svg')]"
       ></div>
     </div >
   );

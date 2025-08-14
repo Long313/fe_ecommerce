@@ -24,6 +24,7 @@ type ButtonProps = {
     arrow?: boolean;
     padding?: string;
     type?: string;
+    isDisable?: boolean;
 };
 
 function Button(props: ButtonProps) {
@@ -44,7 +45,8 @@ function Button(props: ButtonProps) {
         position,
         arrow,
         padding,
-        type
+        type,
+        isDisable
     } = props;
 
     const [mounted, setMounted] = useState(false);
@@ -69,7 +71,7 @@ function Button(props: ButtonProps) {
   `;
 
     return (
-        <button onClick={onSubmit} className={buttonClass}>
+        <button disabled={isDisable} onClick={onSubmit} className={buttonClass}>
             {image && (
                 <Image
                     src={image}

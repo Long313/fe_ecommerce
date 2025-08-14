@@ -32,3 +32,10 @@ export const CATEGORIES_LIST = [
     { label: "Socks", value: "socks" },
     { label: "Skirts", value: "skirts" },
 ]
+
+export const tabs = [
+  { label: 'SALE' },
+  { label: 'HOT' },
+  { label: 'NEW ARRIVALS' },
+  { label: 'ACCESSORIES' },
+]

@@ -18,7 +18,7 @@ const { Option } = Select;
 
 export default function Products() {
     const searchParams = useStore(state => state.paramsSearch);
-    const { setParamsSearch } = useStore();
+    const setParamsSearch = useStore(state => state.setParamsSearch);
     const searchParamsRouter = useSearchParams();
     const [sortOrder, setSortOrder] = useState('');
     const [startPrice, setStartPrice] = useState('');
@@ -32,17 +32,20 @@ export default function Products() {
     const [pageIndex, setPageIndex] = useState(1);
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
 
-    useEffect(() => {
+    const initialParams = useMemo(() => {
         const genders = searchParamsRouter.getAll("gender");
         const categories = searchParamsRouter.getAll("category");
-        const search = searchParamsRouter.get("search");
-        const type = searchParamsRouter.get("type");
-
-        if (genders.length) setGender(genders);
-        if (categories.length) setCategory(categories);
-        if (search) setSearch(search);
-        if (type) setType(type);
+        const search = searchParamsRouter.get("search") || '';
+        const type = searchParamsRouter.get("type") || '';
+        return { genders, categories, search, type };
     }, [searchParamsRouter]);
+
+    useEffect(() => {
+        setGender(initialParams.genders);
+        setCategory(initialParams.categories);
+        setSearch(initialParams.search);
+        setType(initialParams.type);
+    }, [initialParams]);
 
     const filteredParams = useMemo(() => {
         const result = {
@@ -67,21 +70,22 @@ export default function Products() {
                     (!(Array.isArray(value)) || value.length > 0)
             )
         );
-    }, [searchParams, search, type, sortOrder, debouncedStartPrice, debouncedEndPrice, gender, category]);
+    }, [searchParams, sortOrder, debouncedStartPrice, debouncedEndPrice, gender, category, search, type]);
 
     const { data, isPending, isFetching } = useProductSearch({ ...filteredParams, pageIndex });
 
     useEffect(() => {
-        if (data?.data) {
-            setProducts(prev =>
-                pageIndex === 1 ? data.data : [...prev, ...data.data]
-            );
-        }
-    }, [data, pageIndex]);
+        setPageIndex(1);
+        setProducts([]);
+    }, [filteredParams]);
 
     useEffect(() => {
-        setPageIndex(1);
-    }, [filteredParams]);
+        if (!data?.data) return;
+
+        setProducts(prev =>
+            pageIndex === 1 ? data.data : [...prev, ...data.data]
+        );
+    }, [data, pageIndex]);
 
     const handleGenderChange = (value: string) => {
         setGender(prev =>
