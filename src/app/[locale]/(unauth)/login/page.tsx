@@ -1,20 +1,22 @@
 'use client'
-import Button from "@/components/Button";
+import FormField from "@/components/FormField";
 import InputField from "@/components/InputFeild";
 import Loader from "@/components/Loader";
+import { emailRegex, passwordRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
 import { login } from "@/service/login";
 import { useAccessToken, useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import google_logo from '../../../../images/icon_google.png';
-import login_background from '../../../../images/login_background.svg';
-import { emailRegex, passwordRegex } from "@/constants";
+import { useCallback, useEffect, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
-
+import google_logo from '../../../../images/icon_google.png';
+const Button = dynamic(() => import('@/components/Button'), {
+  ssr: false,
+});
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -53,7 +55,7 @@ export default function Login() {
     }
   }, [session, setUserInfor, setAccessToken]);
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     const checkConditionSubmit = !email || !password;
     if (checkConditionSubmit) {
       toast.error('Nhập đầy đủ các trường trước khi đăng nhập !');
@@ -66,7 +68,7 @@ export default function Login() {
       return
     }
     mutate({ email, password });
-  };
+  }, [email, password]);
 
   const {
     mutate,
@@ -150,16 +152,20 @@ export default function Login() {
         </div>
         <div className="">
           <div>
-            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleChange(typeName, value)} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-              {formErrors.email || "\u00A0"}
-            </p>
+            <FormField error={formErrors.email}>
+              <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleChange(typeName, value)} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {formErrors.email || "\u00A0"}
+              </p> */}
+            </FormField>
           </div>
           <div>
-            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("password")} type="password" name="password" placeholder={t("passwordPlaceHolder")} onSave={(typeName, value) => handleChange(typeName, value)} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-              {formErrors.password || "\u00A0"}
-            </p>
+            <FormField error={formErrors.email}>
+              <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("password")} type="password" name="password" placeholder={t("passwordPlaceHolder")} onSave={(typeName, value) => handleChange(typeName, value)} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {formErrors.password || "\u00A0"}
+              </p> */}
+            </FormField>
           </div>
         </div>
         <div className="w-full max-w-[315px] flex justify-between items-center mb-[20px]">
@@ -177,10 +183,7 @@ export default function Login() {
           <Link href={`/${locale}/register`} className="text-[#822FFF] ml-1 hover:opacity-80">{t("signUpFreeTitle")}</Link>
         </div>
       </div>
-      <div
-        className="w-1/2 h-screen bg-cover bg-center"
-        style={{ backgroundImage: `url(${login_background.src})` }}
-      ></div>
+      <div className="w-1/2 h-screen bg-cover bg-center bg-[url('/images/login_background.svg')]"></div>
       <Toaster position="bottom-right" />
     </div>
   );

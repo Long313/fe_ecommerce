@@ -1,18 +1,19 @@
+import useTranslation from "@/hooks/useTranslation";
+import amax from '@/images/amax.svg';
+import logo from '@/images/logo.svg';
 import { useStore } from "@/store/store";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoCloseOutline, IoSearchOutline } from "react-icons/io5";
-import amax from '../../images/amax.svg';
-import logo from '../../images/logo.svg';
-import ProposeTag from "../ProposeTag";
-import useTranslation from "@/hooks/useTranslation";
 
+const ProposeTag = dynamic(() => import('@/components/ProposeTag'), { ssr: false });
 
 export default function SearchBar() {
     const [value, setValue] = useState<string>("");
     const router = useRouter();
-    const { setSearch } = useStore();
+    const { setSearch, setParamsSearch } = useStore();
     const [show, setShow] = useState(false);
     const [listPropose, setListPropose] = useState<string[]>([]);
     const { locale } = useTranslation();
@@ -23,21 +24,27 @@ export default function SearchBar() {
             setSearch(false);
         }, 500);
     }
+    const getProposeList = (): string[] => {
+        try {
+            return JSON.parse(localStorage.getItem("prosose") || "[]");
+        } catch {
+            return [];
+        }
+    };
 
     useEffect(() => {
-        const list = JSON.parse(localStorage.getItem("prosose") || '[]');
-        setListPropose(list);
+        setListPropose(getProposeList());
     }, [])
-    const { setParamsSearch } = useStore();
 
     const handleSearch = () => {
+        const searchValue = value.trim();
+        if (!searchValue) return;
         const newList = [
             ...listPropose.filter(item => item !== value),
             value
         ];
         setListPropose(newList);
         localStorage.setItem("prosose", JSON.stringify(newList));
-        const searchValue = value.trim();
         router.push(`/${locale}/products?search=${searchValue}`);
         setSearch(false);
     };
@@ -48,7 +55,6 @@ export default function SearchBar() {
         setSearch(false);
     }
 
-
     useEffect(() => {
         const timer = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(timer);
@@ -56,7 +62,7 @@ export default function SearchBar() {
 
     const handleClear = (e: React.MouseEvent<HTMLDivElement>, value: string) => {
         e.stopPropagation();
-        const list = JSON.parse(localStorage.getItem("prosose") || "[]");
+        const list = getProposeList();
         if (list.length > 0) {
             const newList = list.filter((item: string) => item !== value);
             setListPropose(newList);
@@ -74,7 +80,12 @@ export default function SearchBar() {
                 <div className="flex flex-1 flex-col mx-[40px]">
                     <div className="relative border border-[#373737] rounded-[16px] py-[8px] px-[16px] flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
                         <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleSearch} />
-                        <input placeholder="SEARCH" value={value} onChange={e => setValue(e.target.value)} className="text-[#A3A3A3] flex-1 outline-none pr-[40px]" />
+                        <input placeholder="SEARCH"
+                            value={value}
+                            onKeyDown={e => {
+                                if (e.key === "Enter") handleSearch();
+                            }}
+                            onChange={e => setValue(e.target.value)} className="text-[#A3A3A3] flex-1 outline-none pr-[40px]" />
                         {value ? <IoCloseOutline onClick={() => setValue("")} size={20} className="cursor-pointer absolute top-1/2 -translate-y-[50%] right-[10px]" /> : <></>}
                     </div>
                     <p className="text-[#A3A3A3] my-[20px]">Popular search terms</p>

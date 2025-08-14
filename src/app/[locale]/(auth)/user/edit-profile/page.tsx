@@ -1,14 +1,20 @@
 'use client'
 
-import Button from "@/components/Button";
-import Input from "@/components/Input";
 import { useGetUser, useUpdateUser } from "@/hooks/useUser";
 import { useStore } from "@/store/store";
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react";
 import { CiCamera } from "react-icons/ci";
 import { toast, Toaster } from 'react-hot-toast';
-
+import dynamic from "next/dynamic";
+const Button = dynamic(
+    () => import('@/components/Button'),
+    { ssr: false }
+);
+const Input = dynamic(
+    () => import('@/components/Input'),
+    { ssr: false }
+);
 export default function EditProfile() {
     const { userInfor, setUserInfor } = useStore();
     const { id, avatar, fullname, phone_number, gender, birthday, address } = userInfor;

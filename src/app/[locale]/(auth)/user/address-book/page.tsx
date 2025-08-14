@@ -1,13 +1,20 @@
 'use client'
 import { addressListProps } from '@/common/type';
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+
 import { useCitySearch, useDistrictSearch, useWardSearch } from '@/hooks/useProvincesSearch';
 import { Tooltip } from 'antd';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import map_pin from '../../../../../images/map_pin.svg';
-
+import dynamic from 'next/dynamic';
+const Button = dynamic(
+    () => import('@/components/Button'),
+    { ssr: false }
+);
+const Input = dynamic(
+    () => import('@/components/Input'),
+    { ssr: false }
+);
 export default function AddressBook() {
     const [open, setOpen] = useState<boolean>(false);
     const [name, setName] = useState<string>("");

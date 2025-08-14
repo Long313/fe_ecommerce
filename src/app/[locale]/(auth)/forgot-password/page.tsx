@@ -1,7 +1,11 @@
 'use client'
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ModalForgotPassWord from "@/components/Modal/ModalForgotPassWord";
-import register_background from '../../../../images/register_background.svg';
+import dynamic from "next/dynamic";
+
+const ModalForgotPassWord = dynamic(
+  () => import("@/components/Modal/ModalForgotPassWord"),
+  { ssr: false }
+);
 
 function ForgotPassWord() {
 
@@ -14,8 +18,7 @@ function ForgotPassWord() {
         <ModalForgotPassWord />
       </div>
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
-        style={{ backgroundImage: `url(${register_background.src})` }}
+        className="w-1/2 h-screen bg-cover bg-center bg-[url('/images/register_background.svg')]"
       ></div>
     </div >
   );

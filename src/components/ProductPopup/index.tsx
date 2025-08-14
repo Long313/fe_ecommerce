@@ -1,16 +1,26 @@
 import { ProductDetailProps } from '@/common/type';
-import InputComponent from '@/components/Input';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
 import type { StaticImageData } from 'next/image';
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { MdOutlineFileUpload } from "react-icons/md";
 import place_holder_img from '../../images/place_holder_product.png';
-import Button from "../Button";
 import { IoCloseOutline } from 'react-icons/io5';
+import dynamic from 'next/dynamic';
 
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
+const InputComponent = dynamic(() => import('@/components/Input'), { ssr: false });
+function ImagePreviewComponent({ image }: { image: string | StaticImageData }) {
+    return (
+        <div className="w-[260px] h-[300px] relative border border-[#C4C4C4]">
+            <Image src={image} alt="product_preview" fill className="object-cover rounded-[4px]" />
+        </div>
+    );
+}
+
+const ImagePreview = memo(ImagePreviewComponent);
 type ProductPopupProps = {
     open: boolean,
     id: string,
@@ -43,20 +53,23 @@ export default function ProductPopup(props: ProductPopupProps) {
         setImageFile(null);
     }
 
+    const closePopup = () => {
+        onClose();
+        resetField();
+    };
+
     const handleSave = () => {
         if (typePopup === "edit") {
             onGetData(typePopup, { id, name, gender, category, type, price, description, image: imageFile });
         } else {
             onGetData(typePopup, { name, gender, category, type, price, description, image: imageFile });
         }
-        onClose();
-        resetField();
+        closePopup();
     };
 
 
     const handleDiscard = () => {
-        onClose();
-        resetField();
+        closePopup();
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,30 +85,17 @@ export default function ProductPopup(props: ProductPopupProps) {
         fileInputRef.current?.click();
     };
 
-    const handleGetData = (name: string, value: string) => {
+    const handleGetData = useCallback((name: string, value: string) => {
         switch (name) {
-            case "name":
-                setName(value);
-                break;
-            case "gender":
-                setGender(value);
-                break;
-            case "category":
-                setCategory(value);
-                break;
-            case "type":
-                setType(value);
-                break;
-            case "price":
-                setPrice(value);
-                break;
-            case "description":
-                setDescription(value);
-                break;
-            default:
-                return;
+            case "name": setName(value); break;
+            case "gender": setGender(value); break;
+            case "category": setCategory(value); break;
+            case "type": setType(value); break;
+            case "price": setPrice(value); break;
+            case "description": setDescription(value); break;
+            default: return;
         }
-    }
+    }, []);
 
     useEffect(() => {
         if (open) {
@@ -138,9 +138,10 @@ export default function ProductPopup(props: ProductPopupProps) {
                 <div className="mb-[20px]">
                     <div className="flex justify-between">
                         <div className="flex flex-col items-center w-[45%] mt-[30px]">
-                            <div className="w-[260px] h-[300px] relative  border border-[#C4C4C4]">
+                            {/* <div className="w-[260px] h-[300px] relative  border border-[#C4C4C4]">
                                 <Image src={image} alt="product_preview" fill className="object-cover rounded-[4px]" />
-                            </div>
+                            </div> */}
+                            <ImagePreview image={image} />
                             <div
                                 onClick={handleClickUpload}
                                 className="rounded-[8px] border border-[#C4C4C4] py-[4px] px-[8px] flex mx-auto items-center justify-center my-[10px] cursor-pointer hover:bg-gray-100"
@@ -161,7 +162,7 @@ export default function ProductPopup(props: ProductPopupProps) {
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={price} title="Price" name="price" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={price} title="Price" name="price" type="number" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={description} title="Description" name="description" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                         </div>
                     </div>

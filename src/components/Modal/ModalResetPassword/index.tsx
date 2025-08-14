@@ -1,16 +1,24 @@
 'use client'
 
-import Button from "@/components/Button";
 import InputField from "@/components/InputFeild";
-import Loader from "@/components/Loader";
 import { passwordRegex } from "@/constants";
 import useTranslation from "@/hooks/useTranslation";
 import { resetPassword } from "@/service/forgot-password";
 import { useStore } from "@/store/store";
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
+const Button = dynamic(() => import('@/components/Button'), {
+    ssr: false,
+});
+const FormField = dynamic(() => import('@/components/FormField'), {
+    ssr: false,
+});
 
+const Loader = dynamic(() => import('@/components/Loader'), {
+    ssr: false,
+});
 function ModalResetPassword() {
 
     const { t, locale } = useTranslation();
@@ -94,10 +102,12 @@ function ModalResetPassword() {
         <div className="mt-[20px] text-center bg-gradient-to-r from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent text-[46px] font-[700]">{t("setNewPassword")}</div>
         <div className="w-[70%] mx-auto mt-[20px]">
             <div>
-                <InputField placeholder="Enter your new password" type="password" title="Password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
-                <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-                    {formErrors.password || "\u00A0"}
-                </p>
+                <FormField error={formErrors.password}>
+                    <InputField placeholder="Enter your new password" type="password" title="Password" name="password" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />
+                    <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                        {formErrors.password || "\u00A0"}
+                    </p>
+                </FormField>
             </div>
             <div>
                 <InputField placeholder="Re-enter password" type="password" title="Confirm password" name="confirmPassword" onSave={(typeName, value) => handleGetDataInput(typeName, value)} onGetBlur={(typeName, value) => handleBlur(typeName, value)} />

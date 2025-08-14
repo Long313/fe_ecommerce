@@ -1,7 +1,10 @@
 'use client'
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import Modal from "@/components/Modal";
-import register_background from '../../../../images/register_background.svg';
+import dynamic from "next/dynamic";
+const Modal = dynamic(
+  () => import("@/components/Modal"),
+  { ssr: false }
+);
 
 function SendOtp() {
 
@@ -14,8 +17,7 @@ function SendOtp() {
         <Modal />
       </div>
       <div
-        className="w-1/2 h-screen bg-cover bg-center"
-        style={{ backgroundImage: `url(${register_background.src})` }}
+        className="w-1/2 h-screen bg-cover bg-center bg-[url('/images/register_background.svg')]"
       ></div>
     </div >
   );
