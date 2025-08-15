@@ -1,33 +1,18 @@
-import { ProductDetailProps } from '@/common/type';
+import { ProductPopupProps } from '@/common/type';
+import InputComponent from '@/components/Input';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import type { StaticImageData } from 'next/image';
 import Image from "next/image";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { MdOutlineFileUpload } from "react-icons/md";
-import place_holder_img from '../../images/place_holder_product.png';
+import { useCallback, useEffect, useRef, useState } from "react";
 import { IoCloseOutline } from 'react-icons/io5';
-import dynamic from 'next/dynamic';
+import { MdOutlineFileUpload } from "react-icons/md";
+import place_holder_img from '@/images/place_holder_product.png';
 
+const ButtonWhite = dynamic(() => import('@/components/ButtonWhite'), { ssr: false });
 const Button = dynamic(() => import('@/components/Button'), { ssr: false });
-const InputComponent = dynamic(() => import('@/components/Input'), { ssr: false });
-function ImagePreviewComponent({ image }: { image: string | StaticImageData }) {
-    return (
-        <div className="w-[260px] h-[300px] relative border border-[#C4C4C4]">
-            <Image src={image} alt="product_preview" fill className="object-cover rounded-[4px]" />
-        </div>
-    );
-}
-
-const ImagePreview = memo(ImagePreviewComponent);
-type ProductPopupProps = {
-    open: boolean,
-    id: string,
-    typePopup: string,
-    onClose: () => void;
-    onGetData: (type: string, data: ProductDetailProps) => void;
-};
 
 export default function ProductPopup(props: ProductPopupProps) {
     const { open, id, typePopup, onClose, onGetData } = props;
@@ -53,23 +38,20 @@ export default function ProductPopup(props: ProductPopupProps) {
         setImageFile(null);
     }
 
-    const closePopup = () => {
-        onClose();
-        resetField();
-    };
-
     const handleSave = () => {
         if (typePopup === "edit") {
             onGetData(typePopup, { id, name, gender, category, type, price, description, image: imageFile });
         } else {
             onGetData(typePopup, { name, gender, category, type, price, description, image: imageFile });
         }
-        closePopup();
+        onClose();
+        resetField();
     };
 
 
     const handleDiscard = () => {
-        closePopup();
+        onClose();
+        resetField();
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,17 +67,30 @@ export default function ProductPopup(props: ProductPopupProps) {
         fileInputRef.current?.click();
     };
 
-    const handleGetData = useCallback((name: string, value: string) => {
+    const handleGetData = (name: string, value: string) => {
         switch (name) {
-            case "name": setName(value); break;
-            case "gender": setGender(value); break;
-            case "category": setCategory(value); break;
-            case "type": setType(value); break;
-            case "price": setPrice(value); break;
-            case "description": setDescription(value); break;
-            default: return;
+            case "name":
+                setName(value);
+                break;
+            case "gender":
+                setGender(value);
+                break;
+            case "category":
+                setCategory(value);
+                break;
+            case "type":
+                setType(value);
+                break;
+            case "price":
+                setPrice(value);
+                break;
+            case "description":
+                setDescription(value);
+                break;
+            default:
+                return;
         }
-    }, []);
+    }
 
     useEffect(() => {
         if (open) {
@@ -138,10 +133,9 @@ export default function ProductPopup(props: ProductPopupProps) {
                 <div className="mb-[20px]">
                     <div className="flex justify-between">
                         <div className="flex flex-col items-center w-[45%] mt-[30px]">
-                            {/* <div className="w-[260px] h-[300px] relative  border border-[#C4C4C4]">
+                            <div className="w-[260px] h-[300px] relative  border border-[#C4C4C4]">
                                 <Image src={image} alt="product_preview" fill className="object-cover rounded-[4px]" />
-                            </div> */}
-                            <ImagePreview image={image} />
+                            </div>
                             <div
                                 onClick={handleClickUpload}
                                 className="rounded-[8px] border border-[#C4C4C4] py-[4px] px-[8px] flex mx-auto items-center justify-center my-[10px] cursor-pointer hover:bg-gray-100"
@@ -172,17 +166,24 @@ export default function ProductPopup(props: ProductPopupProps) {
                 </div>
 
                 <div className="flex justify-end mt-auto">
-                    <button
+                    {/* <button
                         onClick={handleDiscard}
                         className="cursor-pointer mr-[20px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent bg-white border border-[#C4C4C4] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)] w-[100px] h-[36px] flex justify-center items-center rounded-[12px] hover:scale-101"
                     >
                         Discard
-                    </button>
+                    </button> */}
+                    <ButtonWhite
+                        title="Discard"
+                        onSubmit={handleDiscard}
+                        width="w-[100px] "
+                        height="h-[36px]"
+                    />
                     <Button
                         title="Save"
                         onSubmit={handleSave}
                         width="w-[100px]"
                         height="h-[36px]"
+                        margin="ml-[20px]"
                         boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
                     />
                 </div>
