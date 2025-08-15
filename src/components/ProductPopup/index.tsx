@@ -1,15 +1,15 @@
 import { ProductPopupProps } from '@/common/type';
 import InputComponent from '@/components/Input';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
+import place_holder_img from '@/images/place_holder_product.png';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import type { StaticImageData } from 'next/image';
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoCloseOutline } from 'react-icons/io5';
 import { MdOutlineFileUpload } from "react-icons/md";
-import place_holder_img from '@/images/place_holder_product.png';
 
 const ButtonWhite = dynamic(() => import('@/components/ButtonWhite'), { ssr: false });
 const Button = dynamic(() => import('@/components/Button'), { ssr: false });

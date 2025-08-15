@@ -20,6 +20,7 @@ export default function Bag() {
     const { locale } = useTranslation();
     const router = useRouter();
     useEffect(() => {
+        console.log(quantities);
         const bagData = localStorage.getItem("bag");
         const quantitiesData = localStorage.getItem("quantities");
         const favoriteData = localStorage.getItem("listFavorite");
