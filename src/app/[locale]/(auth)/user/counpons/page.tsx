@@ -1,67 +1,59 @@
 'use client';
 
 import NextImage from "next/image";
-import counpons from '@/images/coupon.svg';
-import Button from "@/components/Button";
+import couponImg from '@/images/coupon.svg';
+import dynamic from "next/dynamic";
+const Button = dynamic(() => import('@/components/Button'), {
+    ssr: false,
+});
+export default function Coupons() {
 
-export default function Counpons() {
-
-    const handleDownloadCounpons = async () => {
+    const downloadCoupon = async () => {
         try {
-            const res = await fetch(counpons.src);
-            const svgText = await res.text();
-
-            const canvasWidth = 900;  // kích thước bạn muốn xuất file png
-            const canvasHeight = 300;
+            const svgText = await fetch(couponImg.src).then(res => res.text());
 
             const canvas = document.createElement("canvas");
+            const canvasWidth = 900;
+            const canvasHeight = 300;
             canvas.width = canvasWidth;
             canvas.height = canvasHeight;
 
-            const img = new window.Image();
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
 
+            const img = new Image();
             img.onload = () => {
-                const ctx = canvas.getContext("2d");
-                if (!ctx) return;
-
-                // Nền trắng
                 ctx.fillStyle = "#fff";
                 ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-                // Tính tỉ lệ giữ nguyên cho ảnh SVG
                 const imgRatio = img.width / img.height;
                 const canvasRatio = canvasWidth / canvasHeight;
-
-                let drawWidth = canvasWidth;
-                let drawHeight = canvasHeight;
-                let offsetX = 0;
-                let offsetY = 0;
+                let drawWidth, drawHeight, offsetX, offsetY;
 
                 if (imgRatio > canvasRatio) {
-                    // Ảnh rộng hơn canvas -> fix chiều rộng, scale chiều cao
                     drawHeight = canvasWidth / imgRatio;
+                    drawWidth = canvasWidth;
+                    offsetX = 0;
                     offsetY = (canvasHeight - drawHeight) / 2;
                 } else {
-                    // Ảnh cao hơn canvas -> fix chiều cao, scale chiều rộng
                     drawWidth = canvasHeight * imgRatio;
+                    drawHeight = canvasHeight;
                     offsetX = (canvasWidth - drawWidth) / 2;
+                    offsetY = 0;
                 }
 
                 ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 
-                const pngUrl = canvas.toDataURL("image/png");
-
                 const link = document.createElement("a");
-                link.href = pngUrl;
+                link.href = canvas.toDataURL("image/png");
                 link.download = "coupon.png";
                 link.click();
             };
 
-            const svgBase64 = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgText)));
-            img.src = svgBase64;
+            img.src = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgText)))}`;
 
-        } catch (error) {
-            console.error("Download failed:", error);
+        } catch (err) {
+            console.error("Failed to download coupon:", err);
         }
     };
 
@@ -76,15 +68,21 @@ export default function Counpons() {
                     <div className="flex flex-col justify-center items-center w-full">
                         <div className="w-[90%] h-[300px] relative flex justify-center items-center">
                             <NextImage
-                                src={counpons}
+                                src={couponImg}
                                 alt="coupon"
                                 style={{ objectFit: "contain" }}
-                                fill={false}
-                                width={900}  // điều chỉnh theo tỉ lệ ảnh thật
-                                height={300} // điều chỉnh chiều cao phù hợp
+                                width={900}
+                                height={300}
+                                priority
                             />
                         </div>
-                        <Button title="DOWNLOAD COUPONS" onSubmit={handleDownloadCounpons} width="w-[200px]" height="h-[36px]" boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
+                        <Button
+                            title="DOWNLOAD COUPONS"
+                            onSubmit={downloadCoupon}
+                            width="w-[200px]"
+                            height="h-[36px]"
+                            boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
+                        />
                     </div>
                 </div>
             </div>

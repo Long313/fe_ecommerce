@@ -1,12 +1,16 @@
 'use client'
 
-import Button from '@/components/Button';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import useTranslation from '@/hooks/useTranslation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import register_background from '../../../../images/register_background.svg';
-import success from '../../../../images/success_icon.svg';
+import success from '@/images/success_icon.svg';
+import dynamic from 'next/dynamic';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+
+const Button = dynamic(
+    () => import("@/components/Button"),
+    { ssr: false }
+);
 
 function Success() {
     const { locale } = useTranslation();
@@ -27,8 +31,7 @@ function Success() {
             <Button width="w-[300px]" rounded="rounded-none rounded-r-[20px]" title="Continue" onSubmit={() => router.push(`/${locale}/login`)} />
         </div>
         <div
-            className="w-1/2 h-screen bg-cover bg-center"
-            style={{ backgroundImage: `url(${register_background.src})` }}
+            className="w-1/2 h-screen bg-cover bg-center bg-[url('/images/register_background.svg')]"
         ></div>
     </div>);
 }

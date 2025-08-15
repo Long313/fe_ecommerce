@@ -1,5 +1,4 @@
 'use client'
-import Button from "@/components/Button";
 import InputField from "@/components/InputFeild";
 import Loader from "@/components/Loader";
 import useTranslation from "@/hooks/useTranslation";
@@ -9,12 +8,17 @@ import { useMutation } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
 
+import FormField from "@/components/FormField";
 import { emailRegex, passwordRegex, phoneRegex } from "@/constants";
-import register_background from '../../../../images/register_background.svg';
+
 const PhoneInput = dynamic(() => import('@/components/PhoneWrapper'), {
+  ssr: false,
+});
+
+const Button = dynamic(() => import('@/components/Button'), {
   ssr: false,
 });
 export default function Register() {
@@ -33,9 +37,11 @@ export default function Register() {
   const { t, locale } = useTranslation();
   const router = useRouter();
   const { setEmailAuthen, setPasswordAuthen, setTypeOtpAuthen } = useStore();
+
   useEffect(() => {
     setFormErrors(prev => ({ ...prev, policy: "" }));
   }, [policy])
+
   const handleRegister = () => {
     if (!policy) {
       setFormErrors(prev => ({ ...prev, policy: "Please agree to the Terms and Conditions, Privacy Policy & License Agreement" }));
@@ -55,9 +61,6 @@ export default function Register() {
   const {
     mutate,
     isPending
-    // isError: mutationError,
-    // isSuccess,
-    // error,
   } = useMutation({
     mutationFn: registerUser,
     onSuccess: (res) => {
@@ -75,14 +78,14 @@ export default function Register() {
     }
   });
 
-  const handleChange = (typeName: string, value: string) => {
+  const handleChange = useCallback((typeName: string, value: string) => {
     setFormErrors(prev => ({ ...prev, [typeName]: "" }));
 
     if (typeName === "email") setEmail(value);
     if (typeName === "phone") setPhone(value);
     if (typeName === "password") setPassword(value);
     if (typeName === "confirmPassword") setConfirmPassword(value);
-  };
+  }, []);
 
   const handleBlur = (typeName: string, value: string) => {
     if (!value.trim()) return;
@@ -119,39 +122,49 @@ export default function Register() {
         </div>
         <div className="">
           <div>
-            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleChange(typeName, value)} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-              {formErrors.email || "\u00A0"}
-            </p>
+            <FormField error={formErrors.email}>
+              <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title="Email" placeholder={t("emailPlaceHolder")} type="email" name="email" onSave={(typeName, value) => handleChange(typeName, value)} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {formErrors.email || "\u00A0"}
+              </p> */}
+            </FormField>
           </div>
           <div>
-            <PhoneInput onGetBlur={(typeName, value) => handleBlur(typeName, value)} onSave={(typeName, value) => handleChange(typeName, value)} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-              {formErrors.phone || "\u00A0"}
-            </p>
+            <FormField error={formErrors.phone}>
+              <PhoneInput onGetBlur={(typeName, value) => handleBlur(typeName, value)} onSave={(typeName, value) => handleChange(typeName, value)} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {formErrors.phone || "\u00A0"}
+              </p> */}
+            </FormField>
           </div>
           <div>
-            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("password")} placeholder={t("passwordPlaceHolder")} type="password" name="password" onSave={(typeName, value) => handleChange(typeName, value)} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+            <FormField error={formErrors.password}>
+              <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("password")} placeholder={t("passwordPlaceHolder")} type="password" name="password" onSave={(typeName, value) => handleChange(typeName, value)} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
               {formErrors.password || "\u00A0"}
-            </p>
+            </p> */}
+            </FormField>
           </div>
           <div>
-            <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleChange(typeName, value)} compareWith={password} />
-            <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-              {formErrors.confirmPassword || "\u00A0"}
-            </p>
+            <FormField error={formErrors.confirmPassword}>
+              <InputField onGetBlur={(typeName, value) => handleBlur(typeName, value)} title={t("confirmPassword")} type="password" name="confirmPassword" onSave={(typeName, value) => handleChange(typeName, value)} compareWith={password} />
+              {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+                {formErrors.confirmPassword || "\u00A0"}
+              </p> */}
+            </FormField>
           </div>
         </div>
         <div className="max-w-[315px] flex flex-col mb-[10px]">
-          <div className="flex items-start">
-            <input onChange={() => setPolicy(!policy)} checked={policy}
-              type="checkbox" name="policy" className="inline-block mr-[8px] mt-[2px] w-[20px]" />
-            <span className="font-[500] text-[12px] inline-block">{t("checkPolicy")}</span>
-          </div>
-          <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
-            {formErrors.policy || "\u00A0"}
-          </p>
+          <FormField error={formErrors.policy}>
+            <div className="flex items-start">
+              <input onChange={() => setPolicy(!policy)} checked={policy}
+                type="checkbox" name="policy" className="inline-block mr-[8px] mt-[2px] w-[20px]" />
+              <span className="font-[500] text-[12px] inline-block">{t("checkPolicy")}</span>
+            </div>
+            {/* <p className="w-[315px] mt-[2px] ml-[2px] text-[12px] text-[red] min-h-[20px] visibility-visible">
+              {formErrors.policy || "\u00A0"}
+            </p> */}
+          </FormField>
         </div>
         <Button boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" title={t("signUp")} height="h-[36px]" onSubmit={handleRegister} />
         <div className="font-[500] text-[12px] mt-[8px] hover:opacity-80">
@@ -160,10 +173,9 @@ export default function Register() {
         </div>
       </div>
       <div
-        className="w-1/2 bg-cover bg-center sticky top-0 right-0 bottom-0"
-        style={{ backgroundImage: `url(${register_background.src})` }}
+        className="w-1/2 bg-cover bg-center sticky top-0 right-0 bottom-0 bg-[url('/images/register_background.svg')]"
       ></div>
       <Toaster position="bottom-right" />
-    </div>
+    </div >
   );
 }

@@ -1,23 +1,18 @@
-import { ProductDetailProps } from '@/common/type';
+import { ProductPopupProps } from '@/common/type';
 import InputComponent from '@/components/Input';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
+import place_holder_img from '@/images/place_holder_product.png';
 import { getDetailProduct } from '@/service/product';
 import { useMutation } from '@tanstack/react-query';
+import dynamic from 'next/dynamic';
 import type { StaticImageData } from 'next/image';
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { MdOutlineFileUpload } from "react-icons/md";
-import place_holder_img from '../../images/place_holder_product.png';
-import Button from "../Button";
 import { IoCloseOutline } from 'react-icons/io5';
+import { MdOutlineFileUpload } from "react-icons/md";
 
-type ProductPopupProps = {
-    open: boolean,
-    id: string,
-    typePopup: string,
-    onClose: () => void;
-    onGetData: (type: string, data: ProductDetailProps) => void;
-};
+const ButtonWhite = dynamic(() => import('@/components/ButtonWhite'), { ssr: false });
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
 
 export default function ProductPopup(props: ProductPopupProps) {
     const { open, id, typePopup, onClose, onGetData } = props;
@@ -161,7 +156,7 @@ export default function ProductPopup(props: ProductPopupProps) {
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={gender} dataSelect={GENDERS_LIST} title="Gender" name="gender" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={category} dataSelect={CATEGORIES_LIST} title="Category" name="category" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={type} title="Type" name="type" type="string" onGetData={(name, value) => handleGetData(name, value)} />
-                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={price} title="Price" name="price" type="string" onGetData={(name, value) => handleGetData(name, value)} />
+                            <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={price} title="Price" name="price" type="number" onGetData={(name, value) => handleGetData(name, value)} />
                             <InputComponent minWidth='min-w-[80px]' star={false} defaultValue={description} title="Description" name="description" type="string" onGetData={(name, value) => handleGetData(name, value)} />
                         </div>
                     </div>
@@ -171,17 +166,24 @@ export default function ProductPopup(props: ProductPopupProps) {
                 </div>
 
                 <div className="flex justify-end mt-auto">
-                    <button
+                    {/* <button
                         onClick={handleDiscard}
                         className="cursor-pointer mr-[20px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent bg-white border border-[#C4C4C4] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)] w-[100px] h-[36px] flex justify-center items-center rounded-[12px] hover:scale-101"
                     >
                         Discard
-                    </button>
+                    </button> */}
+                    <ButtonWhite
+                        title="Discard"
+                        onSubmit={handleDiscard}
+                        width="w-[100px] "
+                        height="h-[36px]"
+                    />
                     <Button
                         title="Save"
                         onSubmit={handleSave}
                         width="w-[100px]"
                         height="h-[36px]"
+                        margin="ml-[20px]"
                         boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]"
                     />
                 </div>

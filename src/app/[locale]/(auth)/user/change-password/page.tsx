@@ -1,75 +1,69 @@
 'use client'
 
-import Button from "@/components/Button";
-import Input from "@/components/Input";
+
 import { useChangePassword } from "@/hooks/usePassword";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
-
+const Button = dynamic(
+    () => import('@/components/Button'),
+    { ssr: false }
+);
+const Input = dynamic(
+    () => import('@/components/Input'),
+    { ssr: false }
+);
 export default function ChangePassword() {
-    const [currentPassword, setCurrentPassword] = useState<string>("");
-    const [newPassword, setNewPassword] = useState<string>("");
-    const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
+    const [passwords, setPasswords] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: ""
+    });
     const [error, setError] = useState<string>("");
     const handleGetData = (name: string, value: string) => {
         setError("");
-        switch (name) {
-            case "currentPassword":
-                setCurrentPassword(value);
-                break;
-            case "newPassword":
-                setNewPassword(value);
-                break;
-            case "confirmNewPassword":
-                setConfirmNewPassword(value);
-                break;
-            default:
-                return;
-        }
+        setPasswords(prev => ({ ...prev, [name]: value }));
     };
 
-    useEffect(() => {
-        setError("")
-    }, [])
-
     const handleDiscard = () => {
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-        setError("")
+        setPasswords({ currentPassword: "", newPassword: "", confirmNewPassword: "" });
+        setError("");
     };
     const { mutate: changePassword } = useChangePassword();
     const handleSave = () => {
+        const { currentPassword, newPassword, confirmNewPassword } = passwords;
+
         if (!currentPassword || !newPassword || !confirmNewPassword) {
-            setError("Nhập đầy đủ mật khẩu hiện tại, mật khẩu mới và xác nhận mật khẩu mới")
-        } else if (newPassword !== confirmNewPassword) {
+            setError("Nhập đầy đủ mật khẩu hiện tại, mật khẩu mới và xác nhận mật khẩu mới");
+            return;
+        }
+
+        if (newPassword !== confirmNewPassword) {
             setError("Mật khẩu mới và xác nhận mật khẩu mới phải trùng nhau");
-        } else if (currentPassword === newPassword) {
-            setError("Mật khẩu mới và mật khẩu cũ không được trùng nhau")
-        } else if (currentPassword && newPassword && confirmNewPassword && newPassword === confirmNewPassword) {
-            changePassword(
-                { currentPassword, newPassword },
-                {
-                    onSuccess: () => {
-                        toast.success('Thay đổi mật khẩu thành công!');
-                    },
-                    onError: (error) => {
-                        if (axios.isAxiosError(error)) {
-                            if (error.response?.status === 400) {
-                                toast.error('Thay đổi mật khẩu thất bại!');
-                                setError('Mật khẩu cũ nhập sai!');
-                            } else {
-                                toast.error('Thay đổi mật khẩu thất bại!');
-                            }
-                        } else {
-                            toast.error('Đã xảy ra lỗi không xác định!');
-                        }
+            return;
+        }
+
+        if (currentPassword === newPassword) {
+            setError("Mật khẩu mới và mật khẩu cũ không được trùng nhau");
+            return;
+        }
+
+        changePassword(
+            { currentPassword, newPassword },
+            {
+                onSuccess: () => toast.success("Thay đổi mật khẩu thành công!"),
+                onError: (error) => {
+                    if (axios.isAxiosError(error) && error.response?.status === 400) {
+                        setError("Mật khẩu cũ nhập sai!");
+                        toast.error("Thay đổi mật khẩu thất bại!");
+                    } else {
+                        toast.error("Đã xảy ra lỗi không xác định!");
                     }
                 }
-            );
-        }
-    }
+            }
+        );
+    };
     return (
         <div className="h-fit p-[2px] rounded-[4px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4]">
             <div className="h-full rounded-[4px] bg-white dark:bg-black">
@@ -78,9 +72,9 @@ export default function ChangePassword() {
                         Change my password
                     </h1>
                     <div className="mt-[20px] w-[90%] mx-auto">
-                        <Input minWidth="min-w-[200px]" defaultValue={currentPassword} title="Current password" name="currentPassword" type="password" onGetData={handleGetData} />
-                        <Input minWidth="min-w-[200px]" defaultValue={newPassword} title="New password" name="newPassword" type="password" onGetData={handleGetData} />
-                        <Input minWidth="min-w-[200px]" defaultValue={confirmNewPassword} title="Confirm new password" name="confirmNewPassword" type="password" onGetData={handleGetData} />
+                        <Input minWidth="min-w-[200px]" defaultValue={passwords.currentPassword} title="Current password" name="currentPassword" type="password" onGetData={handleGetData} />
+                        <Input minWidth="min-w-[200px]" defaultValue={passwords.newPassword} title="New password" name="newPassword" type="password" onGetData={handleGetData} />
+                        <Input minWidth="min-w-[200px]" defaultValue={passwords.confirmNewPassword} title="Confirm new password" name="confirmNewPassword" type="password" onGetData={handleGetData} />
                         <p className="text-[red] text-center text-[12px] min-h-[20px] my-[10px]">{error}</p>
                     </div>
                     <div className="flex justify-end w-[80%] mx-auto mb-[40px]">

@@ -1,16 +1,17 @@
 'use client'
-import { ProductDetailProps, ProductProps } from "@/common/type"
-import Button from "@/components/Button";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import shop_cart from '../../../../../images/shop_cart.svg'
-import { CiTrash } from "react-icons/ci";
-import { IoAdd } from "react-icons/io5";
-import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
-import { RiSubtractFill } from "react-icons/ri";
-import item_img from "../../../../../images/item.svg";
+import { ProductDetailProps } from "@/common/type";
 import useTranslation from "@/hooks/useTranslation";
+import item_img from "@/images/item.svg";
+import shop_cart from '@/images/shop_cart.svg';
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { CiTrash } from "react-icons/ci";
+import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
+import { IoAdd } from "react-icons/io5";
+import { RiSubtractFill } from "react-icons/ri";
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
 
 export default function Bag() {
     const [listItem, setListItem] = useState<ProductDetailProps[]>([]);
@@ -19,41 +20,40 @@ export default function Bag() {
     const { locale } = useTranslation();
     const router = useRouter();
     useEffect(() => {
-        const listOrder = JSON.parse(localStorage.getItem("bag") || "[]");
+        console.log(quantities);
+        const bagData = localStorage.getItem("bag");
+        const quantitiesData = localStorage.getItem("quantities");
+        const favoriteData = localStorage.getItem("listFavorite");
+
+        const listOrder: ProductDetailProps[] = bagData ? JSON.parse(bagData) : [];
+        const savedQuantities: Record<string, number> = quantitiesData ? JSON.parse(quantitiesData) : {};
+        const listFavorite: ProductDetailProps[] = favoriteData ? JSON.parse(favoriteData) : [];
+
         setListItem(listOrder);
-
-        const savedQuantities = JSON.parse(localStorage.getItem("quantities") || "{}");
-
-        const initialQuantities: Record<string, number> = {};
-        listOrder.forEach((item: ProductProps) => {
-            if (item.id !== undefined) {
-                initialQuantities[String(item.id)] = savedQuantities[String(item.id)] || 1;
-            }
-        });
-        setQuantities(initialQuantities);
-
-        const listFavorite: ProductDetailProps[] = JSON.parse(localStorage.getItem("listFavorite") ?? "[]");
-        const likedIds = listFavorite
-            .map((item) => item.id)
-            .filter((id): id is string => id !== undefined);
-
-        setLike(likedIds);
-
+        setQuantities(
+            listOrder.reduce((acc, item) => {
+                if (item.id !== undefined) {
+                    acc[String(item.id)] = savedQuantities[String(item.id)] || item.quantity || 1;
+                }
+                return acc;
+            }, {} as Record<string, number>)
+        );
+        setLike(listFavorite.map(i => i.id!).filter(Boolean));
     }, []);
-
-    useEffect(() => {
-        localStorage.setItem('quantities', JSON.stringify(quantities));
-    }, [quantities]);
 
     const handleCheckout = () => {
         router.push(`/${locale}/products/checkout`)
     }
 
-    const handleClear = (id: string | number | undefined) => {
+    const handleClear = useCallback((id: string | number | undefined) => {
         if (id === undefined) return;
         const key = String(id);
-        const newList = listItem.filter(item => String(item.id) !== key);
-        setListItem(newList);
+
+        setListItem(prev => {
+            const updatedList = prev.filter(item => String(item.id) !== key);
+            localStorage.setItem("bag", JSON.stringify(updatedList));
+            return updatedList;
+        });
 
         setQuantities(prev => {
             const updated = { ...prev };
@@ -61,11 +61,9 @@ export default function Bag() {
             localStorage.setItem("quantities", JSON.stringify(updated));
             return updated;
         });
+    }, []);
 
-        localStorage.setItem("bag", JSON.stringify(newList));
-    };
-
-    const handleSub = (id: string | number) => {
+    const handleSub = useCallback((id: string | number) => {
         setListItem(prevList => {
             const newList = prevList.map(item => {
                 if (item.id === id) {
@@ -77,9 +75,9 @@ export default function Bag() {
             localStorage.setItem("bag", JSON.stringify(newList));
             return newList;
         });
-    };
+    }, []);
 
-    const handleAdd = (id: string | number) => {
+    const handleAdd = useCallback((id: string | number) => {
         setListItem(prevList => {
             const newList = prevList.map(item => {
                 if (item.id === id) {
@@ -91,9 +89,9 @@ export default function Bag() {
             localStorage.setItem("bag", JSON.stringify(newList));
             return newList;
         });
-    };
+    }, []);
 
-    const handleAddToFavorite = (item: ProductDetailProps) => {
+    const handleAddToFavorite = useCallback((item: ProductDetailProps) => {
         const listLocalStorage: ProductDetailProps[] = JSON.parse(localStorage.getItem("listFavorite") ?? "[]");
 
         const exists = listLocalStorage.some((i) => i.id === item.id);
@@ -113,7 +111,7 @@ export default function Bag() {
             .filter((id): id is string => id !== undefined);
 
         setLike(newLikeIds);
-    };
+    }, []);
 
     return (
         <div className="w-full h-max mt-[150px] px-[var(--padding-screen)] flex flex-col">

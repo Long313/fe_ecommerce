@@ -96,13 +96,12 @@ export default function Input(props: InputProps) {
                         <button
                             type="button"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute top-[50%] right-[10px] transform -translate-y-1/2 text-[#636364]"
+                            className="absolute top-[50%] -right-[10px] transform -translate-y-1/2 text-[#636364]"
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
                     )}
                 </div>
-
             )}
         </div>
     );

@@ -1,18 +1,19 @@
 import { ROLE } from "@/common/type";
 import useTranslation from "@/hooks/useTranslation";
+import amax from '@/images/amax.svg';
+import logo from '@/images/logo.svg';
 import { useAccessToken, useStore } from "@/store/store";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoSearchOutline } from "react-icons/io5";
 import { PiBag } from "react-icons/pi";
 import { SlUser, SlUserFollowing } from "react-icons/sl";
-import amax from '../../images/amax.svg';
-import logo from '../../images/logo.svg';
-import Button from "../Button";
 import LanguageSwitcher from "../LanguageSwitcher";
+const Button = dynamic(() => import("@/components/Button"), { ssr: false });
 
 function Header() {
     const { setSearch } = useStore();
@@ -30,7 +31,7 @@ function Header() {
     }
     const userInfor = useStore(state => state.userInfor);
 
-    const handleRouterLogout = () => {
+    const handleRouterLogout = useCallback(() => {
         setAccessToken("");
         setUserInfor({
             ...userInfor,
@@ -38,13 +39,19 @@ function Header() {
         });
         document.cookie = "access_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         router.push(`/${locale}/login`)
-    }
+    }, [router, locale, userInfor, setAccessToken])
 
-    const handleOpenSearchBar = () => {
+    const handleOpenSearchBar = useCallback(() => {
         setSearch(true);
-    }
+    }, [setSearch])
 
-    const handleRouterLink = (value: string) => {
+    const underlineClass = (tab: string) => `
+    absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] 
+    transform transition-transform duration-300 origin-left 
+    ${activeTab === tab ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
+`;
+
+    const handleRouterLink = useCallback((value: string) => {
         let query = '';
         switch (value) {
             case 'men':
@@ -63,7 +70,7 @@ function Header() {
                 return;
         }
         router.push(`/${locale}/products?${query}`);
-    };
+    }, [locale, router]);
 
     useEffect(() => {
         const gender = searchParams.get("gender");
@@ -105,19 +112,16 @@ function Header() {
                                 MEN
                             </Link>
                             <span
-                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
-                                ${activeTab === "men" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
-                                `}
+                                className={underlineClass("men")}
                             />
+
                         </li>
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("women")}>
                             <Link href="/women" className="relative z-10">
                                 WOMEN
                             </Link>
                             <span
-                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
-                                ${activeTab === "women" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
-                                `}
+                                className={underlineClass("women")}
                             />
                         </li>
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("kids")}>
@@ -125,9 +129,7 @@ function Header() {
                                 KIDS
                             </Link>
                             <span
-                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
-                                ${activeTab === "kids" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
-                                `}
+                                className={underlineClass("kids")}
                             />
                         </li>
                         <li className="relative group cursor-pointer" onClick={() => handleRouterLink("accessories")}>
@@ -135,9 +137,7 @@ function Header() {
                                 ACCESSORIES
                             </Link>
                             <span
-                                className={`absolute left-0 bottom-0 h-[2px] w-full bg-gradient-to-r from-[#822FFF] to-[#FF35C4] transform transition-transform duration-300 origin-left
-                                ${activeTab === "accessories" ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}
-                                `}
+                                className={underlineClass("accessories")}
                             />
                         </li>
                     </ul>

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { ProductDetailProps } from "@/common/type";
-import ProductBtn from "@/components/ProductBtn";
 import { toast, Toaster } from 'react-hot-toast';
+import dynamic from "next/dynamic";
+const ProductBtn = dynamic(() => import('@/components/ProductBtn'), { ssr: false });
 
 export default function Favorite() {
     const [list, setList] = useState<ProductDetailProps[]>([]);
