@@ -180,3 +180,37 @@ export type PriceInputProps = {
     onGetValue: (name: string, value: string) => void
 }
 
+
+export interface EditableRowProps {
+    id: string;
+}
+
+export interface EditableCellProps {
+    title: React.ReactNode;
+    editable: boolean;
+    dataIndex: keyof ProductDetailProps;
+    record: ProductDetailProps;
+    handleSave: (record: ProductDetailProps) => void;
+}
+
+export interface DataType {
+    id?: string,
+    name?: string,
+    category?: string,
+    description?: string,
+    price?: number | string,
+    image_url?: string | StaticImport,
+    gender?: string;
+    type?: string;
+    size?: string;
+    quantity?: number,
+    rate?: number | string,
+    color?: string,
+}
+export type ProductPopupProps = {
+    open: boolean,
+    id: string,
+    typePopup: string,
+    onClose: () => void;
+    onGetData: (type: string, data: ProductDetailProps) => void;
+};

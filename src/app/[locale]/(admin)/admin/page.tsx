@@ -1,8 +1,6 @@
 'use client'
 
-import { ProductDetailProps } from '@/common/type';
-import ImageWithFallback from '@/components/ImageWithFallback';
-import ProductPopup from '@/components/ProductPopup';
+import { DataType, EditableCellProps, EditableRowProps, ProductDetailProps } from '@/common/type';
 import { CATEGORIES_LIST, GENDERS_LIST } from '@/constants';
 import { useCreateProduct, useProductSearch, useUpdateProduct } from '@/hooks/useProductSearch';
 import useTranslation from '@/hooks/useTranslation';
@@ -17,36 +15,24 @@ import dayjs from 'dayjs';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import './index.css';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
+const ButtonWhite = dynamic(() => import('@/components/ButtonWhite'), { ssr: false });
 const Button = dynamic(() => import('@/components/Button'), { ssr: false });
 const PriceInput = dynamic(() => import('@/components/PriceInput'), { ssr: false });
 const InputComponent = dynamic(() => import("@/components/Input"), { ssr: false });
+const ProductPopup = dynamic(() => import("@/components/ProductPopup"), { ssr: false });
+const ImageWithFallback = dynamic(() => import("@/components/ImageWithFallback"), { ssr: false });
 
 type FormInstance<T> = GetRef<typeof Form<T>>;
 type TablePaginationConfig = Exclude<GetProp<TableProps, 'pagination'>, boolean>;
-
 interface TableParams {
     pagination?: TablePaginationConfig;
     sortField?: SorterResult<ProductDetailProps>['field'];
     sortOrder?: SorterResult<ProductDetailProps>['order'];
     filters?: Parameters<GetProp<TableProps, 'onChange'>>[1];
-}
-
-interface EditableRowProps {
-    id: string;
-}
-
-
-interface EditableCellProps {
-    title: React.ReactNode;
-    editable: boolean;
-    dataIndex: keyof ProductDetailProps;
-    record: ProductDetailProps;
-    handleSave: (record: ProductDetailProps) => void;
 }
 const EditableContext = React.createContext<FormInstance<ProductDetailProps> | null>(null);
 
@@ -95,9 +81,7 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
             console.log('Save failed:', errInfo);
         }
     };
-
     let childNode = children;
-
     if (editable) {
         childNode = editing ? (
             <Form.Item
@@ -117,24 +101,9 @@ const EditableCell: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
             </div>
         );
     }
-
     return <td {...restProps}>{childNode}</td>;
 };
 
-interface DataType {
-    id?: string,
-    name?: string,
-    category?: string,
-    description?: string,
-    price?: number | string,
-    image_url?: string | StaticImport,
-    gender?: string;
-    type?: string;
-    size?: string;
-    quantity?: number,
-    rate?: number | string,
-    color?: string,
-}
 
 type ColumnTypes = Exclude<TableProps<DataType>['columns'], undefined>;
 
@@ -299,7 +268,7 @@ const Admin: React.FC = () => {
         setTypePopup("create")
     };
 
-    const handleSave = (row: DataType) => {
+    const handleSave = useCallback((row: DataType) => {
         const newData = [...products];
         const index = newData.findIndex((item) => row.id === item.id);
         const item = newData[index];
@@ -308,7 +277,7 @@ const Admin: React.FC = () => {
             ...row,
         });
         setProducts(newData);
-    };
+    }, []);
 
     const components = {
         body: {
@@ -332,7 +301,6 @@ const Admin: React.FC = () => {
             }),
         };
     });
-
 
     const handleGetData = (name: string, value: string) => {
         switch (name) {
@@ -392,7 +360,7 @@ const Admin: React.FC = () => {
 
     const handleGetFormData = async (typePopup: string, data: ProductDetailProps) => {
         const formData = new FormData();
-
+        console.log("Data", data);
         if (data.name) formData.append("name", data.name);
         if (data.gender) formData.append("gender", data.gender);
         if (data.category) formData.append("category", data.category);
@@ -462,12 +430,7 @@ const Admin: React.FC = () => {
 
                 <div className='flex items-center'>
                     <Button title="ADD A PRODUCT" onSubmit={handleAdd} margin="my-[16px]" width='w-[140px]' boxShadow="shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]" />
-                    <button
-                        onClick={handleClear}
-                        className="w-[140px] h-[40px] cursor-pointer ml-[20px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent bg-white border border-[#C4C4C4] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)] flex justify-center items-center rounded-[12px] hover:scale-101"
-                    >
-                        CLEAR
-                    </button>
+                    <ButtonWhite title="CLEAR" onSubmit={handleClear} />
                 </div>
             </div>
             <Table<DataType>

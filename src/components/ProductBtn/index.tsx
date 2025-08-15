@@ -1,12 +1,13 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { IoMdStar } from "react-icons/io";
 import item from "../../images/item.svg";
 import Link from "next/link";
-import Button from "../Button";
 import { CiTrash } from "react-icons/ci";
 import useTranslation from "@/hooks/useTranslation";
 import { ProductBtnProps } from "@/common/type";
+import dynamic from "next/dynamic";
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
 
 function ProductBtn(props: ProductBtnProps) {
     const { id, image_url, width, height, name, price, star, onRemove, onAdd } = props;
@@ -17,7 +18,7 @@ function ProductBtn(props: ProductBtnProps) {
         setImgSrc(item);
     };
 
-    const handleAddCart = (id: string | number | undefined) => {
+    const handleAddCart = useCallback((id: string | number | undefined) => {
         if (id === undefined) return;
 
         const currentBag: ProductBtnProps[] = JSON.parse(localStorage.getItem("bag") ?? "[]");
@@ -44,9 +45,9 @@ function ProductBtn(props: ProductBtnProps) {
             localStorage.setItem("bag", JSON.stringify(updatedBag));
         }
         onAdd();
-    };
+    }, [id]);
 
-    const handleClear = (e: React.MouseEvent<SVGElement>, id: string | number | undefined) => {
+    const handleClear = useCallback((e: React.MouseEvent<SVGElement>, id: string | number | undefined) => {
         e.stopPropagation();
         e.preventDefault();
         if (id === undefined) return;
@@ -55,10 +56,11 @@ function ProductBtn(props: ProductBtnProps) {
         const updatedBag = currentBag.filter(item => item.id !== id);
         localStorage.setItem("listFavorite", JSON.stringify(updatedBag));
         onRemove?.();
-    };
+    }, [id]);
+
     return (<div className={`hover:scale-101 transition-transform duration-300 cursor-pointer flex justify-center items-center flex-col ${width ? width : "max-w-[240px]"} ${height ? height : "max-h-[calc(240px+100px)]"}`}>
         <Link href={`/${locale}/products/${id}`}>
-            <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1 min-w-[222px] min-h-[296px]">
+            <div className="z-20 relative bg-[#F8F8F8] rounded-[2px] aspect-[477/628] w-full flex-1 min-w-[222px] min-h-[296px] flex justify-center items-center">
                 {imgSrc ? <Image onError={handleError}
                     src={imgSrc || item} alt="product" width={width ?? 477} height={height ?? 628} /> : null}
                 <CiTrash
@@ -80,7 +82,7 @@ function ProductBtn(props: ProductBtnProps) {
                     <span>${price}</span>
                     <span className="inline-block bg-[#454545] w-[2px] h-[16px] mx-[20px]"></span>
                     <span>{star}</span>
-                    <IoMdStar color="yellow" />
+                    <IoMdStar color="yellow" size={20} />
                 </div>
             </div>
         </Link>

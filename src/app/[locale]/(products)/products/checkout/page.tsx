@@ -1,6 +1,5 @@
 'use client';
 import { addressListProps, ProductDetailProps } from "@/common/type";
-import Button from "@/components/Button";
 import InputField from "@/components/InputFeild";
 import PromoCodePopup from "@/components/PromoCodePopup";
 import { emailRegex, phoneRegex } from "@/constants";
@@ -9,10 +8,12 @@ import item_img from '@/images/item.svg';
 import mdi_voucher from '@/images/mdi_voucher.svg';
 import paypal from '@/images/paypal_logo.svg';
 import { useStore } from "@/store/store";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { toast, Toaster } from 'react-hot-toast';
 import { MdCreditCard } from "react-icons/md";
+const Button = dynamic(() => import('@/components/Button'), { ssr: false });
 
 export default function Checkout() {
     const [email, setEmail] = useState<string>("");
@@ -32,8 +33,7 @@ export default function Checkout() {
     const [totalDiscount, setTotalDiscount] = useState<number>(0);
     const [promoCode, setPromoCode] = useState<string>("");
     const [open, setOpen] = useState<boolean>(false);
-    // const [errorInfor, setErrorInfor] = useState<string>("");
-    // const [errorCard, setErrorCard] = useState<string>("");
+
     const [formErrors, setFormErrors] = useState<Record<string, string>>({
         email: "",
         phone: "",
@@ -241,8 +241,6 @@ export default function Checkout() {
                 return;
             }
         }
-
-
         toast.success('Order thành công!');
     }
 
