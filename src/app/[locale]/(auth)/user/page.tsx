@@ -18,7 +18,7 @@ function getInitials(name: string): string {
 export default function UserInfor() {
     const { avatar, fullname, phone_number, gender, email, birthday, address } =
         useStore((state) => state.userInfor);
-
+    console.log("avatar", avatar);
     const formattedBirthday = useMemo(
         () => (birthday ? dayjs(birthday).format('MM/DD/YYYY') : '01/01/2001'),
         [birthday]
@@ -76,7 +76,7 @@ export default function UserInfor() {
                                     alt="avatar"
                                     width={96}
                                     height={96}
-                                    className="rounded-full object-cover"
+                                    className="rounded-full object-cover w-full h-full"
                                 />
                             ) : (
                                 <div className="w-[96px] h-[96px] rounded-full bg-gray-300 flex items-center justify-center text-white text-[36px] font-bold tracking-widest">

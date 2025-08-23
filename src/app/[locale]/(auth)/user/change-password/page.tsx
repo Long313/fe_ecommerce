@@ -2,6 +2,7 @@
 
 
 import { useChangePassword } from "@/hooks/usePassword";
+import useTranslation from "@/hooks/useTranslation";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -20,6 +21,7 @@ export default function ChangePassword() {
         newPassword: "",
         confirmNewPassword: ""
     });
+    const { t } = useTranslation();
     const [error, setError] = useState<string>("");
     const handleGetData = (name: string, value: string) => {
         setError("");
@@ -66,15 +68,15 @@ export default function ChangePassword() {
     };
     return (
         <div className="h-fit p-[2px] rounded-[4px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4]">
-            <div className="h-full rounded-[4px] bg-white dark:bg-black">
+            <div className="h-full rounded-[4px] bg-white ">
                 <div className="p-[20px]">
                     <h1 className="text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
                         Change my password
                     </h1>
                     <div className="mt-[20px] w-[90%] mx-auto">
-                        <Input minWidth="min-w-[200px]" defaultValue={passwords.currentPassword} title="Current password" name="currentPassword" type="password" onGetData={handleGetData} />
-                        <Input minWidth="min-w-[200px]" defaultValue={passwords.newPassword} title="New password" name="newPassword" type="password" onGetData={handleGetData} />
-                        <Input minWidth="min-w-[200px]" defaultValue={passwords.confirmNewPassword} title="Confirm new password" name="confirmNewPassword" type="password" onGetData={handleGetData} />
+                        <Input padding="pr-[30px]" placeholder={t("passwordPlaceHolder")} minWidth="min-w-[200px]" defaultValue={passwords.currentPassword} title="Current password" name="currentPassword" type="password" onGetData={handleGetData} />
+                        <Input padding="pr-[30px]" placeholder={t("passwordPlaceHolder")} minWidth="min-w-[200px]" defaultValue={passwords.newPassword} title="New password" name="newPassword" type="password" onGetData={handleGetData} />
+                        <Input padding="pr-[30px]" placeholder={t("passwordPlaceHolder")} minWidth="min-w-[200px]" defaultValue={passwords.confirmNewPassword} title="Confirm new password" name="confirmNewPassword" type="password" onGetData={handleGetData} />
                         <p className="text-[red] text-center text-[12px] min-h-[20px] my-[10px]">{error}</p>
                     </div>
                     <div className="flex justify-end w-[80%] mx-auto mb-[40px]">

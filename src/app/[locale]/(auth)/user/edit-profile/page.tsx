@@ -37,7 +37,7 @@ export default function EditProfile() {
     useEffect(() => {
         if (userData?.data) {
             const u = userData.data;
-            setUserInfor(u);
+            setUserInfor({ ...u, avatar: u.avatar_url });
 
             setForm({
                 name: u.fullname || "",
@@ -109,7 +109,7 @@ export default function EditProfile() {
 
     return (
         <div className="h-fit p-[2px] rounded-[4px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4]">
-            <div className="h-full rounded-[4px] bg-white dark:bg-black p-[20px]">
+            <div className="h-full rounded-[4px] bg-white p-[20px]">
                 <h1 className="text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
                     Profile
                 </h1>
