@@ -80,7 +80,7 @@ export default function SearchBar() {
                 <div className="flex flex-1 flex-col mx-[40px]">
                     <div className="relative border border-[#373737] rounded-[16px] py-[8px] px-[16px] flex items-center shadow-[0_4px_12px_rgba(0,0,0,0.15)]">
                         <IoSearchOutline size={20} className="mr-[40px] cursor-pointer" onClick={handleSearch} />
-                        <input placeholder="SEARCH"
+                        <input placeholder="Search by product's name"
                             value={value}
                             onKeyDown={e => {
                                 if (e.key === "Enter") handleSearch();
