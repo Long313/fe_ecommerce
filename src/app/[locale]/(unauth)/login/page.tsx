@@ -80,7 +80,7 @@ export default function Login() {
     mutationFn: login,
     onSuccess: (res) => {
       if (res.status === 200) {
-        setUserInfor(res.data);
+        setUserInfor({ ...res.data, avatar: res.data.avatar_url });
         const getCookie = (name: string): string | null => {
           if (typeof document === 'undefined') return null;
           const value = `; ${document.cookie}`;

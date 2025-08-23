@@ -149,6 +149,7 @@ export type InputProps = {
     minWidth?: string,
     height?: string,
     margin?: string,
+    padding?: string,
     placeholder?: string,
     defaultValue?: string,
     dataSelect?: {

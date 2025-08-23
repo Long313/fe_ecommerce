@@ -17,7 +17,8 @@ export default function Input(props: InputProps) {
         placeholder,
         defaultValue,
         dataSelect = [],
-        margin
+        margin,
+        padding
     } = props;
 
     const [value, setValue] = useState<string>(defaultValue ?? "");
@@ -84,7 +85,7 @@ export default function Input(props: InputProps) {
                 <div className={`relative flex-1 ml-[20px] ${width ? width : "w-full"} ${height ? height : "h-[30px]"}`}>
                     <input
                         // onBlur={handleGetValue}
-                        className={`cursor-pointer w-full h-full outline-none border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black `}
+                        className={`${padding ? padding : ""} text-[14px] cursor-pointer w-full h-full outline-none border border-[#822FFF] bg-[rgb(255,53,196,0.06)] rounded-[4px] py-[4px] px-[8px] text-black `}
                         value={value}
                         placeholder={placeholder}
                         type={inputType}
@@ -96,7 +97,7 @@ export default function Input(props: InputProps) {
                         <button
                             type="button"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            className="absolute top-[50%] -right-[10px] transform -translate-y-1/2 text-[#636364]"
+                            className="absolute top-[50%] right-[5px] transform -translate-y-1/2 text-[#636364]"
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>

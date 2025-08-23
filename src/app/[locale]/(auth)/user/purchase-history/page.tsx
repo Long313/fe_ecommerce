@@ -36,7 +36,7 @@ function PurchaseItemCard({ item }: { item: PurchaseItem }) {
 export default function PurchaseHistory() {
     return (
         <div className="mb-24 h-fit p-[2px] rounded-[4px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4]">
-            <div className="h-full rounded-[4px] bg-white dark:bg-black">
+            <div className="h-full rounded-[4px] bg-white">
                 <div className="p-5">
                     <h1 className="text-3xl font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
                         Purchase history
