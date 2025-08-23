@@ -60,7 +60,7 @@ export default function UserInfor() {
 
     return (
         <div className="h-fit p-[2px] rounded-[4px] bg-gradient-to-b from-[#822FFF] to-[#FF35C4]">
-            <div className="h-full rounded-[4px] bg-white dark:bg-black">
+            <div className="h-full rounded-[4px] bg-white">
                 <div className="p-[20px] pb-[40px]">
                     <h1 className="text-[30px] font-bold bg-gradient-to-b from-[#822FFF] to-[#FF35C4] bg-clip-text text-transparent">
                         Profile
