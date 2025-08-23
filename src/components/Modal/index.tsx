@@ -63,6 +63,7 @@ function Modal() {
 
     const handleResendOtp = () => {
         setError('')
+        setOtp(Array(otpLength).fill(""));
         setResetTime(!resetTime);
         if (typeOtpAuthen === "reset") {
             mutate({ email: emailAuthen, purpose: "reset" });
@@ -189,7 +190,7 @@ function Modal() {
                     key={index}
                     type="text"
                     maxLength={1}
-                    defaultValue={digit}
+                    value={digit}
                     onChange={(e) => handleChange(index, e)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
