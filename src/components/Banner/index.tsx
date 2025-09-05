@@ -6,6 +6,9 @@ import collection from '@/images/collection.svg';
 import shoes_pink from '@/images/shoes_pink.svg';
 import shoes_blue from '@/images/shoes_blue.svg';
 import shoes_brown from '@/images/shoes_brown.svg';
+import arrow_1 from '@/images/arrow_1.svg';
+import arrow_2 from '@/images/arrow_2.svg';
+import arrow_3 from '@/images/arrow_3.svg';
 import new_img from '@/images/new.svg';
 import './banner.css';
 import useTranslation from "@/hooks/useTranslation";
@@ -109,15 +112,15 @@ export default function Banner() {
                         <button onClick={handleExplore} className="cursor-pointer w-[160px] h-[40px] bg-white rounded-[20px] hover:scale-101 font-[600] shadow-[0px_7.12px_7.12px_0px_rgba(55,55,55,0.25)]">EXPLORE NOW</button>
                     </div>
                 </div>
-                <div className="w-1/2 flex justify-center items-center">
-                    <div className="ml-[20px] w-[80%] h-[80%] relative overflow-hidden">
+                <div className="w-1/2 flex justify-center items-center relative">
+                    <div className="ml-[20px] w-full h-full relative overflow-hidden">
                         {style === 1 && (
                             <Image
                                 key="pink"
                                 src={shoes_pink}
                                 alt="shoes"
                                 fill
-                                className="w-full h-full object-contain animate-slide-in"
+                                className="w-full h-full object-contain animate-slide-in z-20"
                             />
                         )}
                         {style === 2 && (
@@ -126,7 +129,7 @@ export default function Banner() {
                                 src={shoes_blue}
                                 alt="shoes"
                                 fill
-                                className="w-full h-full object-contain animate-slide-in"
+                                className="w-full h-full object-contain animate-slide-in z-20"
                             />
                         )}
                         {style === 3 && (
@@ -135,9 +138,35 @@ export default function Banner() {
                                 src={shoes_brown}
                                 alt="shoes"
                                 fill
-                                className="w-full h-full object-contain animate-slide-in"
+                                className="w-full h-full object-contain animate-slide-in z-20"
                             />
                         )}
+                        <div className="absolute top-[0px] right-[10px] flex">
+                            <div className="h-[300px] w-[80px] mr-[20px] relative" key={`arrow-1-${style}`}>
+                                <Image
+                                    src={style === 1 ? arrow_1 : style === 2 ? arrow_2 : arrow_3}
+                                    alt="shoes"
+                                    fill
+                                    className="w-full h-full object-contain animate-arrow"
+                                />
+                            </div>
+                            <div className="h-[300px] w-[80px] mr-[20px] relative" key={`arrow-2-${style}`}>
+                                <Image
+                                    src={style === 1 ? arrow_1 : style === 2 ? arrow_2 : arrow_3}
+                                    alt="shoes"
+                                    fill
+                                    className="w-full h-full object-contain animate-arrow"
+                                />
+                            </div>
+                            <div className="h-[300px] w-[80px] relative" key={`arrow-3-${style}`}>
+                                <Image
+                                    src={style === 1 ? arrow_1 : style === 2 ? arrow_2 : arrow_3}
+                                    alt="shoes"
+                                    fill
+                                    className="w-full h-full object-contain animate-arrow"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
