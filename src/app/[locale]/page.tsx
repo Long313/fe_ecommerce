@@ -13,6 +13,7 @@ import { useCallback, useMemo, useState } from "react";
 import home_img from '../../images/home_img.svg';
 import BestSellingSection from "../components/BestSellingSection";
 import TypingText from "../components/TypingText/intex";
+import Banner from "@/components/Banner";
 const Product = dynamic(() => import("@/components/Product"), { ssr: false });
 const ProductNoPrice = dynamic(() => import("@/components/ProductNoPrice"), { ssr: false });
 const Button = dynamic(() => import("@/components/Button"), { ssr: false });
@@ -38,12 +39,12 @@ export default function Home() {
   const { data: productData } = useProductSearch(params);
   const { data: productSaleData } = useProductSearch({ type: "sale", pageSize: 4 });
 
-  const { resetParamsSearch } = useStore();
+  // const { resetParamsSearch } = useStore();
 
-  const handleExplore = useCallback(() => {
-    resetParamsSearch();
-    router.push(`/${locale}/products`);
-  }, [router, locale]);
+  // const handleExplore = useCallback(() => {
+  //   resetParamsSearch();
+  //   router.push(`/${locale}/products`);
+  // }, [router, locale]);
 
   const handeRouter = (value: string) => {
     if (value === "clothes") {
@@ -58,8 +59,8 @@ export default function Home() {
   }
 
   return (
-    <div className="flex-1 mt-[110px] px-[var(--padding-screen)]">
-      <section className="flex justify-between">
+    <div className="flex-1 mt-[100px]">
+      {/* <section className="flex justify-between">
         <div className="w-[45%] mt-[50px]">
           <p className="min-h-[140px] transition-transform font-[700] text-[46px] text-[var(--text-color)] tracking-[2px]">
             <TypingText text="Step Into Your Sporty Look!" />
@@ -73,9 +74,10 @@ export default function Home() {
             <Image src={home_img} alt="home_image" fill className="w-full h-full object-contain" />
           </div>
         </div>
-      </section>
+      </section> */}
+      <Banner />
       <BestSellingSection data={productSaleData?.data} onSeeAll={handleRouterSale} />
-      <section className="flex flex-col mt-[100px] items-center">
+      <section className="flex flex-col mt-[100px] items-center px-[var(--padding-screen)]">
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Our products </h2>
         <div className="mb-[150px] w-full h-[60px] px-[var(--padding-screen)] flex justify-center items-center bg-[#fff]">
           <div className="w-5/10">
@@ -109,7 +111,7 @@ export default function Home() {
         </div>
       </section>
       <OfferSection />
-      <section className="flex flex-col mt-[100px] items-center">
+      <section className="flex flex-col mt-[100px] items-center px-[var(--padding-screen)]">
         <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Designer Clothes For You</h2>
         <p className="mt-[20px] mb-[100px] font-[600] text-center max-w-[700px]">
           Own every move with high-performance sportswear built for style and power!
