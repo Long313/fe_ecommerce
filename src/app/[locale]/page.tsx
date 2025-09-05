@@ -1,22 +1,17 @@
 'use client'
+import Banner from "@/components/Banner";
 import { tabs } from "@/constants";
 import { useProductSearch } from "@/hooks/useProductSearch";
 import useTranslation from "@/hooks/useTranslation";
 import accessories from "@/images/accessories.svg";
 import clothes from "@/images/clothes.svg";
 import shoes from "@/images/shoes.svg";
-import { useStore } from "@/store/store";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback, useMemo, useState } from "react";
-import home_img from '../../images/home_img.svg';
+import { useMemo, useState } from "react";
 import BestSellingSection from "../components/BestSellingSection";
-import TypingText from "../components/TypingText/intex";
-import Banner from "@/components/Banner";
 const Product = dynamic(() => import("@/components/Product"), { ssr: false });
 const ProductNoPrice = dynamic(() => import("@/components/ProductNoPrice"), { ssr: false });
-const Button = dynamic(() => import("@/components/Button"), { ssr: false });
 const OfferSection = dynamic(() => import("../components/OfferSection"), { ssr: false });
 const FeedbackSection = dynamic(() => import("../components/FeedbackSection"), { ssr: false });
 
