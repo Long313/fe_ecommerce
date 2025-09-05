@@ -116,6 +116,11 @@ const Admin: React.FC = () => {
     const [endPrice, setEndPrice] = useState<string>("");
     const [products, setProducts] = useState<ProductDetailProps[]>([]);
     // const [count, setCount] = useState(2);
+    useEffect(() => {
+        if (process.env.NODE_ENV === 'development') {
+            console.error = () => { };
+        }
+    }, []);
 
     const [tableParams, setTableParams] = useState<TableParams>({
         pagination: {
