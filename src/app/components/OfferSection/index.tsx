@@ -9,7 +9,7 @@ export default function OfferSection() {
         return new Date(Date.now() + 6 * 24 * 60 * 60 * 1000 + 18 * 60 * 60 * 1000 + 48 * 60 * 1000);
     }, []);
     return (
-        <section className="flex flex-col my-[200px] items-center">
+        <section className="flex flex-col my-[200px] items-center px-[var(--padding-screen)]">
             <div className="flex justify-end bg-[url('../../images/discount.svg')] bg-cover bg-center w-full h-[600px]">
                 <div className="w-1/2 mt-[50px]">
                     <h2 className="font-[700] text-[40px]">Exclusive offer</h2>
