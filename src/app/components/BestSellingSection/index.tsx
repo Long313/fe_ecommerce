@@ -9,7 +9,7 @@ type BestSellingSectionProps = { data: ProductDetailProps[] | undefined, onSeeAl
 function BestSellingSection(props: BestSellingSectionProps) {
   const { data, onSeeAll } = props;
   return (
-    <section className="flex flex-col mt-[100px] items-center">
+    <section className="flex flex-col mt-[100px] items-center px-[var(--padding-screen)]">
       <h2 className="text-[30px] text-[var(--text-color)] font-[700]">Best selling</h2>
       <p className="text-[var(--text-color)] mt-[20px] mb-[150px] font-[600]">
         Stay on trend with our best-selling sportwear picks.
